@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32">
+      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes">
+      <UniqueIdentifier>{2f7391ca-8cf3-4120-a767-ea27159fc6db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\ui">
+      <UniqueIdentifier>{e605e2bf-c547-4600-b8a5-fc89038fb969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\game">
+      <UniqueIdentifier>{47d38123-e97c-4fee-9042-a4169b34cbb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\game\login">
+      <UniqueIdentifier>{8e1f9324-0316-4a73-8337-410f3caf8628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\game\ui">
+      <UniqueIdentifier>{2595d787-89d7-4413-b3f4-92a1f4492f2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\game\loading">
+      <UniqueIdentifier>{170b2508-0181-4d5e-9929-342277dd9725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\config">
+      <UniqueIdentifier>{836e54f0-5c08-44e9-afe1-2fd5620a7676}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\core">
+      <UniqueIdentifier>{11011659-e894-4d03-b37b-39e525399853}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\core\common">
+      <UniqueIdentifier>{33f648e3-4a32-479e-b884-001a0c11e0f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\core\gui">
+      <UniqueIdentifier>{f2b6955c-d808-48c0-b982-0c5398f9da15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\core\utils">
+      <UniqueIdentifier>{a6b14998-1489-4a22-92b9-8616a868616f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\LoginScene.cpp">
+      <Filter>Classes\game\login</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\LoadingScene.cpp">
+      <Filter>Classes\game\loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\GameUILayer.cpp">
+      <Filter>Classes\game\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\DataManager.cpp">
+      <Filter>Classes\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\GameSceneManager.cpp">
+      <Filter>Classes\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\config\MapData.cpp">
+      <Filter>Classes\config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\AccountLayer.cpp">
+      <Filter>Classes\game\login</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\gui\AnimButton.cpp">
+      <Filter>Classes\core\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\gui\BaseNode.cpp">
+      <Filter>Classes\core\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\utils\byteorder.cpp">
+      <Filter>Classes\core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\utils\ReadUtil.cpp">
+      <Filter>Classes\core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\gui\SimpleButton.cpp">
+      <Filter>Classes\core\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\gui\TextInput.cpp">
+      <Filter>Classes\core\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\common\PlistManager.cpp">
+      <Filter>Classes\core\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ui\MsgDisplay.cpp">
+      <Filter>Classes\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\gui\Menu.cpp">
+      <Filter>Classes\core\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\common\InternationManager.cpp">
+      <Filter>Classes\core\common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\HelloWorldScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\LoginScene.h">
+      <Filter>Classes\game\login</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\LoadingScene.h">
+      <Filter>Classes\game\loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\GameUILayer.h">
+      <Filter>Classes\game\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\DataManager.h">
+      <Filter>Classes\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\GameSceneManager.h">
+      <Filter>Classes\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\GameDefine.h">
+      <Filter>Classes\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\config\MapData.h">
+      <Filter>Classes\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\AccountLayer.h">
+      <Filter>Classes\game\login</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\gui\AnimButton.h">
+      <Filter>Classes\core\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\gui\BaseNode.h">
+      <Filter>Classes\core\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\utils\basic_types.h">
+      <Filter>Classes\core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\utils\byteorder.h">
+      <Filter>Classes\core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\utils\ReadUtil.h">
+      <Filter>Classes\core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\gui\TextInput.h">
+      <Filter>Classes\core\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\gui\CoreDefine.h">
+      <Filter>Classes\core\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\common\PlistManager.h">
+      <Filter>Classes\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\gui\SimpleButton.h">
+      <Filter>Classes\core\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ui\MsgDisplay.h">
+      <Filter>Classes\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ui\UIDefine.h">
+      <Filter>Classes\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\gui\UIProtocol.h">
+      <Filter>Classes\core\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\gui\Menu.h">
+      <Filter>Classes\core\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\common\InternationManager.h">
+      <Filter>Classes\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\GameCore.h">
+      <Filter>Classes\core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
