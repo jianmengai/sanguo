@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="158" tileheight="120" infinite="0" nextlayerid="5" nextobjectid="1">
+ <tileset firstgid="1" name="2045.0" tilewidth="157" tileheight="199" tilecount="1" columns="1">
+  <image source="2045.0.png" width="157" height="199"/>
+ </tileset>
+ <tileset firstgid="2" name="grass" tilewidth="158" tileheight="120" tilecount="1" columns="1">
+  <image source="grass.png" width="158" height="120"/>
+ </tileset>
+ <layer id="2" name="backgroundLayer" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKHj+4ceLIeCq6aqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv4DIkZOIQ==
+  </data>
+ </layer>
+ <layer id="4" name="gameObjectLayer" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztmUGSgzAMBLP7/0dv7SmXECQ8ksd2dxU3McI0IY7yegEAAAAAAHjxY3xAnqr7OftZ4JlZD3x4gQ8veGf5gQ8v8OHFyj523D9WX/PKe/UZ11qxrhWeURfnn65rhcxTwIcX+PACH/U4fJ/DG3x4gQ8v8OHFCj5OcoYPL/DhBT68wIeekZmjuw8XF4p5+Qk+Kv8zUc/ST/GxClEf0TXhYwz1fcbHGPjwAh9e4MOL1X1E9hqR85V71hF28DFy/qfamY7wcX9upyN85Jn9+7yiLoObj6seipkKPvoY3XtU1mXYxcc/+MCHGnzU12XAR31dhlEfFUT3U5+uT7EefOj64kMPPvr6RXLx0dcvkouPvn6RXHz09Yvk4qOvXyS3yoc6Ax/j2coMdx+qdeBD0w8ftb1n+RgBH/l6fDzLxEd9r0wmPup7ZTKvZtpPsp7UPWEHH6rPSGYds37bKDNmrCHrw3kt6gx3H5l6fDzLrfSROdT9FRk7+chmKrytMN+9y3XwoQIfXuDDi1N9uDo50cfTczrAhxf48AIfXuDDi5N9jM49KjjVx7esmZ528NFFhyd8jDHiqGNGfJqPKxSz3rt8ZV1V/1PAx5rM9PFb1HsGqnebw+cj+u52PxQ4+IA3+PACH17go4/O76Gr3ifSfa+jzN7vrL7XAgAAgL35A/nGA1U=
+  </data>
+ </layer>
+</map>

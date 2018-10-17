@@ -40,6 +40,7 @@ void LoginLayer::onEnter()
 }
 void LoginLayer::onExit()
 {
+	Layer::onExit();
 	PlistManager::getInstance().removeUISpirteFrames(LOGIN_PLIST);
 }
 
@@ -73,9 +74,13 @@ void LoginLayer::initLoginPanel()
 
 	//ÃÜÂëÊäÈë¿ò±³¾°
 	cocos2d::Sprite* pTextPasswordFieldBg = cocos2d::Sprite::createWithSpriteFrameName(LOGIN_INPUT);
+	auto anchorPoint = pTextPasswordFieldBg->getAnchorPoint();
+	//pTextPasswordFieldBg->setAnchorPoint(cocos2d::Point(0.5,0.5));
 	desPos = cocos2d::Point(winSize.width / 2, winSize.height / 2);
 	pTextPasswordFieldBg->setPosition(desPos);
 	this->addChild(pTextPasswordFieldBg);
+	auto bgRect = pTextPasswordFieldBg->getBoundingBox();
+	cocos2d::log("password bg,  rect.x=%0.1f, rect.y=%0.1f, size.x=%0.1f, size.y=%0.1f\n",bgRect.origin.x, bgRect.origin.y, bgRect.size.width, bgRect.size.height);
 	//ÃÜÂëÎÄ×ÖÍ¼Æ¬
 	desSprite = cocos2d::Sprite::createWithSpriteFrameName(LOGIN_PWD_DES);
 	desSprite->setAnchorPoint(cocos2d::Point(1.0f, 0.5f));
@@ -87,7 +92,7 @@ void LoginLayer::initLoginPanel()
 	//ÕËºÅÊäÈë¿ò
 	cocos2d::Size editBoxSize = cocos2d::Size(312, 60);
 	m_pTextUserName = TextInput::create(editBoxSize, cocos2d::ui::Scale9Sprite::createWithSpriteFrameName(BG_TRANSPARENT_42_42, BG_TRANSPARENT_42_42_CCRect));
-	m_pTextUserName->setAnchorPoint(cocos2d::Point());
+	m_pTextUserName->setAnchorPoint(cocos2d::Point(0.5, 0.5));
 	m_pTextUserName->setPosition(winSize.width / 2, winSize.height / 2 + m_pTextUserName->getContentSize().height * 2);
 	m_pTextUserName->setFontName(FONT_NAME_DEFAULT);
 	m_pTextUserName->setFontSize(FONT_SIZE_20);
@@ -103,6 +108,7 @@ void LoginLayer::initLoginPanel()
 
 	//ÃÜÂëÊäÈë¿ò
 	m_pTextPassword = TextInput::create(editBoxSize, cocos2d::ui::Scale9Sprite::createWithSpriteFrameName(BG_TRANSPARENT_42_42, BG_TRANSPARENT_42_42_CCRect));
+	m_pTextPassword->setAnchorPoint(cocos2d::Point(0.5, 0.5));
 	m_pTextPassword->setPosition(cocos2d::Point(winSize.width / 2, winSize.height / 2));
 	m_pTextPassword->setFontName(FONT_NAME_DEFAULT);
 	m_pTextPassword->setFontSize(FONT_SIZE_20);
@@ -114,18 +120,33 @@ void LoginLayer::initLoginPanel()
 	m_pTextPassword->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::GO);
 	m_pTextPassword->setDelegate(this);
 	m_pTextPassword->setInputFlag(cocos2d::ui::EditBox::InputFlag::PASSWORD);
-	m_pTextPassword->setText("hahahah"/*cocos2d::UserDefault::getInstance()->getStringForKey(LAST_PASSWORD).c_str()*/);
+	m_pTextPassword->setText(cocos2d::UserDefault::getInstance()->getStringForKey(LAST_PASSWORD).c_str());
 	this->addChild(m_pTextPassword);
+
+	auto bgAnchor = m_pTextPassword->getAnchorPoint();
+	auto inputAnchor = m_pTextPassword->m_pTextField->getAnchorPoint();
+
+	cocos2d::log("bg anchor:x=%0.1f, y=%0.1f, input anchor:x=%0.1f, y=%0.1f", bgAnchor.x, bgAnchor.y, inputAnchor.x, inputAnchor.y);
+
+	auto position = m_pTextPassword->getPosition();
+	cocos2d::log("password input.x=%0.1f, y=%0.1f", position.x, position.y);
+	auto rect = m_pTextPassword->getRect(m_pTextPassword->m_pTextField);
+	cocos2d::log("text field rect, x=%0.1f, y=%0.1f", rect.origin.x, rect.origin.y);
+	auto postion2 = m_pTextPassword->m_pTextField->getParent()->convertToWorldSpace(m_pTextPassword->m_pTextField->getPosition());
+	cocos2d::log("text field pos2, x=%0.1f, y=%0.1f", postion2.x, postion2.y);
+	auto bgRect1 = m_pTextPassword->getBoundingBox();
+	cocos2d::log("password input,  rect.x=%0.1f, rect.y=%0.1f, size.x=%0.1f, size.y=%0.1f\n", bgRect1.origin.x, bgRect1.origin.y, bgRect1.size.width, bgRect1.size.height);
+	//ÃÜÂëÎÄ×ÖÍ¼Æ¬
 
 	/*cocos2d::ui::EditBox* pEditBox = cocos2d::ui::EditBox::create(editBoxSize, cocos2d::ui::Scale9Sprite::createWithSpriteFrameName(BG_TRANSPARENT_42_42, BG_TRANSPARENT_42_42_CCRect));
 	pEditBox->setPosition(cocos2d::Point(winSize.width / 2, winSize.height / 2));
 	pEditBox->setText("hahahahah ");
 	this->addChild(pEditBox);*/
 
-	cocos2d::TextFieldTTF* pTextTTF = cocos2d::TextFieldTTF::textFieldWithPlaceHolder("", m_pTextUserName->getContentSize(), cocos2d::TextHAlignment::LEFT, FONT_NAME_DEFAULT, FONT_SIZE_24);
+	/*cocos2d::TextFieldTTF* pTextTTF = cocos2d::TextFieldTTF::textFieldWithPlaceHolder("", m_pTextUserName->getContentSize(), cocos2d::TextHAlignment::LEFT, FONT_NAME_DEFAULT, FONT_SIZE_24);
 	pTextTTF->setPosition(cocos2d::Point(winSize.width / 2, winSize.height / 2));
 	pTextTTF->setString("feufheufheu");
-	this->addChild(pTextTTF);
+	this->addChild(pTextTTF);*/
 	//µÇÂ¼°´Å¥
 	cocos2d::ui::Button* pLoginButton = cocos2d::ui::Button::create();
 	pLoginButton->setTouchEnabled(true);
@@ -235,6 +256,12 @@ void LoginLayer::login()
 			cocos2d::UserDefault::getInstance()->setStringForKey(LAST_PASSWORD, passWord);
 		}
 
+	}
+	else
+	{
+		MsgDisplay* msgDisplay = MsgDisplay::create();
+		this->addChild(msgDisplay);
+		msgDisplay->msgDisplay("account or password is wrong");
 	}
 }
 

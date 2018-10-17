@@ -33,6 +33,8 @@ bool TextInput::init()
 		this->addChild(m_pEditBox);
 #else
 		m_pTextField = cocos2d::TextFieldTTF::textFieldWithPlaceHolder("", this->getContentSize(), cocos2d::TextHAlignment::LEFT, FONT_NAME_DEFAULT, FONT_SIZE_24);
+		m_pTextField->setAnchorPoint(cocos2d::Point(0.0f, 0.0f));
+		m_pTextField->setPosition(cocos2d::Point(10, 0));
 		this->addChild(m_pTextField);
 #endif
 
@@ -41,38 +43,35 @@ bool TextInput::init()
 
 	auto dispatcher = cocos2d::Director::getInstance()->getEventDispatcher();
 	m_pTouchListener = cocos2d::EventListenerTouchOneByOne::create();
+	m_pTouchListener->setSwallowTouches(true);
 	m_pTouchListener->onTouchBegan = CC_CALLBACK_2(TextInput::onTouchBegan, this);
 	m_pTouchListener->onTouchMoved = CC_CALLBACK_2(TextInput::onTouchMoved, this);
 	m_pTouchListener->onTouchCancelled = CC_CALLBACK_2(TextInput::onTouchCancelled, this);
 	m_pTouchListener->onTouchEnded = CC_CALLBACK_2(TextInput::onTouchEnded, this);
 	dispatcher->addEventListenerWithSceneGraphPriority(m_pTouchListener, this);
-
 	return bRet;
-}
-
-void TextInput::setAnchorPoint(const cocos2d::Point anchorPoint)
-{
-	//m_pNormalBg->setAnchorPoint(anchorPoint);
 }
 
 bool TextInput::onTouchBegan(cocos2d::Touch *pTouch, cocos2d::Event *pEvent)
 {
-	cocos2d::log("TextInput::onTouchBegan");
+	
 	if (!m_pTextField)
 	{
 		return false;
 	} 
 
-	cocos2d::Point convertedLocation = this->convertToWorldSpace(this->convertTouchToNodeSpace(pTouch));
-	cocos2d::Rect bgRect = this->getBoundingBox();
-	
+	auto pos = pTouch->getLocation();//this->convertToWorldSpace(this->convertTouchToNodeSpace(pTouch));
+	auto bgRect = this->getBoundingBox();
+	cocos2d::log("TextInput::onTouchBegan, this:%p, pox.x=%0.1f, pos.y=%0.1f, rect.x=%0.1f, rect.y=%0.1f, size.x=%0.1f, size.y=%0.1f\n", 
+		this, pos.x, pos.y, bgRect.origin.x, bgRect.origin.y, bgRect.size.width, bgRect.size.height);
 	//cocos2d::Rect bgRect; //= this->getRect(this);
 	//cocos2d::Rect bgRect;
 	//bgRect.origin = cocos2d::Point(-this->getContentSize().width / 2, -this->getContentSize().height / 2);
 	//bgRect.size = this->getContentSize();
 
-	if (bgRect.containsPoint(convertedLocation))
+	if (bgRect.containsPoint(pos))
 	{
+		cocos2d::log("TextInput::onTouchBegan, this:%p, in rect", this);
 		m_beginPos = pTouch->getLocation();
 		return true;
 	}
@@ -102,12 +101,13 @@ bool TextInput::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *pEvent)
 	//是不是点中 m_pTextField ？
 	cocos2d::Point convertedLocation = this->convertToWorldSpace(this->convertTouchToNodeSpace(pTouch));
 	//CCRect bgRect = m_pNormalBg->boundingBox();
-	cocos2d::Rect bgRect;
-	bgRect.origin = cocos2d::Point(-this->getContentSize().width / 2, -this->getContentSize().height / 2);
+	cocos2d::Rect bgRect = this->getBoundingBox();
+	/*bgRect.origin = cocos2d::Point(-this->getContentSize().width / 2, -this->getContentSize().height / 2);
 	bgRect.size = this->getContentSize();
-
+*/
 	if (bgRect.containsPoint(convertedLocation))
 	{
+		cocos2d::log("onTouchEnded, in rect, attach ime");
 		//be clicked
 		m_pTextField->attachWithIME();
 		return true;
@@ -506,9 +506,9 @@ void TextInput::setColorSpaceHolder(const cocos2d::Color3B& color)
 	}
 }
 
-void TextInput::setLabelEx(bool m_isLabelEx)
+void TextInput::setLabelEx(bool isLabelEx)
 {
-	this->m_isLabelEx = m_isLabelEx;
+	this->m_isLabelEx = isLabelEx;
 }
 
 

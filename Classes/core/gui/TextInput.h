@@ -33,8 +33,6 @@ public:
 	bool init();
 
 public:
-	void setAnchorPoint(const cocos2d::Point anchorPoint);  //默认中心（0.5,0.5）
-
 	const char* getText();          //取得键盘输入字符串
 	void setText(const char* str);  //设置键盘输入字符
 	void setPlaceHolder(const char*  pText);    //提示信息 （但输入的信息为空时就显示）PlaceHolder和输入的内容共用一个cclabelTTF
@@ -63,6 +61,7 @@ public:
 	void setVisible(bool isVisible);
 
 	cocos2d::Rect getRect(cocos2d::Node * pNode);
+
 public:
 	bool onTouchBegan(cocos2d::Touch*pTouch, cocos2d::Event*pEvent);
 	void onTouchMoved(cocos2d::Touch*pTouch, cocos2d::Event*pEvent);

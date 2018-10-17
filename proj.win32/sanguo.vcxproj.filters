@@ -19,29 +19,29 @@
     <Filter Include="Classes\game">
       <UniqueIdentifier>{47d38123-e97c-4fee-9042-a4169b34cbb1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\game\login">
-      <UniqueIdentifier>{8e1f9324-0316-4a73-8337-410f3caf8628}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Classes\game\ui">
       <UniqueIdentifier>{2595d787-89d7-4413-b3f4-92a1f4492f2e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\game\loading">
-      <UniqueIdentifier>{170b2508-0181-4d5e-9929-342277dd9725}</UniqueIdentifier>
     </Filter>
     <Filter Include="Classes\config">
       <UniqueIdentifier>{836e54f0-5c08-44e9-afe1-2fd5620a7676}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\core">
-      <UniqueIdentifier>{11011659-e894-4d03-b37b-39e525399853}</UniqueIdentifier>
+    <Filter Include="Classes\game\scene">
+      <UniqueIdentifier>{cb80f4c9-3c80-45dd-94dc-888f5985a039}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\core\common">
-      <UniqueIdentifier>{33f648e3-4a32-479e-b884-001a0c11e0f6}</UniqueIdentifier>
+    <Filter Include="Classes\game\entity">
+      <UniqueIdentifier>{7c688d45-6434-4696-a43a-98df5f3db48d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\core\gui">
-      <UniqueIdentifier>{f2b6955c-d808-48c0-b982-0c5398f9da15}</UniqueIdentifier>
+    <Filter Include="Classes\game\map">
+      <UniqueIdentifier>{9b717557-508e-4ee2-85d1-3adb3c7a8d2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\core\utils">
-      <UniqueIdentifier>{a6b14998-1489-4a22-92b9-8616a868616f}</UniqueIdentifier>
+    <Filter Include="Classes\game\logic">
+      <UniqueIdentifier>{1396deec-e1a7-4d3e-a561-5d0786cdd9fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\game\manager">
+      <UniqueIdentifier>{b2cd50b5-adbf-41ee-b9da-31c4652a38f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\utils">
+      <UniqueIdentifier>{c4ceaa42-d344-4cf2-9fff-34dd2c75eb34}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,56 +54,62 @@
     <ClCompile Include="..\Classes\HelloWorldScene.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\game\LoginScene.cpp">
-      <Filter>Classes\game\login</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\game\LoadingScene.cpp">
-      <Filter>Classes\game\loading</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\game\GameUILayer.cpp">
       <Filter>Classes\game\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\game\DataManager.cpp">
-      <Filter>Classes\game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\game\GameSceneManager.cpp">
-      <Filter>Classes\game</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\config\MapData.cpp">
       <Filter>Classes\config</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\game\AccountLayer.cpp">
-      <Filter>Classes\game\login</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\core\gui\AnimButton.cpp">
-      <Filter>Classes\core\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\core\gui\BaseNode.cpp">
-      <Filter>Classes\core\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\core\utils\byteorder.cpp">
-      <Filter>Classes\core\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\core\utils\ReadUtil.cpp">
-      <Filter>Classes\core\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\core\gui\SimpleButton.cpp">
-      <Filter>Classes\core\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\core\gui\TextInput.cpp">
-      <Filter>Classes\core\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\core\common\PlistManager.cpp">
-      <Filter>Classes\core\common</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\ui\MsgDisplay.cpp">
       <Filter>Classes\ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\core\gui\Menu.cpp">
-      <Filter>Classes\core\gui</Filter>
+    <ClCompile Include="..\Classes\game\Building.cpp">
+      <Filter>Classes\game\entity</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\core\common\InternationManager.cpp">
-      <Filter>Classes\core\common</Filter>
+    <ClCompile Include="..\Classes\game\Soldier.cpp">
+      <Filter>Classes\game\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\GameScene.cpp">
+      <Filter>Classes\game\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\MapManager.cpp">
+      <Filter>Classes\game\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\AutoFindPath.cpp">
+      <Filter>Classes\game\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\Army.cpp">
+      <Filter>Classes\game\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\GameConfig.cpp">
+      <Filter>Classes\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\GameBattle.cpp">
+      <Filter>Classes\game\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\GameObjectSelectBox.cpp">
+      <Filter>Classes\game\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\GameObject.cpp">
+      <Filter>Classes\game\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\BulletManager.cpp">
+      <Filter>Classes\game\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\GameObjectManager.cpp">
+      <Filter>Classes\game\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\SoundManager.cpp">
+      <Filter>Classes\game\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\SpecialEffectManager.cpp">
+      <Filter>Classes\game\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\utils\GameUtils.cpp">
+      <Filter>Classes\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ui\FixUI.cpp">
+      <Filter>Classes\game\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,20 +122,8 @@
     <ClInclude Include="..\Classes\HelloWorldScene.h">
       <Filter>Classes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\game\LoginScene.h">
-      <Filter>Classes\game\login</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\game\LoadingScene.h">
-      <Filter>Classes\game\loading</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\game\GameUILayer.h">
       <Filter>Classes\game\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\game\DataManager.h">
-      <Filter>Classes\game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\game\GameSceneManager.h">
-      <Filter>Classes\game</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\game\GameDefine.h">
       <Filter>Classes\game</Filter>
@@ -137,53 +131,59 @@
     <ClInclude Include="..\Classes\config\MapData.h">
       <Filter>Classes\config</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\game\AccountLayer.h">
-      <Filter>Classes\game\login</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\core\gui\AnimButton.h">
-      <Filter>Classes\core\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\core\gui\BaseNode.h">
-      <Filter>Classes\core\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\core\utils\basic_types.h">
-      <Filter>Classes\core\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\core\utils\byteorder.h">
-      <Filter>Classes\core\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\core\utils\ReadUtil.h">
-      <Filter>Classes\core\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\core\gui\TextInput.h">
-      <Filter>Classes\core\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\core\gui\CoreDefine.h">
-      <Filter>Classes\core\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\core\common\PlistManager.h">
-      <Filter>Classes\core\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\core\gui\SimpleButton.h">
-      <Filter>Classes\core\gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\ui\MsgDisplay.h">
       <Filter>Classes\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\ui\UIDefine.h">
       <Filter>Classes\ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\core\gui\UIProtocol.h">
-      <Filter>Classes\core\gui</Filter>
+    <ClInclude Include="..\Classes\game\Building.h">
+      <Filter>Classes\game\entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\core\gui\Menu.h">
-      <Filter>Classes\core\gui</Filter>
+    <ClInclude Include="..\Classes\game\Soldier.h">
+      <Filter>Classes\game\entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\core\common\InternationManager.h">
-      <Filter>Classes\core\common</Filter>
+    <ClInclude Include="..\Classes\game\GameScene.h">
+      <Filter>Classes\game\scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\core\GameCore.h">
-      <Filter>Classes\core</Filter>
+    <ClInclude Include="..\Classes\game\MapManager.h">
+      <Filter>Classes\game\map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\AutoFindPath.h">
+      <Filter>Classes\game\map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\Army.h">
+      <Filter>Classes\game\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\GameConfig.h">
+      <Filter>Classes\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\GameBattle.h">
+      <Filter>Classes\game\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\GameObjectSelectBox.h">
+      <Filter>Classes\game\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\GameObject.h">
+      <Filter>Classes\game\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\BulletManager.h">
+      <Filter>Classes\game\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\GameObjectManager.h">
+      <Filter>Classes\game\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\SoundManager.h">
+      <Filter>Classes\game\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\SpecialEffectManager.h">
+      <Filter>Classes\game\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\utils\GameUtils.h">
+      <Filter>Classes\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ui\FixUI.h">
+      <Filter>Classes\game\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
