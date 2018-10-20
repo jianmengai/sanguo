@@ -213,3 +213,13 @@ void Army::update(float dt)
 
 	}
 }
+
+void Army::soldiersMoveTo(const cocos2d::Vec2& position)
+{
+	auto mapPos = MapManager::getInstance()->toMapPos(position);
+
+	for (auto& soldier : m_selectedSodiers)
+	{
+
+	}
+}

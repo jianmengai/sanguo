@@ -12,6 +12,8 @@ public:
 	void onDieAnimationEnd();
 
 	void clear();
+
+	void moveTo();
 private:
 	bool initAnimate(SoldierType type);
 	bool initData(SoldierType type);

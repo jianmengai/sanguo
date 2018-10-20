@@ -92,5 +92,5 @@ void GameScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 
 void GameScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 {
-
+	cocos2d::Vec2 curPosition = touch->getLocation();
 }

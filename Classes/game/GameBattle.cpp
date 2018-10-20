@@ -56,3 +56,8 @@ void GameBattle::update(float dt)
 	m_player->update(dt);
 	m_npc->update(dt);
 }
+
+void GameBattle::playerMoveTo(const cocos2d::Vec2& postiion)
+{
+
+}

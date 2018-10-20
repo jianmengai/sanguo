@@ -14,6 +14,8 @@ public:
 	bool createSoldier(ForceType forceType, SoldierType soldierType);
 
 	void update(float dt);
+
+	void playerMoveTo(const cocos2d::Vec2& postiion);
 private:
 	Army* m_player = nullptr;
 	Army* m_npc = nullptr;

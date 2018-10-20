@@ -201,6 +201,9 @@ bool GameConfig::parseSoldierConf(const tinyxml2::XMLElement* node)
 		soldierConf->bulletType = static_cast<BulletType>(atoi(brotherNode->Attribute("bulletType")));
 		soldierConf->damageType = static_cast<DamageType>(atoi(brotherNode->Attribute("damageType")));
 		soldierConf->aoeDamageRadius = atof(brotherNode->Attribute("aoeDamageRadius"));
+		soldierConf->standAnimateDelayPerUnit = atof(brotherNode->Attribute("standAnimatePerUnit"));
+		soldierConf->moveAnimateDelayPerUnit = atof(brotherNode->Attribute("moveAnimatePerUnit"));
+		soldierConf->dieAnimateDelayPerUnit = atof(brotherNode->Attribute("dieAnimatePerUnit"));
 		m_soldierConf[soldierType] = soldierConf;
 		brotherNode = brotherNode->NextSiblingElement();
 	}

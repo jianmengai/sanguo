@@ -124,7 +124,7 @@ cocos2d::RepeatForever* Soldier::createAnimateWithPlist(const std::string& plist
 		setContentSize(spriteFrame->getOriginalSizeInPixels());
 	}
 
-	animation->setDelayPerUnit(animateDelayPerUnit);
+	animation->setDelayPerUnit(1.0f);
 	animation->setRestoreOriginalFrame(true);
 
 	cocos2d::RepeatForever* repeatForeverAnimate = nullptr;
