@@ -59,5 +59,5 @@ void GameBattle::update(float dt)
 
 void GameBattle::playerMoveTo(const cocos2d::Vec2& postiion)
 {
-
+	m_player->soldiersMoveTo(postiion);
 }

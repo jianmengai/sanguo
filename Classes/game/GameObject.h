@@ -32,7 +32,7 @@ protected:
 	int m_maxHp;
 	int m_maxDefence;
 	int m_curDefence;
-	int m_state;
+	//int m_state;
 	int m_type;
 	int m_attackPower;
 	int m_maxAttackPower;

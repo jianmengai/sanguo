@@ -53,6 +53,9 @@ public:
 	//坐标转成瓦片块的行列
 	cocos2d::Vec2 toTileRowCol(const cocos2d::Vec2& pos);
 
+	//pos为地图坐标位置
+	TileNode* getTileNode(const cocos2d::Vec2& pos);
+
 	cocos2d::Vec2 tileRowColToPos(const int row, const int col);
 
 	//设置障碍物

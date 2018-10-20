@@ -1,6 +1,7 @@
 #include "Army.h"
 #include "MapManager.h"
 #include "GameObjectManager.h"
+#include "AutoFindPath.h"
 
 Army::Army()
 {
@@ -174,6 +175,7 @@ bool Army::createSoldier(SoldierType type)
 	MapManager::getInstance()->addChildToGameObjectLayer(soldier);
 	GameObjectManager::getInstance()->addGameObject(soldier);
 	MapManager::getInstance()->setOccupy(newPos, soldier->getContentSize());
+	m_selectedSodiers.push_back(soldier);
 	return true;
 }
 
@@ -217,9 +219,9 @@ void Army::update(float dt)
 void Army::soldiersMoveTo(const cocos2d::Vec2& position)
 {
 	auto mapPos = MapManager::getInstance()->toMapPos(position);
-
+	auto endTileNode = MapManager::getInstance()->getTileNode(mapPos);
 	for (auto& soldier : m_selectedSodiers)
 	{
-
+		soldier->moveTo(mapPos);
 	}
 }

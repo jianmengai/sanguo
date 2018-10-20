@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "cocostudio/ActionTimeline/CSLoader.h"
+#include "GameBattle.h"
 GameScene::GameScene()
 {
 }
@@ -93,4 +94,6 @@ void GameScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 void GameScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 {
 	cocos2d::Vec2 curPosition = touch->getLocation();
+	cocos2d::log("GameScene::onTouchEnded, ");
+	GameBattle::getInstance()->playerMoveTo(curPosition);
 }

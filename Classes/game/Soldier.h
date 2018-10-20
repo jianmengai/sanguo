@@ -1,6 +1,8 @@
 #pragma once
+#include <list>
 #include "GameObject.h"
 
+struct TileNode;
 
 class Soldier : public GameObject
 {
@@ -13,11 +15,20 @@ public:
 
 	void clear();
 
-	void moveTo();
+	void update(float deltaTime);
+
+	//Ñ°Â·Ö¸Áî
+	void moveTo(const cocos2d::Vec2& pos);
 private:
 	bool initAnimate(SoldierType type);
 	bool initData(SoldierType type);
 	cocos2d::RepeatForever* createAnimateWithPlist(const std::string& plistFile, float animateDelayPerUnit, GameObjectStatus status);
+
+private:
+	void toMove();
+	void toStand();
+	void toAttack();
+
 private:
 	cocos2d::Size m_dieAnimationFrameSize;
 
@@ -27,4 +38,8 @@ private:
 	std::unordered_map<FaceDirection, cocos2d::RepeatForever*> m_moveAnimateMap;
 	std::unordered_map<FaceDirection, cocos2d::RepeatForever*> m_standAnimateMap;
 	std::unordered_map<FaceDirection, cocos2d::RepeatForever*> m_attackAnimateMap;
+
+	std::list<TileNode*> m_pathList;
+	
+	GameObjectStatus m_soldierStatus;
 };

@@ -6,6 +6,7 @@
 #include "SoundManager.h"
 #include "MapManager.h"
 #include "GameUtils.h"
+#include "AutoFindPath.h"
 
 Soldier* Soldier::create(SoldierType type, const cocos2d::Vec2& position, FaceDirection direction)
 {
@@ -42,6 +43,8 @@ bool Soldier::init(SoldierType type, const cocos2d::Vec2& position, FaceDirectio
 
 	
 	m_uniqId = GameUtils::getLastestUniqId();
+	
+	scheduleUpdate();
 
 	return true;
 }
@@ -183,4 +186,80 @@ void Soldier::onAttackAnimationEnd()
 void Soldier::onDieAnimationEnd()
 {
 
+}
+
+void Soldier::moveTo(const cocos2d::Vec2& pos)
+{
+	cocos2d::log("soldier:%d will move to:[%0.1f, %0.1f]",m_uniqId, pos.x, pos.y);
+	//接收到新的目的点，清空之前的寻路路径
+	if (!m_pathList.empty())
+	{
+		m_pathList.clear();
+	}
+	auto endTileNode = MapManager::getInstance()->getTileNode(pos);
+	auto curPos = this->getPosition();
+	auto curTileNode = MapManager::getInstance()->getTileNode(curPos);
+	cocos2d::log("from tile node:[%d, %d] to [%d, %d]", curTileNode->rowIndex, curTileNode->columnIndex, 
+		endTileNode->rowIndex, endTileNode->columnIndex);
+	m_pathList = AutoFindPath::computeTileNodePathListBetween(curTileNode, endTileNode);
+	
+	cocos2d::log("find path, node size:%lu", m_pathList.size());
+}
+
+void Soldier::update(float deltaTime)
+{
+	if (!m_pathList.empty())
+	{
+		cocos2d::log("soldier id:%d update", m_uniqId);
+		toMove();
+	}
+}
+
+void Soldier::toStand()
+{
+	if (m_soldierStatus == GameObjectStatus::Stand)
+	{
+		return;
+	}
+	if (!m_pathList.empty())
+	{
+		m_pathList.clear();
+	}
+
+	m_soldierStatus = GameObjectStatus::Stand;
+	runAction(m_standAnimateMap[m_faceDirection]);
+}
+
+void Soldier::toMove()
+{
+	if (m_soldierStatus != GameObjectStatus::Move)
+	{
+		m_soldierStatus = GameObjectStatus::Move;
+		runAction(m_moveAnimateMap[m_faceDirection]);
+	}
+	static int tick_count = 0;
+	++tick_count;
+	if (tick_count < 30)
+	{
+		return ;
+	}
+	tick_count = 0;
+	TileNode* curNode = m_pathList.front();
+	//cocos2d::log("-->[%d, %d]==>[%0.1f, %0.1f]", curNode->rowIndex, curNode->columnIndex, curNode->position.x, curNode->position.y);
+	this->setPosition(curNode->position);
+	m_pathList.pop_front();
+}
+
+void Soldier::toAttack()
+{
+	if (m_soldierStatus == GameObjectStatus::Attack)
+	{
+		return;
+	}
+	if (!m_pathList.empty())
+	{
+		m_pathList.clear();
+	}
+	runAction(m_attackAnimateMap[m_faceDirection]);
+	m_soldierStatus = GameObjectStatus::Attack;
 }

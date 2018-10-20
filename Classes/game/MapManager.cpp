@@ -323,3 +323,9 @@ bool MapManager::checkOccupy(const int row, const int col)
 	}
 	return m_tileNodeTable[row][col]->occupy != 1;
 }
+
+TileNode* MapManager::getTileNode(const cocos2d::Vec2& pos)
+{
+	cocos2d::Vec2 rowCol = toTileRowCol(pos);
+	return m_tileNodeTable[rowCol.x][rowCol.y];
+}

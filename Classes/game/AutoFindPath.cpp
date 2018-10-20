@@ -87,6 +87,7 @@ std::list<TileNode*> AutoFindPath::computeTileNodePathListBetween(TileNode* star
 		if (nextPathNode == g_endNode)
 		{
 			pathList = getPathList(startNode, g_endNode);
+			pathList.pop_front();
 			break;
 		}
 	}
@@ -98,7 +99,7 @@ bool AutoFindPath::canVisit(TileNode* node)
 {
 	bool result = true;
 
-	if (node->gid == OBSTACLE_ID ||
+	if (node->occupy == 1 ||
 		node->isVisit)
 	{
 		result = false;
@@ -118,11 +119,12 @@ TileNode* AutoFindPath::findNextPathNodeBeside(TileNode* node)
 	int minColumnIndex = std::max(node->columnIndex - 1, 0);
 	int maxColumnIndex = std::min(node->columnIndex + 1, g_maxColumnCount - 1);
 
-	for (int columnIndex = minColumnIndex; columnIndex <= maxColumnIndex; columnIndex++)
+	//搜寻周边8个tileNode
+	for (int rowIndex = minRowIndex; rowIndex <= maxRowIndex; ++rowIndex)
 	{
-		for (int rowIndex = minRowIndex; rowIndex <= maxRowIndex; rowIndex++)
+		for (int columnIndex = minColumnIndex; columnIndex <= maxColumnIndex; ++columnIndex)
 		{
-			auto prepareToVisitNode = g_tileNodeTable[columnIndex][rowIndex];
+			auto prepareToVisitNode = g_tileNodeTable[rowIndex][columnIndex];
 			if (canVisit(prepareToVisitNode))
 			{
 				prepareToVisitNode->isVisit = true;
@@ -189,15 +191,19 @@ TileNode* AutoFindPath::findNextPathNodeBeside(TileNode* node)
 	{
 		// 按sumWeight值从小到大排序
 		//g_openList.sort(isLeftSumWeightLessThanRight);
-
+		nextPathNode = g_openList.front();
 		for (auto alternativeNode : g_openList)
 		{
-			if (alternativeNode->gotoStartNodeWeight > node->gotoStartNodeWeight)
+			if (nextPathNode->sumWeight > alternativeNode->sumWeight)
+			{
+				nextPathNode = alternativeNode;
+			}
+			/*if (alternativeNode->gotoStartNodeWeight > node->gotoStartNodeWeight)
 			{
 				nextPathNode = alternativeNode;
 
 				break;
-			}
+			}*/
 		}
 	}
 
@@ -212,12 +218,11 @@ bool isLeftSumWeightLessThanRight(const TileNode* left, const TileNode* right)
 std::list<TileNode*> AutoFindPath::getPathList(TileNode* startNode, TileNode* endNode)
 {
 	std::list<TileNode*> pathList;
-
-
 	auto previousNode = endNode;
 	while (previousNode)
 	{
-		pathList.push_back(previousNode);
+		pathList.push_front(previousNode);
+		cocos2d::log("push front:[%d, %d]", previousNode->rowIndex, previousNode->columnIndex);
 		previousNode = previousNode->parent;
 	}
 
