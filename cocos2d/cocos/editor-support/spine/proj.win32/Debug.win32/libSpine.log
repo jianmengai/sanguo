@@ -1,1 +1,56 @@
-﻿  libSpine.vcxproj -> E:\cocos\sanguo\proj.win32\Debug.win32\libSpine.lib
+﻿  Animation.c
+  AnimationState.c
+  AnimationStateData.c
+  Array.c
+  Atlas.c
+  AtlasAttachmentLoader.c
+  Attachment.c
+  AttachmentLoader.c
+  Bone.c
+  BoneData.c
+  BoundingBoxAttachment.c
+  ClippingAttachment.c
+  Color.c
+  Event.c
+  EventData.c
+  extension.c
+  IkConstraint.c
+  IkConstraintData.c
+  Json.c
+  MeshAttachment.c
+  PathAttachment.c
+  PathConstraint.c
+  PathConstraintData.c
+  PointAttachment.c
+  RegionAttachment.c
+  Skeleton.c
+  SkeletonBinary.c
+  SkeletonBounds.c
+  SkeletonClipping.c
+  SkeletonData.c
+  SkeletonJson.c
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(310): warning C4018: “<”: 有符号/无符号不匹配
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(372): warning C4018: “<”: 有符号/无符号不匹配
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(484): warning C4018: “<”: 有符号/无符号不匹配
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(649): warning C4018: “<”: 有符号/无符号不匹配
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(652): warning C4018: “<”: 有符号/无符号不匹配
+  Skin.c
+  Slot.c
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonjson.c(97): warning C4018: “>=”: 有符号/无符号不匹配
+  SlotData.c
+  TransformConstraint.c
+  TransformConstraintData.c
+  Triangulator.c
+  VertexAttachment.c
+  VertexEffect.c
+  AttachmentVertices.cpp
+  Cocos2dAttachmentLoader.cpp
+  SkeletonAnimation.cpp
+  SkeletonBatch.cpp
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbatch.cpp(110): warning C4018: “<”: 有符号/无符号不匹配
+  SkeletonRenderer.cpp
+  SkeletonTwoColorBatch.cpp
+  spine-cocos2dx.cpp
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletontwocolorbatch.cpp(237): warning C4018: “<”: 有符号/无符号不匹配
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletontwocolorbatch.cpp(274): warning C4018: “<”: 有符号/无符号不匹配
+  libSpine.vcxproj -> D:\codes\sanguo\proj.win32\Debug.win32\libSpine.lib

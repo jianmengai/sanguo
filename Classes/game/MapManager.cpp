@@ -204,7 +204,7 @@ cocos2d::Size MapManager::getMapSize()
 	return m_mapSize;
 }
 
-cocos2d::Vec2& MapManager::toMapPos(const cocos2d::Vec2& pos)
+cocos2d::Vec2 MapManager::toMapPos(const cocos2d::Vec2& pos)
 {
 	auto mapPos = m_tiledMap->getPosition();
 	mapPos.negate();
@@ -221,7 +221,15 @@ cocos2d::Vec2 MapManager::toTileRowCol(const cocos2d::Vec2& pos)
 	auto tileSize = m_tiledMap->getTileSize();
 	int col = static_cast<int>(pos.x / tileSize.width);
 	int row = static_cast<int>(pos.y / tileSize.height);
+	if (col >= tileSize.width)
+	{
+		col = 0;
+	}
 	row = m_mapSize.height - row - 1;
+	if (row < 0)
+	{
+		row = 0;
+	}
 	return cocos2d::Vec2(row, col);
 }
 

@@ -24,7 +24,9 @@ private:
 	bool initData(SoldierType type);
 	cocos2d::RepeatForever* createAnimateWithPlist(const std::string& plistFile, float animateDelayPerUnit, GameObjectStatus status);
 
-private:
+	FaceDirection getFaceDirection(const cocos2d::Vec2& moveToPos);
+	float getMoveToDuration(const cocos2d::Vec2& moveToPos);
+
 	void toMove();
 	void toStand();
 	void toAttack();
@@ -42,4 +44,6 @@ private:
 	std::list<TileNode*> m_pathList;
 	
 	GameObjectStatus m_soldierStatus;
+
+	float m_moveSpeed = 50;
 };

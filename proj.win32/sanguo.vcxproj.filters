@@ -13,17 +13,11 @@
     <Filter Include="Classes">
       <UniqueIdentifier>{2f7391ca-8cf3-4120-a767-ea27159fc6db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\ui">
-      <UniqueIdentifier>{e605e2bf-c547-4600-b8a5-fc89038fb969}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Classes\game">
       <UniqueIdentifier>{47d38123-e97c-4fee-9042-a4169b34cbb1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Classes\game\ui">
       <UniqueIdentifier>{2595d787-89d7-4413-b3f4-92a1f4492f2e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\config">
-      <UniqueIdentifier>{836e54f0-5c08-44e9-afe1-2fd5620a7676}</UniqueIdentifier>
     </Filter>
     <Filter Include="Classes\game\scene">
       <UniqueIdentifier>{cb80f4c9-3c80-45dd-94dc-888f5985a039}</UniqueIdentifier>
@@ -56,12 +50,6 @@
     </ClCompile>
     <ClCompile Include="..\Classes\game\GameUILayer.cpp">
       <Filter>Classes\game\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\config\MapData.cpp">
-      <Filter>Classes\config</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\ui\MsgDisplay.cpp">
-      <Filter>Classes\ui</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\game\Building.cpp">
       <Filter>Classes\game\entity</Filter>
@@ -127,15 +115,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\game\GameDefine.h">
       <Filter>Classes\game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\config\MapData.h">
-      <Filter>Classes\config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ui\MsgDisplay.h">
-      <Filter>Classes\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ui\UIDefine.h">
-      <Filter>Classes\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\game\Building.h">
       <Filter>Classes\game\entity</Filter>

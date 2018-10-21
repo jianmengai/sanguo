@@ -48,7 +48,7 @@ public:
 	cocos2d::Vec2 getPosition();
 
 	//屏幕位置转成地图上的位置
-	cocos2d::Vec2& toMapPos(const cocos2d::Vec2& pos);
+	cocos2d::Vec2 toMapPos(const cocos2d::Vec2& pos);
 
 	//坐标转成瓦片块的行列
 	cocos2d::Vec2 toTileRowCol(const cocos2d::Vec2& pos);

@@ -151,7 +151,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
-    <ClCompile Include="..\Classes\config\MapData.cpp" />
     <ClCompile Include="..\Classes\game\Army.cpp" />
     <ClCompile Include="..\Classes\game\AutoFindPath.cpp" />
     <ClCompile Include="..\Classes\game\Building.cpp" />
@@ -169,13 +168,11 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\game\SpecialEffectManager.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\ui\FixUI.cpp" />
-    <ClCompile Include="..\Classes\ui\MsgDisplay.cpp" />
     <ClCompile Include="..\Classes\utils\GameUtils.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\Classes\config\MapData.h" />
     <ClInclude Include="..\Classes\game\Army.h" />
     <ClInclude Include="..\Classes\game\AutoFindPath.h" />
     <ClInclude Include="..\Classes\game\Building.h" />
@@ -194,8 +191,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\game\SpecialEffectManager.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\ui\FixUI.h" />
-    <ClInclude Include="..\Classes\ui\MsgDisplay.h" />
-    <ClInclude Include="..\Classes\ui\UIDefine.h" />
     <ClInclude Include="..\Classes\utils\GameUtils.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

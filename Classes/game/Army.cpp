@@ -218,6 +218,10 @@ void Army::update(float dt)
 
 void Army::soldiersMoveTo(const cocos2d::Vec2& position)
 {
+	if (m_selectedSodiers.empty())
+	{
+		return;
+	}
 	auto mapPos = MapManager::getInstance()->toMapPos(position);
 	auto endTileNode = MapManager::getInstance()->getTileNode(mapPos);
 	for (auto& soldier : m_selectedSodiers)

@@ -39,6 +39,7 @@ bool Soldier::init(SoldierType type, const cocos2d::Vec2& position, FaceDirectio
 	{
 		return false;
 	}
+	this->setScale(MapManager::getInstance()->getMapScale() * 2);
 	this->setPosition(position);
 
 	
@@ -127,7 +128,7 @@ cocos2d::RepeatForever* Soldier::createAnimateWithPlist(const std::string& plist
 		setContentSize(spriteFrame->getOriginalSizeInPixels());
 	}
 
-	animation->setDelayPerUnit(1.0f);
+	animation->setDelayPerUnit(animateDelayPerUnit);
 	animation->setRestoreOriginalFrame(true);
 
 	cocos2d::RepeatForever* repeatForeverAnimate = nullptr;
@@ -204,14 +205,16 @@ void Soldier::moveTo(const cocos2d::Vec2& pos)
 	m_pathList = AutoFindPath::computeTileNodePathListBetween(curTileNode, endTileNode);
 	
 	cocos2d::log("find path, node size:%lu", m_pathList.size());
+	toMove();
 }
 
 void Soldier::update(float deltaTime)
 {
+	//GameObject::update(deltaTime);
 	if (!m_pathList.empty())
 	{
-		cocos2d::log("soldier id:%d update", m_uniqId);
-		toMove();
+		//toMove();
+		//m_soldierStatus = GameObjectStatus::Move;
 	}
 }
 
@@ -225,29 +228,48 @@ void Soldier::toStand()
 	{
 		m_pathList.clear();
 	}
-
+	stopAllActions();
 	m_soldierStatus = GameObjectStatus::Stand;
 	runAction(m_standAnimateMap[m_faceDirection]);
 }
 
 void Soldier::toMove()
 {
-	if (m_soldierStatus != GameObjectStatus::Move)
+	if (m_pathList.empty())
 	{
-		m_soldierStatus = GameObjectStatus::Move;
-		runAction(m_moveAnimateMap[m_faceDirection]);
+		return;
 	}
-	static int tick_count = 0;
-	++tick_count;
-	if (tick_count < 30)
-	{
-		return ;
-	}
-	tick_count = 0;
 	TileNode* curNode = m_pathList.front();
-	//cocos2d::log("-->[%d, %d]==>[%0.1f, %0.1f]", curNode->rowIndex, curNode->columnIndex, curNode->position.x, curNode->position.y);
-	this->setPosition(curNode->position);
 	m_pathList.pop_front();
+	cocos2d::log("-->[%d, %d]==>[%0.1f, %0.1f]", curNode->rowIndex, curNode->columnIndex, curNode->position.x, curNode->position.y);
+	FaceDirection faceDirection = getFaceDirection(curNode->position);
+	auto animteIt = m_moveAnimateMap.find(faceDirection);
+	if (animteIt != m_moveAnimateMap.end())
+	{
+		if ((m_soldierStatus != GameObjectStatus::Move) || (faceDirection != m_faceDirection))
+		{
+			m_soldierStatus = GameObjectStatus::Move;
+			stopAllActions();
+			m_faceDirection = faceDirection;
+			runAction(animteIt->second);
+		}
+		
+		auto moveDuration = getMoveToDuration(curNode->position);
+		auto moveDelta = curNode->position - getPosition();
+		auto moveBy = cocos2d::MoveBy::create(moveDuration, moveDelta);
+		cocos2d::CallFunc* moveEndEvent = nullptr;
+		if (m_pathList.empty())
+		{
+			moveEndEvent = cocos2d::CallFunc::create(CC_CALLBACK_0(Soldier::toStand, this));
+		}
+		else
+		{
+			moveEndEvent = cocos2d::CallFunc::create(CC_CALLBACK_0(Soldier::toMove, this));
+		}
+		auto sequenceAction = cocos2d::Sequence::create(moveBy, moveEndEvent, nullptr);
+		runAction(sequenceAction);
+		
+	}
 }
 
 void Soldier::toAttack()
@@ -262,4 +284,47 @@ void Soldier::toAttack()
 	}
 	runAction(m_attackAnimateMap[m_faceDirection]);
 	m_soldierStatus = GameObjectStatus::Attack;
+}
+
+FaceDirection Soldier::getFaceDirection(const cocos2d::Vec2& moveToPos)
+{
+	FaceDirection faceToDirection = FaceDirection::Invalid;
+	auto position = getPosition();
+
+	float degree = GameUtils::computeRotatedDegree(position, moveToPos);
+	if (degree >= 0.0f && degree < 60.0f)
+	{
+		faceToDirection = FaceDirection::FaceToNorthEast;
+	}
+	else if (degree >= 60.0f && degree < 120.0f)
+	{
+		faceToDirection = FaceDirection::FaceToEast;
+	}
+	else if (degree >= 120.0f && degree < 180.0f)
+	{
+		faceToDirection = FaceDirection::FaceToSouthEast;
+	}
+	else if (degree >= 180.0f && degree < 240.0f)
+	{
+		faceToDirection = FaceDirection::FaceToSouthWest;
+	}
+	else if (degree >= 240.0f && degree < 300.0f)
+	{
+		faceToDirection = FaceDirection::FaceToWest;
+	}
+	else
+	{
+		faceToDirection = FaceDirection::FaceToNorthWest;
+	}
+
+	return faceToDirection;
+}
+
+float Soldier::getMoveToDuration(const cocos2d::Vec2& moveToPos)
+{
+	auto position = getPosition();
+	float distance = std::sqrt((moveToPos.x - position.x) * (moveToPos.x - position.x) +
+		(moveToPos.y - position.y) * (moveToPos.y - position.y));
+
+	return distance / m_moveSpeed;
 }
