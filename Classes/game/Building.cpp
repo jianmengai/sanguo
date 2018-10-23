@@ -25,7 +25,7 @@ bool Building::init(const BuildingType type, const cocos2d::Vec2& position)
 	{
 		return false;
 	}
-	
+	m_objectType = GameObjectType::Building;
 	m_buildingStatus = BuildingStatus::Working;
 	setPosition(position);
 	initBuildingStatusSprites(type);
@@ -89,7 +89,7 @@ cocos2d::Sprite* Building::createBuildingStatusSprite(const BuildingType type, B
 	this->addChild(buildingStatusSprite);
 	m_buildingStatusSpriteMap[buildingStatus] = buildingStatusSprite;
 
-	if (hasShadow)
+	/*if (hasShadow)
 	{
 		auto buildStatusSpriteSize = buildingStatusSprite->getContentSize();
 
@@ -98,7 +98,7 @@ cocos2d::Sprite* Building::createBuildingStatusSprite(const BuildingType type, B
 		shadowSprite->setSpriteFrame(shadowSpriteFrame);
 		shadowSprite->setPosition(cocos2d::Vec2(buildStatusSpriteSize.width / 2.0f, shadowYPosition));
 		buildingStatusSprite->addChild(shadowSprite, -1);
-	}
+	}*/
 
 	return buildingStatusSprite;
 }

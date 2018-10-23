@@ -15,6 +15,7 @@ public:
 
 	void update(float dt);
 
+	void touchProcess(const cocos2d::Vec2& position);
 	void playerMoveTo(const cocos2d::Vec2& postiion);
 private:
 	Army* m_player = nullptr;

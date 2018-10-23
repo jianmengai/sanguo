@@ -18,9 +18,15 @@ public:
 	bool createSoldier(SoldierType type);
 	bool createBuilding(BuildingType type, const cocos2d::Vec2& position);
 	void soldiersMoveTo(const cocos2d::Vec2& position);
+
+	void addSelected(GameObject* gameObject);
+	void attackTarget(GameObject* gameObject);
+
+	void setForceType(ForceType forceType);
 private:
 	int m_gold = 0;
 	SOLDIER_MAP m_soldiers;
 	BUILDING_MAP m_buildings;
 	std::vector<Soldier*> m_selectedSodiers;
+	ForceType m_forceType;
 };

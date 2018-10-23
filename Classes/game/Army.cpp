@@ -170,12 +170,13 @@ bool Army::createSoldier(SoldierType type)
 	{
 		return false;
 	}
+	soldier->setForceType(m_forceType);
 	cocos2d::log("===>create soldier, pos:[%0.1f, %0.1f]", newPos.x, newPos.y);
 	m_soldiers[type].push_back(soldier);
 	MapManager::getInstance()->addChildToGameObjectLayer(soldier);
 	GameObjectManager::getInstance()->addGameObject(soldier);
 	MapManager::getInstance()->setOccupy(newPos, soldier->getContentSize());
-	m_selectedSodiers.push_back(soldier);
+	//m_selectedSodiers.push_back(soldier);
 	return true;
 }
 
@@ -194,12 +195,18 @@ bool Army::createBuilding(BuildingType type, const cocos2d::Vec2& position)
 		cocos2d::log("can not building here...");
 		return false;
 	}
+	building->setForceType(m_forceType);
 	cocos2d::log("==> create building, pos:[x=%0.1f, y=%0.1f]\n", newPos.x, newPos.y);
 	m_buildings[type].push_back(building);
 	MapManager::getInstance()->addChildToGameObjectLayer(building);
 	GameObjectManager::getInstance()->addGameObject(building);
 	MapManager::getInstance()->setOccupy(newPos, contentSize);
 	return true;
+}
+
+void Army::setForceType(ForceType forceType)
+{
+	m_forceType = forceType;
 }
 
 void Army::update(float dt)
@@ -216,16 +223,53 @@ void Army::update(float dt)
 	}
 }
 
-void Army::soldiersMoveTo(const cocos2d::Vec2& position)
+void Army::addSelected(GameObject* gameObject)
+{
+	if (gameObject->getGameObjectType() == GameObjectType::Soldier)
+	{
+		Soldier* soldier = dynamic_cast<Soldier*>(gameObject);
+		m_selectedSodiers.push_back(dynamic_cast<Soldier*>(soldier));
+		cocos2d::log("select soldier:%d", soldier->getId());
+	}
+}
+
+void Army::attackTarget(GameObject* gameObject)
+{
+	if (gameObject->getForceType() != ForceType::AI)
+	{
+		return;
+	}
+	soldiersMoveTo(gameObject->getPosition());
+}
+
+void Army::soldiersMoveTo(const cocos2d::Vec2& mapPos)
 {
 	if (m_selectedSodiers.empty())
 	{
 		return;
 	}
-	auto mapPos = MapManager::getInstance()->toMapPos(position);
+	//auto mapPos = MapManager::getInstance()->toMapPos(position);
 	auto endTileNode = MapManager::getInstance()->getTileNode(mapPos);
+	int row = endTileNode->rowIndex;
+	int col = endTileNode->columnIndex;
+	auto moveToPos = mapPos;
+	auto mapSize = MapManager::getInstance()->getMapSize();
 	for (auto& soldier : m_selectedSodiers)
 	{
-		soldier->moveTo(mapPos);
+		soldier->moveTo(moveToPos);
+		if (row - 1 >= 0)
+		{
+			TileNode* tileNode = MapManager::getInstance()->getTileNode(row -1, col);
+			moveToPos = tileNode->position;
+			row = row - 1;
+			continue;
+		}
+		if (col - 1 >= 0)
+		{
+			TileNode* tileNode = MapManager::getInstance()->getTileNode(row, col -1);
+			col = col - 1;
+			moveToPos = tileNode->position;
+			continue;
+		}
 	}
 }

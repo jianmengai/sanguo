@@ -56,6 +56,7 @@ bool GameScene::init()
 void GameScene::update(float deltaTime)
 {
 	MapManager::getInstance()->update(deltaTime);
+	GameBattle::getInstance()->update(deltaTime);
 }
 
 void GameScene::pauseGame()
@@ -95,5 +96,5 @@ void GameScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 {
 	cocos2d::Vec2 curPosition = touch->getLocation();
 	cocos2d::log("GameScene::onTouchEnded, ");
-	GameBattle::getInstance()->playerMoveTo(curPosition);
+	GameBattle::getInstance()->touchProcess(curPosition);
 }

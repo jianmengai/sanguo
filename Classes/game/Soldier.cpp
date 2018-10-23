@@ -29,6 +29,7 @@ bool Soldier::init(SoldierType type, const cocos2d::Vec2& position, FaceDirectio
 	{
 		return false;
 	}
+	m_objectType = GameObjectType::Soldier;
 	m_faceDirection = direction;
 
 	if (!initAnimate(type))
@@ -39,7 +40,7 @@ bool Soldier::init(SoldierType type, const cocos2d::Vec2& position, FaceDirectio
 	{
 		return false;
 	}
-	this->setScale(MapManager::getInstance()->getMapScale() * 2);
+	this->setScale(MapManager::getInstance()->getMapScale() * 5);
 	this->setPosition(position);
 
 	
@@ -210,12 +211,6 @@ void Soldier::moveTo(const cocos2d::Vec2& pos)
 
 void Soldier::update(float deltaTime)
 {
-	//GameObject::update(deltaTime);
-	if (!m_pathList.empty())
-	{
-		//toMove();
-		//m_soldierStatus = GameObjectStatus::Move;
-	}
 }
 
 void Soldier::toStand()

@@ -19,6 +19,7 @@ public:
 
 	virtual float getAoeDamageRadius();
 
+	void setForceType(ForceType forceType) { m_forceType = forceType; }
 	ForceType getForceType() { return m_forceType; }
 	GameObjectType getGameObjectType() { return m_objectType; }
 

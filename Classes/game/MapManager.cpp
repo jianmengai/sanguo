@@ -1,5 +1,6 @@
 #include "MapManager.h"
 #include "AutoFindPath.h"
+#include "GameObjectManager.h"
 
 static std::map<TileMapLayerType, std::string> s_tileMapLayerTypeToString = {
 	{ TileMapLayerType::BackgroundLayer, "backgroundLayer" },
@@ -336,4 +337,24 @@ TileNode* MapManager::getTileNode(const cocos2d::Vec2& pos)
 {
 	cocos2d::Vec2 rowCol = toTileRowCol(pos);
 	return m_tileNodeTable[rowCol.x][rowCol.y];
+}
+
+TileNode* MapManager::getTileNode(int row, int col)
+{
+	if (row >= m_mapSize.height || col >= m_mapSize.width)
+	{
+		return nullptr;
+	}
+
+	return m_tileNodeTable[row][col];
+}
+
+void MapManager::updateTileNodeTable()
+{
+	//实时刷新各个格子的占用情况，以及格子上object信息
+	GameObjectMap& gameObjects = GameObjectManager::getInstance()->getGameObjectMap();
+	for (auto& it : gameObjects)
+	{
+		GameObject* gameObject = it.second;
+	}
 }
