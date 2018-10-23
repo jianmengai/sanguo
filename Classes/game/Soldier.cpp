@@ -40,7 +40,7 @@ bool Soldier::init(SoldierType type, const cocos2d::Vec2& position, FaceDirectio
 	{
 		return false;
 	}
-	this->setScale(MapManager::getInstance()->getMapScale() * 5);
+	this->setScale(1.5);
 	this->setPosition(position);
 
 	

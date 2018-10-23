@@ -188,6 +188,7 @@ void MapManager::setPosition(cocos2d::Vec2& position, bool isDelta)
 void MapManager::addChildToGameObjectLayer(cocos2d::Sprite* unit, int zOrder)
 {
 	m_gameObjectLayer->addChild(unit, zOrder);
+	cocos2d::log("child scale:%0.1f", unit->getScale());
 }
 
 cocos2d::Vec2 MapManager::getPosition()
