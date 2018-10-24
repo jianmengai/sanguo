@@ -233,6 +233,11 @@ void Army::addSelected(GameObject* gameObject)
 	}
 }
 
+void Army::clearSelected()
+{
+	m_selectedSodiers.clear();
+}
+
 void Army::attackTarget(GameObject* gameObject)
 {
 	if (gameObject->getForceType() != ForceType::AI)

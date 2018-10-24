@@ -166,6 +166,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\game\Soldier.cpp" />
     <ClCompile Include="..\Classes\game\SoundManager.cpp" />
     <ClCompile Include="..\Classes\game\SpecialEffectManager.cpp" />
+    <ClCompile Include="..\Classes\game\TextureSprite.cpp" />
+    <ClCompile Include="..\Classes\game\WarFogLayer.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\ui\FixUI.cpp" />
     <ClCompile Include="..\Classes\utils\GameUtils.cpp" />
@@ -189,6 +191,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\game\Soldier.h" />
     <ClInclude Include="..\Classes\game\SoundManager.h" />
     <ClInclude Include="..\Classes\game\SpecialEffectManager.h" />
+    <ClInclude Include="..\Classes\game\TextureSprite.h" />
+    <ClInclude Include="..\Classes\game\WarFogLayer.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\ui\FixUI.h" />
     <ClInclude Include="..\Classes\utils\GameUtils.h" />

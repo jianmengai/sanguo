@@ -32,6 +32,14 @@ bool GameScene::init()
 		return false;
 	}
 
+	auto mapContentSize = MapManager::getInstance()->getContentSize();
+	m_warFog = WarFogLayer::create(mapContentSize.width, mapContentSize.height);
+	if (nullptr == m_warFog)
+	{
+		return false;
+	}
+	this->addChild(m_warFog);
+
 	m_gameUI = GameUILayer::create();
 	if (nullptr == m_gameUI)
 	{

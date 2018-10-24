@@ -45,12 +45,6 @@ bool GameBattle::createSoldier(ForceType forceType, SoldierType soldierType)
 {
 	if (ForceType::Player == forceType)
 	{
-		//获取兵营位置
-		//遍历兵营周边未占用的位置
-		if (m_player->createSoldier(soldierType))
-		{
-
-		}
 		return m_player->createSoldier(soldierType);
 	}
 
@@ -91,7 +85,7 @@ void GameBattle::touchProcess(const cocos2d::Vec2& position)
 	//点击己方单位，选中该单位
 	else if (foceType == ForceType::Player)
 	{
-
+		m_player->clearSelected();
 		m_player->addSelected(selectObject);
 	}
 	//点击敌方单位，攻击该单位

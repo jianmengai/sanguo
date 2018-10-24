@@ -20,6 +20,8 @@ public:
 	void soldiersMoveTo(const cocos2d::Vec2& position);
 
 	void addSelected(GameObject* gameObject);
+	void clearSelected();
+
 	void attackTarget(GameObject* gameObject);
 
 	void setForceType(ForceType forceType);

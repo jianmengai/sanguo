@@ -7,7 +7,6 @@ static std::map<TileMapLayerType, std::string> s_tileMapLayerTypeToString = {
 	{ TileMapLayerType::GameObjcetLayer, "gameObjectLayer" },
 };
 
-
 MapManager* MapManager::getInstance()
 {
 	static MapManager mapManagerInstance;
@@ -204,6 +203,11 @@ cocos2d::Size MapManager::getTileSize()
 cocos2d::Size MapManager::getMapSize()
 {
 	return m_mapSize;
+}
+
+cocos2d::Size MapManager::getContentSize()
+{
+	return m_mapContentSize;
 }
 
 cocos2d::Vec2 MapManager::toMapPos(const cocos2d::Vec2& pos)

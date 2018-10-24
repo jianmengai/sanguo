@@ -99,6 +99,12 @@
     <ClCompile Include="..\Classes\ui\FixUI.cpp">
       <Filter>Classes\game\ui</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\game\TextureSprite.cpp">
+      <Filter>Classes\game\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\WarFogLayer.cpp">
+      <Filter>Classes\game\map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -163,6 +169,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\ui\FixUI.h">
       <Filter>Classes\game\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\TextureSprite.h">
+      <Filter>Classes\game\map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\WarFogLayer.h">
+      <Filter>Classes\game\map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

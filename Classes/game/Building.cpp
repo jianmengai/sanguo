@@ -31,6 +31,7 @@ bool Building::init(const BuildingType type, const cocos2d::Vec2& position)
 	initBuildingStatusSprites(type);
 	initBottomGridSprites(type);
 
+	setScale(1.5f);
 	m_uniqId = GameUtils::getLastestUniqId();
 
 	return true;

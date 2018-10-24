@@ -77,6 +77,7 @@ public:
 
 	cocos2d::Size getTileSize();
 	cocos2d::Size getMapSize();
+	cocos2d::Size getContentSize();
 
 private:
 	void initTileNodeTable();
