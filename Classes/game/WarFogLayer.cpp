@@ -32,12 +32,12 @@ bool WarFogLayer::init(int w, int h)
 	m_layerSize = cocos2d::Size(w, h);
 	m_base = TextureSprite::create(w, h);
 	addChild(m_base);
-	m_base->setRotation(45);
+	//m_base->setRotation(45);
 	m_out = cocos2d::Color4B::BLACK;
 	m_in = m_out;
 	m_out.a = 90;
 	m_in.a = 0;
-	setScaleY(0.5f);
+	//setScaleY(0.5f);
 	return true;
 }
 void WarFogLayer::setTileSize(cocos2d::Size s) 

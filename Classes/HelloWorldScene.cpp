@@ -25,6 +25,8 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 
+#include "WarFogLayer.h"
+
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -102,7 +104,7 @@ bool HelloWorld::init()
     }
 
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
+    auto sprite = Sprite::create("logo.png");
     if (sprite == nullptr)
     {
         problemLoading("'HelloWorld.png'");
@@ -114,6 +116,16 @@ bool HelloWorld::init()
 
         // add the sprite as a child to this layer
         this->addChild(sprite, 0);
+
+		auto mapContentSize = visibleSize;
+		auto warFog = WarFogLayer::create(mapContentSize.width, mapContentSize.height);
+		if (nullptr == warFog)
+		{
+			return false;
+		}
+		this->addChild(warFog);
+
+
     }
     return true;
 }

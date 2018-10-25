@@ -24,7 +24,7 @@ bool TextureSprite::init(int w, int h)
 	auto dataLen = w * h * 4;
 	m_data = new unsigned char[dataLen];
 	auto allcolor = cocos2d::Color4B::BLACK;
-	//allcolor.a = 150;
+	allcolor.a = 150;
 	m_layerSize = cocos2d::Size(w, h);
 	clearWithColor(allcolor);
 	auto texture = new (std::nothrow)cocos2d::Texture2D();
@@ -34,12 +34,15 @@ bool TextureSprite::init(int w, int h)
 	}
 	initWithTexture(texture);
 	texture->release();
-	setAnchorPoint(cocos2d::Vec2(m_layerSize.height / m_layerSize.width - 0.5f, -0.5f*(m_layerSize.width / m_layerSize.height)));
+	//setAnchorPoint(cocos2d::Vec2(0.5f, 0.5f));
+	setAnchorPoint(cocos2d::Vec2(0.0f, 0.0f));
 	scheduleUpdate();
 	return true;
 }
 void TextureSprite::update(float dt) 
 {
+	auto width = getContentSize().width;
+	auto height = getContentSize().height;
 	_texture->updateWithData(m_data, 0, 0, getContentSize().width, getContentSize().height);
 }
 void TextureSprite::clearWithColor(cocos2d::Color4B color) 

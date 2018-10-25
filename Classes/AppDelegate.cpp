@@ -139,7 +139,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	{
 		return false;
 	}
-	auto gameScene = GameScene::scene();
+	//auto gameScene = GameScene::scene();
+	auto gameScene = HelloWorld::createScene();
 	director->runWithScene(gameScene);
 
 
