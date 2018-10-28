@@ -27,6 +27,8 @@ private:
 
 	void onWin();
 	void onLost();
+
+	void updateWarFog();
 private:
 	cocos2d::Vec2 m_preTouchPos;
 	cocos2d::EventListenerTouchOneByOne* m_touchOneByOneListener = nullptr;

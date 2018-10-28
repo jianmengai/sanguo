@@ -40,7 +40,7 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 		return false;
 	}
 	m_tiledMap->setScale(m_mapScale);
-	m_tiledMap->setPosition(cocos2d::Vec2(-1700,-1200));
+	//m_tiledMap->setPosition(cocos2d::Vec2(-1700,-1200));
 
 	parentLayer->addChild(m_tiledMap);
 
@@ -61,6 +61,7 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 	cocos2d::log("map content size, width:%0.1f, height:%0.1f", m_mapContentSize.width, m_mapContentSize.height);
 	cocos2d::log("tile size, width:%0.1f, height:%0.1f", m_tiledMap->getTileSize().width, m_tiledMap->getTileSize().height);
 	cocos2d::log("map size, width:%0.1f, height:%0.1f", m_tiledMap->getMapSize().width, m_tiledMap->getMapSize().height);
+	cocos2d::log("position:%0.1f, %0.1f", m_tiledMap->getPosition().x, m_tiledMap->getPosition().y);
 	cocos2d::log("anchor point, x:%0.1f, y;%0.1f", m_tiledMap->getAnchorPoint().x, m_tiledMap->getAnchorPoint().y);
 
 
@@ -91,13 +92,9 @@ float MapManager::getMapScale()
 
 void MapManager::initTileNodeTable()
 {
-	//static int gid = 1;
-	//auto mapSize = m_tiledMap->getMapSize();
+	/*
 	m_tileNodeTable.resize((std::size_t)m_mapSize.height);
-
-	//auto tileSize = m_tiledMap->getTileSize();
 	auto gameObjectLayer = m_tiledMap->getLayer(s_tileMapLayerTypeToString[TileMapLayerType::GameObjcetLayer]);
-
 	cocos2d::log("\n-------gameoject layer-------");
 	cocos2d::log("	tilesize: width=%0.1f, height=%0.1f", gameObjectLayer->getMapTileSize().width, gameObjectLayer->getMapTileSize().height);
 	cocos2d::log("	contentsize: width=%0.1f, height=%0.1f", gameObjectLayer->getContentSize().width, gameObjectLayer->getContentSize().height);
@@ -126,6 +123,44 @@ void MapManager::initTileNodeTable()
 			m_tileNodeTable[rowIndex][columnIndex]->isVisit = false;
 		}
 	}
+	*/
+
+	auto mapSize = m_tiledMap->getMapSize();
+	m_tileNodeTable.resize((int)mapSize.height);
+
+	auto tileSize = m_tiledMap->getTileSize();
+
+	auto gameObjectLayer = m_tiledMap->getLayer(s_tileMapLayerTypeToString[TileMapLayerType::GameObjcetLayer]);
+
+	for (int rowIndex = 0; rowIndex < (int)mapSize.height; ++rowIndex)
+	{
+		m_tileNodeTable[rowIndex].resize((int)mapSize.width);
+		for (int columnIndex = 0; columnIndex < (int)mapSize.height; ++columnIndex)
+		{
+			m_tileNodeTable[rowIndex][columnIndex] = new TileNode;
+
+			m_tileNodeTable[rowIndex][columnIndex]->gid = gameObjectLayer->getTileGIDAt(cocos2d::Vec2(columnIndex, rowIndex));
+			if (m_tileNodeTable[rowIndex][columnIndex]->gid != 0)
+			{
+				m_tileNodeTable[rowIndex][columnIndex]->occupy = 1;
+			}
+			/*cocos2d::Vec2 positionInTileMap;
+			positionInTileMap.x = (((float)columnIndex - (float)rowIndex) / 2.0f + mapSize.width / 2.0f) * tileSize.width;
+			positionInTileMap.y = (mapSize.height - ((float)columnIndex + (float)rowIndex) / 2.0f) *  tileSize.height;
+			m_tileNodeTable[rowIndex][columnIndex]->position = positionInTileMap;*/
+
+			m_tileNodeTable[rowIndex][columnIndex]->position.x = (((float)columnIndex - (float)rowIndex) / 2.0f + mapSize.width / 2.0f) * tileSize.width;
+			m_tileNodeTable[rowIndex][columnIndex]->position.y = (mapSize.height - ((float)columnIndex + (float)rowIndex) / 2.0f - 0.5f) *  tileSize.height;;
+
+
+			m_tileNodeTable[rowIndex][columnIndex]->rowIndex = rowIndex;
+			m_tileNodeTable[rowIndex][columnIndex]->columnIndex = columnIndex;
+
+			m_tileNodeTable[rowIndex][columnIndex]->parent = nullptr;
+
+			m_tileNodeTable[rowIndex][columnIndex]->isVisit = false;
+		}
+	}
 }
 
 void MapManager::drawTileTable()
@@ -136,7 +171,7 @@ void MapManager::drawTileTable()
 	{
 		for (int columnIndex = 0; columnIndex < (int)m_mapSize.width; columnIndex++)
 		{
-			auto originPoint = cocos2d::Vec2(columnIndex * m_tileSize.width, totalHeight - rowIndex * m_tileSize.height);
+			/*auto originPoint = cocos2d::Vec2(columnIndex * m_tileSize.width, totalHeight - rowIndex * m_tileSize.height);
 			auto destPoint = cocos2d::Vec2((columnIndex + 1) * m_tileSize.width, totalHeight - (rowIndex + 1) * m_tileSize.height);
 			if (m_tileNodeTable[rowIndex][columnIndex]->occupy == 1)
 			{
@@ -145,8 +180,25 @@ void MapManager::drawTileTable()
 			else
 			{
 				m_drawNode->drawRect(originPoint, destPoint, color);
+			}*/
+			auto curPoint = m_tileNodeTable[rowIndex][columnIndex]->position;
+			cocos2d::Vec2 points[4];
+			points[0].x = curPoint.x - m_tileSize.width / 2.0;
+			points[0].y = curPoint.y;
+			points[1].x = curPoint.x;
+			points[1].y = curPoint.y + m_tileSize.height / 2.0;
+			points[2].x = curPoint.x + m_tileSize.width / 2.0;
+			points[2].y = curPoint.y;
+			points[3].x = curPoint.x;
+			points[3].y = curPoint.y - m_tileSize.height / 2.0;
+			if (m_tileNodeTable[rowIndex][columnIndex]->occupy == 1)
+			{
+				m_drawNode->drawSolidPoly(points, 4, color);
 			}
-			
+			else
+			{
+				m_drawNode->drawPoly(points, 4, false, color);
+			}
 		}
 	}
 }
@@ -224,7 +276,8 @@ cocos2d::Vec2 MapManager::toMapPos(const cocos2d::Vec2& pos)
 
 cocos2d::Vec2 MapManager::toTileRowCol(const cocos2d::Vec2& pos)
 {
-	auto tileSize = m_tiledMap->getTileSize();
+	//矩形地图行列计算
+	/*auto tileSize = m_tiledMap->getTileSize();
 	int col = static_cast<int>(pos.x / tileSize.width);
 	int row = static_cast<int>(pos.y / tileSize.height);
 	if (col >= tileSize.width)
@@ -236,6 +289,22 @@ cocos2d::Vec2 MapManager::toTileRowCol(const cocos2d::Vec2& pos)
 	{
 		row = 0;
 	}
+	return cocos2d::Vec2(row, col);*/
+
+	//菱形 45度地图行列计算
+	//pos.x = ((col - row) / 2.0 + mapSize.width / 2.0) * tileSize.width;
+	//pos.y = (mapSize.height - (col + row) / 2.0 + 0.5) * tileSize.height;
+	int row = m_mapSize.height - pos.y / m_tileSize.height - pos.x / m_tileSize.width + m_mapSize.width / 2.0 - 0.5;
+	int col = pos.x / m_tileSize.width + m_mapSize.height - m_mapSize.width / 2.0 - pos.y / m_tileSize.height - 0.5;
+	if (row < 0 || row >= m_mapSize.height)
+	{
+		row = 0;
+	}
+	if (col < 0 || col >= m_mapSize.width)
+	{
+		col = 0;
+	}
+
 	return cocos2d::Vec2(row, col);
 }
 

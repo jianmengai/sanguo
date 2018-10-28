@@ -35,6 +35,7 @@ bool TextureSprite::init(int w, int h)
 	initWithTexture(texture);
 	texture->release();
 	//setAnchorPoint(cocos2d::Vec2(0.5f, 0.5f));
+	//setAnchorPoint(cocos2d::Vec2(m_layerSize.height / m_layerSize.width, -0.3 * (m_layerSize.width / m_layerSize.height)));
 	setAnchorPoint(cocos2d::Vec2(0.0f, 0.0f));
 	scheduleUpdate();
 	return true;

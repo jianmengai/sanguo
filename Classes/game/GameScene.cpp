@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "cocostudio/ActionTimeline/CSLoader.h"
 #include "GameBattle.h"
+#include "GameObjectManager.h"
 GameScene::GameScene()
 {
 }
@@ -26,18 +27,21 @@ bool GameScene::init()
 	}
 
 	cocos2d::log("loading map...");
-	std::string tileMap = "map/test4.tmx";
+	std::string tileMap = "map/test451.tmx";
 	if (!MapManager::getInstance()->init(this, tileMap))
 	{
 		return false;
 	}
 
-	auto mapContentSize = MapManager::getInstance()->getContentSize();
-	m_warFog = WarFogLayer::create(mapContentSize.width, mapContentSize.height);
+	auto mapSize = MapManager::getInstance()->getMapSize();
+	auto tileSize = MapManager::getInstance()->getTileSize();
+	m_warFog = WarFogLayer::create(mapSize.width, mapSize.height);
 	if (nullptr == m_warFog)
 	{
 		return false;
 	}
+
+	m_warFog->setTileSize(tileSize);
 	this->addChild(m_warFog);
 
 	m_gameUI = GameUILayer::create();
@@ -65,7 +69,24 @@ void GameScene::update(float deltaTime)
 {
 	MapManager::getInstance()->update(deltaTime);
 	GameBattle::getInstance()->update(deltaTime);
+	updateWarFog();
 }
+
+
+void GameScene::updateWarFog()
+{
+	auto& gameObjectMap = GameObjectManager::getInstance()->getGameObjectMap();
+	for (auto& objectIt : gameObjectMap)
+	{
+		auto object = objectIt.second;
+		if (object->getForceType() == ForceType::Player)
+		{
+			auto pos = MapManager::getInstance()->toTileRowCol(object->getPosition());
+			m_warFog->inView(pos.x, pos.y);
+		}
+	}
+}
+
 
 void GameScene::pauseGame()
 {
@@ -96,7 +117,7 @@ void GameScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 	m_preTouchPos = curPosition;
 	//cocos2d::log("GameScene::onTouchMoved, x:%0.1f, y:%0.1f", deltaPos.x, deltaPos.y);
 	MapManager::getInstance()->setPosition(deltaPos, true);
-	
+	m_warFog->setFogPosition(deltaPos);
 
 }
 
