@@ -104,7 +104,10 @@ bool HelloWorld::init()
     }
 
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("logo.png");
+	auto bg = Sprite::create("logo.png");
+	bg->setAnchorPoint(Vec2(0, 0));
+	this->addChild(bg);
+    auto sprite = Sprite::create("HelloWorld.png");
     if (sprite == nullptr)
     {
         problemLoading("'HelloWorld.png'");
@@ -112,22 +115,26 @@ bool HelloWorld::init()
     else
     {
         // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
+       // sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+		sprite->setPosition(Vec2(0, 0));
+		sprite->setAnchorPoint(Vec2(0, 0));
+		//sprite->setAnchorPoint(Vec2(1, 1));
+		sprite->setRotation(45);
+		//sprite->setScale(1.5);
         // add the sprite as a child to this layer
         this->addChild(sprite, 0);
 
-		auto mapContentSize = cocos2d::Size(25, 25);
-		auto warFog = WarFogLayer::create(mapContentSize.width, mapContentSize.height);
-		if (nullptr == warFog)
-		{
-			return false;
-		}
-		//warFog->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
-		warFog->setTileSize(cocos2d::Size(158, 120));
-		//warFog->setScale(0.3f);
-		this->addChild(warFog);
-		warFog->inView(12, 12);
+		//auto mapContentSize = cocos2d::Size(25, 25);
+		//auto warFog = WarFogLayer::create(mapContentSize.width, mapContentSize.height);
+		//if (nullptr == warFog)
+		//{
+		//	return false;
+		//}
+		////warFog->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
+		//warFog->setTileSize(cocos2d::Size(158, 120));
+		////warFog->setScale(0.3f);
+		//this->addChild(warFog);
+		//warFog->inView(12, 12);
 
     }
     return true;

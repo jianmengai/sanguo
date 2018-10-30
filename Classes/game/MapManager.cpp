@@ -232,7 +232,7 @@ void MapManager::setPosition(cocos2d::Vec2& position, bool isDelta)
 	}
 	newPosition.negate();
 	m_tiledMap->setPosition(newPosition);
-	//cocos2d::log("set map postion, x:%0.1f, y:%0.1f", newPosition.x, newPosition.y);
+	cocos2d::log("===>set map postion, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, position.y, m_mapScale);
 }
 
 

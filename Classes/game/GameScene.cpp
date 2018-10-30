@@ -25,7 +25,10 @@ bool GameScene::init()
 	{
 		return false;
 	}
-
+	auto sprite = cocos2d::Sprite::create("logo.png");
+	sprite->setAnchorPoint(cocos2d::Vec2(0.0f, 0.0f));
+	//sprite->setScaleX(0.5f);
+	this->addChild(sprite, 0);
 	cocos2d::log("loading map...");
 	std::string tileMap = "map/test451.tmx";
 	if (!MapManager::getInstance()->init(this, tileMap))
@@ -117,7 +120,7 @@ void GameScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 	m_preTouchPos = curPosition;
 	//cocos2d::log("GameScene::onTouchMoved, x:%0.1f, y:%0.1f", deltaPos.x, deltaPos.y);
 	MapManager::getInstance()->setPosition(deltaPos, true);
-	m_warFog->setFogPosition(deltaPos);
+	m_warFog->setPosition(deltaPos);
 
 }
 

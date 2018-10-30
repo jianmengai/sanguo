@@ -32,37 +32,80 @@ bool WarFogLayer::init(int w, int h)
 	m_layerSize = cocos2d::Size(w, h);
 	m_base = TextureSprite::create(w, h);
 	addChild(m_base);
-	m_base->setRotation(45);
+	
 	m_out = cocos2d::Color4B::BLUE;
 	m_in = m_out;
 	m_out.a = 120;
 	m_in.a = 0;
 	m_scale = MapManager::getInstance()->getMapScale();
-	auto mapContentSize = MapManager::getInstance()->getContentSize() * m_scale;
-	//m_base->setPosition(cocos2d::Vec2(0, mapContentSize.height / 2.0));
-	cocos2d::log("anchor point:%0.1f, %0.1f, position:%0.1f, %0.1f", m_base->getAnchorPoint().x, m_base->getAnchorPoint().y, 
-		m_base->getPosition().x, m_base->getPosition().y);
-	cocos2d::log("war fog size:%0.1f,%0.1f", m_base->getContentSize().width, m_base->getContentSize().height);
+	m_mapContentSize = MapManager::getInstance()->getContentSize() * m_scale;
+	auto tileSize = MapManager::getInstance()->getTileSize();
+	auto scale = m_scale * tileSize.width / sqrt(2);
+	m_base->setScale(scale);
+	m_base->setRotation(45);
+
+	m_scaleY = tileSize.height / tileSize.width;
+
+	setFogPosition(cocos2d::Vec2(0, m_mapContentSize.height / 2.0));
+
+	setAnchorPoint(cocos2d::Vec2(0.0f, 0.0f));
+	setScaleY(tileSize.height / tileSize.width);
+
+	auto boundingBox = m_base->getBoundingBox();
+
+	m_clientWinSize = cocos2d::Director::getInstance()->getWinSize();
+	cocos2d::log("anchor point:%0.1f, %0.1f, position:%0.1f, %0.1f, layer:%0.1f, %0.1f, anchor:%0.1f, %0.1f", m_base->getAnchorPoint().x, m_base->getAnchorPoint().y, 
+		m_base->getPosition().x, m_base->getPosition().y, this->getPosition().x, this->getPosition().y, this->getAnchorPoint().x, this->getAnchorPoint().y);
+	cocos2d::log("war fog size:%0.1f,%0.1f, layer size:%0.1f, %0.1f", m_base->getContentSize().width, m_base->getContentSize().height, this->getContentSize().width, this->getContentSize().height);
 	return true;
 }
 void WarFogLayer::setTileSize(cocos2d::Size s) 
 {
-	auto scale = m_scale * s.width / sqrt(2);
-	m_base->setScale(scale);
-	setScaleY(s.height / s.width * scale);
+	//auto scale = m_scale * s.width / sqrt(2);
+	//m_base->setScale(scale);
+	//setScaleY(s.height / s.width);
 }
 
 void WarFogLayer::setFogPosition(cocos2d::Vec2& pos)
 {
+	pos.y /= m_scaleY;
+	m_base->setPosition(pos);
+}
+
+cocos2d::Vec2 WarFogLayer::getFogPosition()
+{
+	auto pos = m_base->getPosition();
+	pos.y *= m_scaleY;
+	return pos;
+}
+
+void WarFogLayer::setPosition(cocos2d::Vec2& pos)
+{
 	cocos2d::Vec2 newPosition = pos * m_scale;
-	
-		cocos2d::Vec2 curPos = m_base->getPosition();
-		cocos2d::log("old warfog postion, x:%0.1f, y:%0.1f", curPos.x, curPos.y);
-		pos.negate();
-
-		newPosition = curPos - newPosition;
-
-	m_base->setPosition(newPosition);
+	cocos2d::Vec2 curPos = getFogPosition();
+	//cocos2d::log("old warfog postion, x:%0.1f, y:%0.1f", curPos.x, curPos.y);
+	auto minY = m_clientWinSize.height - m_mapContentSize.height;
+	auto maxY = 0;
+	auto minX = m_clientWinSize.width - m_mapContentSize.width;
+	newPosition = curPos + newPosition;
+	/*if (newPosition.y > maxY)
+	{
+		newPosition.y = maxY;
+	}
+	if (newPosition.y < minY)
+	{
+		newPosition.y = minY;
+	}
+	if (newPosition.x > 0)
+	{
+		newPosition.x = 0;
+	}
+	if (newPosition.x < minX)
+	{
+		newPosition.x = minX;
+	}*/
+	setFogPosition(newPosition);
+	cocos2d::log("new warfog positin, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, pos.y, m_scale);
 }
 
 void WarFogLayer::inView(int x, int y) 
