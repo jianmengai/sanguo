@@ -7,23 +7,13 @@ WarFogLayer::~WarFogLayer()
 {
 }
 
-WarFogLayer* WarFogLayer::create(int w, int h)
+WarFogLayer* WarFogLayer::getInstance()
 {
-	auto warFogLayer = new (std::nothrow)WarFogLayer;
-	if (warFogLayer && warFogLayer->init(w, h))
-	{
-		warFogLayer->autorelease();
-	}
-	else
-	{
-		CC_SAFE_DELETE(warFogLayer);
-	}
-
-	return warFogLayer;
+	static WarFogLayer warFogLayerInstance;
+	return &warFogLayerInstance;
 }
 
-
-bool WarFogLayer::init(int w, int h) 
+bool WarFogLayer::init(cocos2d::Layer* parentLayer, int w, int h) 
 {
 	if (!cocos2d::Layer::init())
 	{
@@ -57,6 +47,9 @@ bool WarFogLayer::init(int w, int h)
 	cocos2d::log("anchor point:%0.1f, %0.1f, position:%0.1f, %0.1f, layer:%0.1f, %0.1f, anchor:%0.1f, %0.1f", m_base->getAnchorPoint().x, m_base->getAnchorPoint().y, 
 		m_base->getPosition().x, m_base->getPosition().y, this->getPosition().x, this->getPosition().y, this->getAnchorPoint().x, this->getAnchorPoint().y);
 	cocos2d::log("war fog size:%0.1f,%0.1f, layer size:%0.1f, %0.1f", m_base->getContentSize().width, m_base->getContentSize().height, this->getContentSize().width, this->getContentSize().height);
+	
+	parentLayer->addChild(this);
+	
 	return true;
 }
 void WarFogLayer::setTileSize(cocos2d::Size s) 
@@ -84,11 +77,11 @@ void WarFogLayer::setPosition(cocos2d::Vec2& pos)
 	cocos2d::Vec2 newPosition = pos * m_scale;
 	cocos2d::Vec2 curPos = getFogPosition();
 	//cocos2d::log("old warfog postion, x:%0.1f, y:%0.1f", curPos.x, curPos.y);
-	auto minY = m_clientWinSize.height - m_mapContentSize.height;
-	auto maxY = 0;
+	auto minY = m_clientWinSize.height - m_mapContentSize.height / 2.0;
+	auto maxY = m_mapContentSize.height / 2.0;
 	auto minX = m_clientWinSize.width - m_mapContentSize.width;
 	newPosition = curPos + newPosition;
-	/*if (newPosition.y > maxY)
+	if (newPosition.y > maxY)
 	{
 		newPosition.y = maxY;
 	}
@@ -103,19 +96,28 @@ void WarFogLayer::setPosition(cocos2d::Vec2& pos)
 	if (newPosition.x < minX)
 	{
 		newPosition.x = minX;
-	}*/
+	}
 	setFogPosition(newPosition);
 	cocos2d::log("new warfog positin, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, pos.y, m_scale);
+
+
+	
 }
 
 void WarFogLayer::inView(int x, int y) 
 {
-	if (x >= 0 && y >= 0 && x < m_layerSize.width&&y < m_layerSize.height)
+	//ÖÜ±ß¾Å¹¬¸ñ
+	for (int i = x - 1; i <= x + 1; ++i)
 	{
-		cocos2d::log("inView:%d, %d",x, y);
-		m_base->changeData(x, y, m_in);
+		for (int j = y - 1; j <= y + 1; ++j)
+		{
+			if (i >= 0 && j >= 0 && i < m_layerSize.width && j < m_layerSize.height)
+			{
+				cocos2d::log("inView:%d, %d", i, j);
+				m_base->changeData(i, j, m_in);
+			}
+		}
 	}
-
 }
 void WarFogLayer::outView(int x, int y) 
 {

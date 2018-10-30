@@ -33,5 +33,4 @@ private:
 	cocos2d::Vec2 m_preTouchPos;
 	cocos2d::EventListenerTouchOneByOne* m_touchOneByOneListener = nullptr;
 	GameUILayer* m_gameUI = nullptr;
-	WarFogLayer* m_warFog = nullptr;
 };

@@ -27,10 +27,9 @@ bool GameScene::init()
 	}
 	auto sprite = cocos2d::Sprite::create("logo.png");
 	sprite->setAnchorPoint(cocos2d::Vec2(0.0f, 0.0f));
-	//sprite->setScaleX(0.5f);
 	this->addChild(sprite, 0);
 	cocos2d::log("loading map...");
-	std::string tileMap = "map/test451.tmx";
+	std::string tileMap = "map/map45.tmx";
 	if (!MapManager::getInstance()->init(this, tileMap))
 	{
 		return false;
@@ -38,14 +37,11 @@ bool GameScene::init()
 
 	auto mapSize = MapManager::getInstance()->getMapSize();
 	auto tileSize = MapManager::getInstance()->getTileSize();
-	m_warFog = WarFogLayer::create(mapSize.width, mapSize.height);
-	if (nullptr == m_warFog)
+	
+	if (!WarFogLayer::getInstance()->init(this, mapSize.width, mapSize.height))
 	{
 		return false;
 	}
-
-	m_warFog->setTileSize(tileSize);
-	this->addChild(m_warFog);
 
 	m_gameUI = GameUILayer::create();
 	if (nullptr == m_gameUI)
@@ -82,10 +78,10 @@ void GameScene::updateWarFog()
 	for (auto& objectIt : gameObjectMap)
 	{
 		auto object = objectIt.second;
-		if (object->getForceType() == ForceType::Player)
+		if ((object->getForceType() == ForceType::Player) && (object->getGameObjectStatus() == GameObjectStatus::Move))
 		{
 			auto pos = MapManager::getInstance()->toTileRowCol(object->getPosition());
-			m_warFog->inView(pos.x, pos.y);
+			WarFogLayer::getInstance()->inView(pos.x, pos.y);
 		}
 	}
 }
@@ -120,7 +116,7 @@ void GameScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 	m_preTouchPos = curPosition;
 	//cocos2d::log("GameScene::onTouchMoved, x:%0.1f, y:%0.1f", deltaPos.x, deltaPos.y);
 	MapManager::getInstance()->setPosition(deltaPos, true);
-	m_warFog->setPosition(deltaPos);
+	WarFogLayer::getInstance()->setPosition(deltaPos);
 
 }
 
@@ -129,4 +125,7 @@ void GameScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 	cocos2d::Vec2 curPosition = touch->getLocation();
 	cocos2d::log("GameScene::onTouchEnded, ");
 	GameBattle::getInstance()->touchProcess(curPosition);
+	/*int x = int(curPosition.x) % 25;
+	int y = int(curPosition.y) % 25;
+	m_warFog->inView(x, y);*/
 }

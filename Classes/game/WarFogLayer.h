@@ -5,8 +5,8 @@
 class WarFogLayer :public cocos2d::Layer
 {
 public:
-	static WarFogLayer* create(int w, int h);
-	virtual bool init(int w, int h);
+	static WarFogLayer* getInstance();
+	virtual bool init(cocos2d::Layer* parentLayer, int w, int h);
 	void setTileSize(cocos2d::Size s);
 	void inView(int x, int y);
 	void outView(int x, int y);

@@ -73,7 +73,7 @@ void MapManager::update(float dt)
 	static int count = 0;
 	if (count >= 120)
 	{
-		drawTileTable();
+		//drawTileTable();
 		count = 0;
 	}
 	++count;

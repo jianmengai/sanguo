@@ -34,17 +34,21 @@ bool TextureSprite::init(int w, int h)
 	}
 	initWithTexture(texture);
 	texture->release();
-	//setAnchorPoint(cocos2d::Vec2(0.5f, 0.5f));
-	//setAnchorPoint(cocos2d::Vec2(m_layerSize.height / m_layerSize.width, -0.3 * (m_layerSize.width / m_layerSize.height)));
 	setAnchorPoint(cocos2d::Vec2(0.0f, 0.0f));
 	scheduleUpdate();
 	return true;
 }
 void TextureSprite::update(float dt) 
 {
-	auto width = getContentSize().width;
-	auto height = getContentSize().height;
-	_texture->updateWithData(m_data, 0, 0, getContentSize().width, getContentSize().height);
+	static int count = 0;
+	if (count >= 2)
+	{
+		auto width = getContentSize().width;
+		auto height = getContentSize().height;
+		_texture->updateWithData(m_data, 0, 0, getContentSize().width, getContentSize().height);
+		count = 0;
+	}
+	++count;
 }
 void TextureSprite::clearWithColor(cocos2d::Color4B color) 
 {
@@ -63,10 +67,10 @@ void TextureSprite::clearWithColor(cocos2d::Color4B color)
 void TextureSprite::changeData(int x, int y, cocos2d::Color4B color) 
 {
 	int w = 4 * m_layerSize.width;
-	m_data[y * w + x * 4 + 0] = color.r;
-	m_data[y * w + x * 4 + 1] = color.g;
-	m_data[y * w + x * 4 + 2] = color.b;
-	m_data[y * w + x * 4 + 3] = color.a;
+	m_data[x * w + y * 4 + 0] = color.r;
+	m_data[x * w + y * 4 + 1] = color.g;
+	m_data[x * w + y * 4 + 2] = color.b;
+	m_data[x * w + y * 4 + 3] = color.a;
 }
 TextureSprite::~TextureSprite() 
 {

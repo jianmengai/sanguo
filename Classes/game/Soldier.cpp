@@ -29,6 +29,8 @@ bool Soldier::init(SoldierType type, const cocos2d::Vec2& position, FaceDirectio
 	{
 		return false;
 	}
+
+	
 	m_objectType = GameObjectType::Soldier;
 	m_faceDirection = direction;
 
@@ -36,13 +38,15 @@ bool Soldier::init(SoldierType type, const cocos2d::Vec2& position, FaceDirectio
 	{
 		return false;
 	}
+	
 	if (!initData(type))
 	{
 		return false;
 	}
+	
 	this->setScale(1.5);
 	this->setPosition(position);
-
+	
 	
 	m_uniqId = GameUtils::getLastestUniqId();
 	
@@ -85,16 +89,17 @@ bool Soldier::initAnimate(SoldierType type)
 	m_moveAnimateMap[FaceDirection::FaceToSouthEast] = createAnimateWithPlist(soldierConf->moveToSouthEastAnimationPList, soldierConf->moveAnimateDelayPerUnit, GameObjectStatus::Move);
 	m_moveAnimateMap[FaceDirection::FaceToSouthWest] = createAnimateWithPlist(soldierConf->moveToSouthWestAnimationPList, soldierConf->moveAnimateDelayPerUnit, GameObjectStatus::Move);
 	m_moveAnimateMap[FaceDirection::FaceToWest] = createAnimateWithPlist(soldierConf->moveToWestAnimationPList, soldierConf->moveAnimateDelayPerUnit, GameObjectStatus::Move);
-
-	m_dieAnimate = createAnimateWithPlist(soldierConf->dieAnimationPList, soldierConf->dieAnimateDelayPerUnit, GameObjectStatus::Die);
-
+	
+	//这里放开导致战争迷雾有问题，待确认
+	//m_dieAnimate = createAnimateWithPlist(soldierConf->dieAnimationPList, soldierConf->dieAnimateDelayPerUnit, GameObjectStatus::Die);
+	
 	m_standAnimateMap[FaceDirection::FaceToEast] = createAnimateWithPlist(soldierConf->standAndFaceToEastAnimationPList, soldierConf->standAnimateDelayPerUnit, GameObjectStatus::Stand);
 	m_standAnimateMap[FaceDirection::FaceToNorthEast] = createAnimateWithPlist(soldierConf->standAndFaceToNorthEastAnimationPList, soldierConf->standAnimateDelayPerUnit, GameObjectStatus::Stand);
 	m_standAnimateMap[FaceDirection::FaceToNorthWest] = createAnimateWithPlist(soldierConf->standAndFaceToNorthWestAnimationPList, soldierConf->standAnimateDelayPerUnit, GameObjectStatus::Stand);
 	m_standAnimateMap[FaceDirection::FaceToSouthEast] = createAnimateWithPlist(soldierConf->standAndFaceToSouthEastAnimationPList, soldierConf->standAnimateDelayPerUnit, GameObjectStatus::Stand);
 	m_standAnimateMap[FaceDirection::FaceToSouthWest] = createAnimateWithPlist(soldierConf->standAndFaceToSouthWestAnimationPList, soldierConf->standAnimateDelayPerUnit, GameObjectStatus::Stand);
 	m_standAnimateMap[FaceDirection::FaceToWest] = createAnimateWithPlist(soldierConf->standAndFaceToWestAnimationPList, soldierConf->standAnimateDelayPerUnit, GameObjectStatus::Stand);
-
+	
 	float attackAnimateDelayPerUnit = 1.0f / (float)soldierConf->perSecondAttackCount;
 	m_attackAnimateMap[FaceDirection::FaceToEast] = createAnimateWithPlist(soldierConf->attackToEastAnimationPList, attackAnimateDelayPerUnit, GameObjectStatus::Attack);
 	m_attackAnimateMap[FaceDirection::FaceToNorthEast] = createAnimateWithPlist(soldierConf->attackToNorthEastAnimationPList, attackAnimateDelayPerUnit, GameObjectStatus::Attack);
@@ -103,6 +108,7 @@ bool Soldier::initAnimate(SoldierType type)
 	m_attackAnimateMap[FaceDirection::FaceToSouthWest] = createAnimateWithPlist(soldierConf->attackToSouthWestAnimationPList, attackAnimateDelayPerUnit, GameObjectStatus::Attack);
 	m_attackAnimateMap[FaceDirection::FaceToWest] = createAnimateWithPlist(soldierConf->attackToWestAnimationPList, attackAnimateDelayPerUnit, GameObjectStatus::Attack);
 
+	
 	runAction(m_standAnimateMap[m_faceDirection]);
 
 	return true;
@@ -215,7 +221,7 @@ void Soldier::update(float deltaTime)
 
 void Soldier::toStand()
 {
-	if (m_soldierStatus == GameObjectStatus::Stand)
+	if (m_objectStatus == GameObjectStatus::Stand)
 	{
 		return;
 	}
@@ -224,7 +230,7 @@ void Soldier::toStand()
 		m_pathList.clear();
 	}
 	stopAllActions();
-	m_soldierStatus = GameObjectStatus::Stand;
+	m_objectStatus = GameObjectStatus::Stand;
 	runAction(m_standAnimateMap[m_faceDirection]);
 }
 
@@ -241,9 +247,9 @@ void Soldier::toMove()
 	auto animteIt = m_moveAnimateMap.find(faceDirection);
 	if (animteIt != m_moveAnimateMap.end())
 	{
-		if ((m_soldierStatus != GameObjectStatus::Move) || (faceDirection != m_faceDirection))
+		if ((m_objectStatus != GameObjectStatus::Move) || (faceDirection != m_faceDirection))
 		{
-			m_soldierStatus = GameObjectStatus::Move;
+			m_objectStatus = GameObjectStatus::Move;
 			stopAllActions();
 			m_faceDirection = faceDirection;
 			runAction(animteIt->second);
@@ -269,7 +275,7 @@ void Soldier::toMove()
 
 void Soldier::toAttack()
 {
-	if (m_soldierStatus == GameObjectStatus::Attack)
+	if (m_objectStatus == GameObjectStatus::Attack)
 	{
 		return;
 	}
@@ -278,7 +284,7 @@ void Soldier::toAttack()
 		m_pathList.clear();
 	}
 	runAction(m_attackAnimateMap[m_faceDirection]);
-	m_soldierStatus = GameObjectStatus::Attack;
+	m_objectStatus = GameObjectStatus::Attack;
 }
 
 FaceDirection Soldier::getFaceDirection(const cocos2d::Vec2& moveToPos)

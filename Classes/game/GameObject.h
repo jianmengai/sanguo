@@ -22,7 +22,7 @@ public:
 	void setForceType(ForceType forceType) { m_forceType = forceType; }
 	ForceType getForceType() { return m_forceType; }
 	GameObjectType getGameObjectType() { return m_objectType; }
-
+	GameObjectStatus getGameObjectStatus() { return m_objectStatus; }
 protected:
 	GameObject();
 	bool init() override;
@@ -33,7 +33,7 @@ protected:
 	int m_maxHp;
 	int m_maxDefence;
 	int m_curDefence;
-	//int m_state;
+	GameObjectStatus m_objectStatus = GameObjectStatus::Invalid;
 	int m_type;
 	int m_attackPower;
 	int m_maxAttackPower;

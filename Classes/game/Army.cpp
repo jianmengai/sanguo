@@ -2,6 +2,7 @@
 #include "MapManager.h"
 #include "GameObjectManager.h"
 #include "AutoFindPath.h"
+#include "WarFogLayer.h"
 
 Army::Army()
 {
@@ -22,6 +23,7 @@ bool Army::createSoldier(SoldierType type)
 		cocos2d::log("need building barrack first");
 		return false;
 	}
+	
 	auto barracks = barrackIt->second;
 	auto pos = barracks[0]->getPosition();
 	auto posToTileNode = MapManager::getInstance()->toTileRowCol(pos);
@@ -34,6 +36,8 @@ bool Army::createSoldier(SoldierType type)
 	FaceDirection direction;
 	cocos2d::Vec2 newPos = cocos2d::Vec2::ZERO;
 	bool found = false;
+	int tileRow = -1;
+	int tileCol = -1;
 	if (pos.x > centerX)
 	{
 		if (pos.y > centerY)
@@ -55,6 +59,8 @@ bool Army::createSoldier(SoldierType type)
 					if (MapManager::getInstance()->checkOccupy(row, col))
 					{
 						found = true;
+						tileRow = row;
+						tileCol = col;
 						newPos = MapManager::getInstance()->tileRowColToPos(row, col);
 						break;
 					}
@@ -85,6 +91,8 @@ bool Army::createSoldier(SoldierType type)
 					if (MapManager::getInstance()->checkOccupy(row, col))
 					{
 						found = true;
+						tileRow = row;
+						tileCol = col;
 						newPos = MapManager::getInstance()->tileRowColToPos(row, col);
 						break;
 					}
@@ -118,6 +126,8 @@ bool Army::createSoldier(SoldierType type)
 					if (MapManager::getInstance()->checkOccupy(row, col))
 					{
 						found = true;
+						tileRow = row;
+						tileCol = col;
 						newPos = MapManager::getInstance()->tileRowColToPos(row, col);
 						break;
 					}
@@ -149,6 +159,8 @@ bool Army::createSoldier(SoldierType type)
 					if (MapManager::getInstance()->checkOccupy(row, col))
 					{
 						found = true;
+						tileRow = row;
+						tileCol = col;
 						newPos = MapManager::getInstance()->tileRowColToPos(row, col);
 						break;
 					}
@@ -165,18 +177,20 @@ bool Army::createSoldier(SoldierType type)
 		return false;
 		cocos2d::log("no place to create soldier!");
 	}
+	
 	Soldier* soldier = Soldier::create(type, newPos, direction);
 	if (nullptr == soldier)
 	{
 		return false;
 	}
+
 	soldier->setForceType(m_forceType);
 	cocos2d::log("===>create soldier, pos:[%0.1f, %0.1f]", newPos.x, newPos.y);
 	m_soldiers[type].push_back(soldier);
 	MapManager::getInstance()->addChildToGameObjectLayer(soldier);
 	GameObjectManager::getInstance()->addGameObject(soldier);
 	MapManager::getInstance()->setOccupy(newPos, soldier->getContentSize());
-	//m_selectedSodiers.push_back(soldier);
+	WarFogLayer::getInstance()->inView(tileRow, tileCol);
 	return true;
 }
 
@@ -201,6 +215,20 @@ bool Army::createBuilding(BuildingType type, const cocos2d::Vec2& position)
 	MapManager::getInstance()->addChildToGameObjectLayer(building);
 	GameObjectManager::getInstance()->addGameObject(building);
 	MapManager::getInstance()->setOccupy(newPos, contentSize);
+	
+	//¾Å¹¬¸ñ¿ªÊÓÒ°
+	auto posToTileNode = MapManager::getInstance()->toTileRowCol(newPos);
+	auto tileSize = MapManager::getInstance()->getTileSize();
+	for (int i = posToTileNode.x - 1; i <= posToTileNode.x + 1; ++i)
+	{
+		for (int j = posToTileNode.y - 1; j <= posToTileNode.y + 1; ++j)
+		{
+			if (i >= 0 && j >= 0 && i < tileSize.width && j < tileSize.height)
+			{
+				WarFogLayer::getInstance()->inView(i, j);
+			}
+		}
+	}
 	return true;
 }
 
