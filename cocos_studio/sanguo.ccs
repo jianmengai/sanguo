@@ -1,0 +1,34 @@
+<Solution>
+  <PropertyGroup Name="sanguo" Version="2.3.1.1" Type="CocosStudio" />
+  <SolutionFolder>
+    <Group ctype="ResourceGroup">
+      <RootFolder Name=".">
+        <Project Name="MainScene.csd" Type="Scene" />
+        <Folder Name="res">
+          <Image Name="GameTime.png" />
+          <Image Name="TechnologyPoint.png" />
+          <Image Name="ArcherButtonNormal.png" />
+          <Image Name="BarbarianButtonNormal.png" />
+          <Image Name="EnchanterButtonNormal.png" />
+          <Image Name="EnchanterTowerButtonNormal.png" />
+          <Image Name="bg.png" />
+          <Image Name="EnchanterTowerButtonDown.png" />
+          <Image Name="EnchanterTowerButtonDisable.png" />
+          <Image Name="ArcherTowerButtonNormal.png" />
+          <Image Name="ArcherTowerButtonDown.png" />
+          <Image Name="ArcherTowerButtonDisable.png" />
+          <Image Name="ArcherButtonDown.png" />
+          <Image Name="ArcherButtonDisable.png" />
+          <Image Name="BarbarianButtonDown.png" />
+          <Image Name="BarbarianButtonDisable.png" />
+          <Image Name="EnchanterButtonDown.png" />
+          <Image Name="EnchanterButtonDisable.png" />
+          <Image Name="MiniMapNormal.png" />
+          <Image Name="BalloonButtonNormal.png" />
+          <Image Name="BalloonButtonDown.png" />
+          <Image Name="BalloonButtonDisable.png" />
+        </Folder>
+      </RootFolder>
+    </Group>
+  </SolutionFolder>
+</Solution>

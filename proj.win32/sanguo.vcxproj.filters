@@ -37,6 +37,9 @@
     <Filter Include="Classes\utils">
       <UniqueIdentifier>{c4ceaa42-d344-4cf2-9fff-34dd2c75eb34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\game\warfog">
+      <UniqueIdentifier>{bf9cfe62-a7fe-4005-b2f8-15697ef2aa28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -99,11 +102,11 @@
     <ClCompile Include="..\Classes\ui\FixUI.cpp">
       <Filter>Classes\game\ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\game\TextureSprite.cpp">
-      <Filter>Classes\game\map</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\game\WarFogLayer.cpp">
-      <Filter>Classes\game\map</Filter>
+      <Filter>Classes\game\warfog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\game\TextureSprite.cpp">
+      <Filter>Classes\game\warfog</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -170,11 +173,11 @@
     <ClInclude Include="..\Classes\ui\FixUI.h">
       <Filter>Classes\game\ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\game\TextureSprite.h">
-      <Filter>Classes\game\map</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\game\WarFogLayer.h">
-      <Filter>Classes\game\map</Filter>
+      <Filter>Classes\game\warfog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\TextureSprite.h">
+      <Filter>Classes\game\warfog</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

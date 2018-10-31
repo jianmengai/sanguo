@@ -6,6 +6,7 @@
 #include "GameConfig.h"
 #include "GameBattle.h"
 #include "FixUI.h"
+#include "WarFogLayer.h"
 
 GameUILayer::GameUILayer()
 {
@@ -97,10 +98,15 @@ bool GameUILayer::initCreateButton()
 void GameUILayer::onMinimapTouched(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
 	cocos2d::log("minimap touched");
-	if (touchType == cocos2d::ui::Widget::TouchEventType::ENDED)
+	if (touchType == cocos2d::ui::Widget::TouchEventType::MOVED)
 	{
+		
 		auto widget = static_cast<cocos2d::ui::Widget*>(sender);
-		auto touchPosition = widget->convertToNodeSpace(widget->getTouchEndPosition());
+		auto touchStart = widget->convertToNodeSpace(widget->getTouchBeganPosition());
+		auto touchMove = widget->convertToNodeSpace(widget->getTouchMovePosition());
+		auto deltaPos = touchMove - touchStart;
+		deltaPos.negate();
+		/*auto touchPosition = widget->convertToNodeSpace(widget->getTouchEndPosition());
 		auto widgetSize = widget->getContentSize();
 
 		float mapScale = MapManager::getInstance()->getMapScale();
@@ -108,8 +114,9 @@ void GameUILayer::onMinimapTouched(cocos2d::Ref* sender, cocos2d::ui::Widget::To
 
 		cocos2d::Vec2 tileMapNewPosition(touchPosition.x / widgetSize.width * MapManager::getInstance()->getTileSize().width * mapScale - visibleSize.width / 2.0f,
 			touchPosition.y / widgetSize.height * MapManager::getInstance()->getTileSize().height * mapScale - visibleSize.height / 2.0f);
-
-		MapManager::getInstance()->setPosition(-tileMapNewPosition);
+*/
+		MapManager::getInstance()->setPosition(deltaPos, true);
+		WarFogLayer::getInstance()->setPosition(deltaPos);
 
 		if (cocos2d::Director::getInstance()->isPaused())
 		{
