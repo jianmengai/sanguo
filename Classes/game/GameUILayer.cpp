@@ -35,7 +35,6 @@ bool GameUILayer::init()
 	initMiniMap();
 	initCreateButton();
 
-
 	auto dispatcher = cocos2d::Director::getInstance()->getEventDispatcher();
 	auto touchOneByOneListener = cocos2d::EventListenerTouchOneByOne::create();
 	//touchOneByOneListener->setSwallowTouches(true);
@@ -156,10 +155,10 @@ void GameUILayer::updateMiniMap()
 		{
 			color = cocos2d::Color4F(164.0f / 255.0f, 72.0f / 255.0f, 192.0f / 255.0f, 1.0f);
 		}
-
+		//物体位置坐标是地图中的坐标位置，这里相对地图而言是没有缩放的
 		auto gameObjectInTileMapPosition = gameObject->getPosition();
-		auto gameObjectInMinimapPosition = cocos2d::Vec2(gameObjectInTileMapPosition.x * miniMapSize.width / (mapSize.width * mapScale),
-			gameObjectInTileMapPosition.y * miniMapSize.height / (mapSize.height* mapScale));
+		auto gameObjectInMinimapPosition = cocos2d::Vec2(gameObjectInTileMapPosition.x * miniMapSize.width / mapSize.width,
+			gameObjectInTileMapPosition.y * miniMapSize.height / mapSize.height);
 		if (gameObject->getGameObjectType() == GameObjectType::Building)
 		{
 			m_miniMapDrawNode->drawSolidRect(cocos2d::Vec2(gameObjectInMinimapPosition.x - 2.0f, gameObjectInMinimapPosition.y - 2.0f),
@@ -173,7 +172,7 @@ void GameUILayer::updateMiniMap()
 		}
 	}
 
-	
+	//屏幕展示的是缩放后的地图，这里计算位置的时候要考虑缩放
 	cocos2d::Size minimapScreenBoxSize(visibileSize.width * miniMapSize.width / (mapSize.width * mapScale),
 		visibileSize.height * miniMapSize.height / (mapSize.height * mapScale));
 

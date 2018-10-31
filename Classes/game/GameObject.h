@@ -23,6 +23,7 @@ public:
 	ForceType getForceType() { return m_forceType; }
 	GameObjectType getGameObjectType() { return m_objectType; }
 	GameObjectStatus getGameObjectStatus() { return m_objectStatus; }
+	void isSelected(bool selected) { m_selected = selected; }
 	bool isSelected() { return m_selected; }
 protected:
 	GameObject();

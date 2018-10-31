@@ -256,6 +256,7 @@ void Army::addSelected(GameObject* gameObject)
 	if (gameObject->getGameObjectType() == GameObjectType::Soldier)
 	{
 		Soldier* soldier = dynamic_cast<Soldier*>(gameObject);
+		soldier->isSelected(true);
 		m_selectedSodiers.push_back(dynamic_cast<Soldier*>(soldier));
 		cocos2d::log("select soldier:%d", soldier->getId());
 	}
@@ -263,6 +264,10 @@ void Army::addSelected(GameObject* gameObject)
 
 void Army::clearSelected()
 {
+	for (auto soldier : m_selectedSodiers)
+	{
+		soldier->isSelected(false);
+	}
 	m_selectedSodiers.clear();
 }
 
