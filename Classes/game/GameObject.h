@@ -23,6 +23,7 @@ public:
 	ForceType getForceType() { return m_forceType; }
 	GameObjectType getGameObjectType() { return m_objectType; }
 	GameObjectStatus getGameObjectStatus() { return m_objectStatus; }
+	bool isSelected() { return m_selected; }
 protected:
 	GameObject();
 	bool init() override;
@@ -43,4 +44,5 @@ protected:
 	GameObjectType m_objectType = GameObjectType::Invalid;
 	
 	bool m_readyToRemove;
+	bool m_selected = false;
 };

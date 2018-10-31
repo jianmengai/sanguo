@@ -44,26 +44,27 @@ bool GameUILayer::init()
 	touchOneByOneListener->onTouchEnded = CC_CALLBACK_2(GameUILayer::onTouchEnded, this);
 	dispatcher->addEventListenerWithSceneGraphPriority(touchOneByOneListener, this);
 
-	//scheduleUpdate();
+	scheduleUpdate();
 
 	return true;
 }
 
 bool GameUILayer::initMiniMap()
 {
-	auto gameMainPanel = m_gameUI->getChildByName("Panel_GameMain");
+	auto gameMainPanel = m_gameUI->getChildByName("Panel_Creating");
 	if (gameMainPanel == nullptr)
 	{
 		return false;
 	}
 	m_miniMapImgView = gameMainPanel->getChildByName<cocos2d::ui::ImageView*>("Image_MiniMap");
 	m_miniMapDrawNode = cocos2d::DrawNode::create();
+	m_miniMapImgView->addChild(m_miniMapDrawNode);
 	m_miniMapImgView->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onMinimapTouched, this));
 }
 
 bool GameUILayer::initCreateButton()
 {
-	auto gameMainPanel = m_gameUI->getChildByName("Panel_GameMain");
+	auto gameMainPanel = m_gameUI->getChildByName("Panel_Creating");
 	auto createBuildingPanel = gameMainPanel->getChildByName("Panel_CreateBuilding");
 	auto createSoldierPanel = gameMainPanel->getChildByName("Panel_CreateSoldier");
 	//Ö÷³Ç
@@ -120,14 +121,19 @@ void GameUILayer::onMinimapTouched(cocos2d::Ref* sender, cocos2d::ui::Widget::To
 
 void GameUILayer::update(float dt)
 {
-	/*updateMiniMap();
+	updateMiniMap();
 	updateGameTime();
-	updateButtonStatus();*/
+	//updateButtonStatus();
 }
 
 void GameUILayer::updateMiniMap()
 {
 	m_miniMapDrawNode->clear();
+	auto mapPosition = MapManager::getInstance()->getPosition();
+	auto mapScale = MapManager::getInstance()->getMapScale();
+	auto visibileSize = cocos2d::Director::getInstance()->getVisibleSize();
+	auto mapSize = MapManager::getInstance()->getContentSize();
+
 	auto& tileMapSize = MapManager::getInstance()->getTileSize();
 	auto& miniMapSize = m_miniMapImgView->getContentSize();
 	auto& gameObjectMap = GameObjectManager::getInstance()->getGameObjectMap();
@@ -137,13 +143,13 @@ void GameUILayer::updateMiniMap()
 		auto gameObject = gameObjectIter.second;
 		if (gameObject->getForceType() == ForceType::Player)
 		{
-			/*if (gameObject->isSelected())
+			if (gameObject->isSelected())
 			{
 				color = cocos2d::Color4F(1.0f, 1.0f, 1.0f, 1.0f);
 			}
-			else*/
+			else
 			{
-				color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);;
+				color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
 			}
 		}
 		else
@@ -152,8 +158,8 @@ void GameUILayer::updateMiniMap()
 		}
 
 		auto gameObjectInTileMapPosition = gameObject->getPosition();
-		auto gameObjectInMinimapPosition = cocos2d::Vec2(gameObjectInTileMapPosition.x / tileMapSize.width * miniMapSize.width,
-			gameObjectInTileMapPosition.y / tileMapSize.height * miniMapSize.height);
+		auto gameObjectInMinimapPosition = cocos2d::Vec2(gameObjectInTileMapPosition.x * miniMapSize.width / (mapSize.width * mapScale),
+			gameObjectInTileMapPosition.y * miniMapSize.height / (mapSize.height* mapScale));
 		if (gameObject->getGameObjectType() == GameObjectType::Building)
 		{
 			m_miniMapDrawNode->drawSolidRect(cocos2d::Vec2(gameObjectInMinimapPosition.x - 2.0f, gameObjectInMinimapPosition.y - 2.0f),
@@ -167,16 +173,12 @@ void GameUILayer::updateMiniMap()
 		}
 	}
 
+	
+	cocos2d::Size minimapScreenBoxSize(visibileSize.width * miniMapSize.width / (mapSize.width * mapScale),
+		visibileSize.height * miniMapSize.height / (mapSize.height * mapScale));
 
-	auto mapPosition = MapManager::getInstance()->getPosition();
-	auto mapScale = MapManager::getInstance()->getMapScale();
-	auto visibileSize = cocos2d::Director::getInstance()->getVisibleSize();
-
-	cocos2d::Size minimapScreenBoxSize(visibileSize.width / tileMapSize.width * miniMapSize.width / mapScale,
-		visibileSize.height / tileMapSize.height * miniMapSize.height / mapScale);
-
-	cocos2d::Vec2 minimapScreenBoxPosition(-mapPosition.x / (tileMapSize.width * mapScale) * miniMapSize.width,
-		-mapPosition.y / (tileMapSize.height * mapScale) * miniMapSize.height);
+	cocos2d::Vec2 minimapScreenBoxPosition(-mapPosition.x * miniMapSize.width / (mapSize.width * mapScale),
+		-mapPosition.y  * miniMapSize.height / (mapSize.height * mapScale));
 
 	m_miniMapDrawNode->drawRect(minimapScreenBoxPosition,
 		minimapScreenBoxPosition + minimapScreenBoxSize,
@@ -188,7 +190,7 @@ void GameUILayer::updateGameTime()
 	time_t now = time(nullptr);
 	time_t passTime = now - m_gameStartTime;
 	tm* passTimeTm = gmtime(&passTime);
-	auto gameMainPanel = m_gameUI->getChildByName("Panel_GameMain");
+	auto gameMainPanel = m_gameUI->getChildByName("Panel_Creating");
 	auto passTimeLabel = gameMainPanel->getChildByName<cocos2d::ui::Text*>("Text_GameTime");
 	passTimeLabel->setString(cocos2d::StringUtils::format("%02d:%02d:%02d", passTimeTm->tm_hour, passTimeTm->tm_min, passTimeTm->tm_sec));
 }
