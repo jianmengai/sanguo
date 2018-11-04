@@ -5,6 +5,7 @@
 static std::map<TileMapLayerType, std::string> s_tileMapLayerTypeToString = {
 	{ TileMapLayerType::BackgroundLayer, "backgroundLayer" },
 	{ TileMapLayerType::GameObjcetLayer, "gameObjectLayer" },
+	{ TileMapLayerType::ResourceLayer, "resourceLayer"},
 };
 
 MapManager* MapManager::getInstance()
@@ -39,6 +40,12 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 	{
 		return false;
 	}
+
+	if (!initBasePosition())
+	{
+		return false;
+	}
+
 	m_tiledMap->setScale(m_mapScale);
 	//m_tiledMap->setPosition(cocos2d::Vec2(-1700,-1200));
 
@@ -79,6 +86,31 @@ void MapManager::update(float dt)
 	++count;
 }
 
+bool MapManager::initBasePosition()
+{
+	auto resourceLayer = m_tiledMap->getObjectGroup(s_tileMapLayerTypeToString[TileMapLayerType::ResourceLayer]);
+	if (resourceLayer == nullptr)
+	{
+		return false;
+	}
+	auto& objects = resourceLayer->getObjects();
+	for (auto& value : objects)
+	{
+		cocos2d::Vec2 position;
+		auto& valueMap = value.asValueMap();
+		position.x = valueMap["x"].asFloat() * m_mapScale;
+		position.y = valueMap["y"].asFloat() * m_mapScale;
+		m_basePositions.push_back(position);
+	}
+
+	if (m_basePositions.empty())
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void MapManager::setMapScale(float scale)
 {
 	m_mapScale = scale;
@@ -88,6 +120,12 @@ void MapManager::setMapScale(float scale)
 float MapManager::getMapScale()
 {
 	return m_mapScale;
+}
+
+std::vector<cocos2d::Vec2>& MapManager::getBasePosition()
+{
+	// TODO: 在此处插入 return 语句
+	return m_basePositions;
 }
 
 void MapManager::initTileNodeTable()

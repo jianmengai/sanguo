@@ -7,6 +7,7 @@
 #include "MapManager.h"
 #include "GameUtils.h"
 #include "AutoFindPath.h"
+#include "building.h"
 
 Soldier* Soldier::create(SoldierType type, const cocos2d::Vec2& position, FaceDirection direction)
 {
@@ -217,6 +218,25 @@ void Soldier::moveTo(const cocos2d::Vec2& pos)
 
 void Soldier::update(float deltaTime)
 {
+	//GameBattle里面已经控制指定攻击目标，之类只需要定时刷新状态，以及行进过程中的遭遇战
+	if (m_forceType == ForceType::AI)
+	{
+		findAndFight(deltaTime);
+	}
+}
+
+void Soldier::attackTarget(GameObject * target)
+{
+	m_attackTarget = target;
+	//是否在攻击距离内
+	if (isEnemyInAttackRange(target))
+	{
+		toAttack();
+	}
+	else
+	{
+		moveTo(target->getPosition());
+	}
 }
 
 void Soldier::toStand()
@@ -328,4 +348,104 @@ float Soldier::getMoveToDuration(const cocos2d::Vec2& moveToPos)
 		(moveToPos.y - position.y) * (moveToPos.y - position.y));
 
 	return distance / m_moveSpeed;
+}
+
+void Soldier::findAndFight(float deltaTime)
+{
+	m_alertTimeCd += deltaTime;
+	if (m_enemyId != INVALID_GAMEOBJECT_ID)
+	{
+		auto enemy = GameObjectManager::getInstance()->getGameObjectById(m_enemyId);
+		if (enemy == nullptr)
+		{
+			m_enemyId = INVALID_GAMEOBJECT_ID;
+			if (m_attackTarget != nullptr)
+			{
+				attackTarget(m_attackTarget);
+			}
+		}
+		//在攻击范围内
+		else if (isEnemyInAttackRange(enemy))
+		{
+			toAttack();
+		}
+		//在警戒范围内，不在攻击范围内
+		else
+		{
+			moveTo(enemy->getPosition());
+		}
+	}
+	else
+	{
+		if (m_alertTimeCd >= GameConfig::getInstance()->getCooldownConf()->alertCdTime)
+		{
+			searchEnemy();
+			m_alertTimeCd = 0;
+		}
+	}
+}
+
+void Soldier::searchEnemy()
+{
+	auto& gameObjects = GameObjectManager::getInstance()->getGameObjectMap();
+	for (auto& gameObjectIt : gameObjects)
+	{
+		auto gameObject = gameObjectIt.second;
+		if (isEnemyInAlertRange(gameObject))
+		{
+			setEnemyId(gameObject->getId());
+		}
+	}
+}
+
+bool Soldier::isEnemyInAlertRange(GameObject * enemy)
+{
+	auto& startPos = this->getPosition();
+	auto enemyPos = getEnemyPosition(enemy);
+	auto distance = GameUtils::computeDistanceBetween(startPos, enemyPos);
+	if (distance <= m_alertDistance)
+	{
+		return true;
+	}
+	return false;
+}
+
+
+cocos2d::Vec2 Soldier::getEnemyPosition(GameObject * enemy)
+{
+	cocos2d::Vec2 targetPos;
+	if (enemy->getGameObjectType() == GameObjectType::Soldier)
+	{
+		targetPos = enemy->getPosition();
+	}
+	else if (enemy->getGameObjectType() == GameObjectType::Building)
+	{
+		float minDistance = FLT_MAX;
+		auto& startPos = this->getPosition();
+		Building* building = dynamic_cast<Building*>(enemy);
+		//建筑占用的格子较多，这里找出距离最近的格子
+		auto& bottonGridPos = building->getBottonGirdPos();
+		for (auto& endPos : bottonGridPos)
+		{
+			auto distance = GameUtils::computeDistanceBetween(startPos, endPos);
+			if (distance < minDistance)
+			{
+				minDistance = distance;
+				targetPos = endPos;
+			}
+		}
+	}
+	return targetPos;
+}
+
+bool Soldier::isEnemyInAttackRange(GameObject * enemy)
+{
+	auto startPos = getPosition();
+	auto targetPos = getEnemyPosition(enemy);
+	auto distance = GameUtils::computeDistanceBetween(startPos, targetPos);
+	if (distance <= m_attackDistance)
+	{
+		return true;
+	}
+	return false;
 }

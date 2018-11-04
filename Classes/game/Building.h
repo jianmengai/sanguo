@@ -10,6 +10,8 @@ class Building : public GameObject
 public:
 	static Building* create(BuildingType type , const cocos2d::Vec2& position);
 	const cocos2d::Size& getContentSize();
+	BuildingType getBuildingType();
+	std::vector<cocos2d::Vec2>& getBottonGirdPos();
 private:
 	bool init(const BuildingType type, const cocos2d::Vec2& position);
 	cocos2d::Sprite* Building::createBuildingStatusSprite(const BuildingType type, BuildingStatus buildingStatus, int opacity = 255);
@@ -20,4 +22,6 @@ private:
 	std::unordered_map<BuildingStatus, cocos2d::Sprite*> m_buildingStatusSpriteMap;
 	cocos2d::Vec2 m_bottomGridsPlaneCenterPositionInLocalSpace;
 	std::vector<cocos2d::Sprite*> m_bottomGridSpritesList;
+	BuildingType m_buildingType = BuildingType::Invalid;
+	std::vector<cocos2d::Vec2> m_bottonGridPos;
 };

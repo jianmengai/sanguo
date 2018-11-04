@@ -1,6 +1,7 @@
 #include "GameBattle.h"
 #include "MapManager.h"
 #include "GameObjectManager.h"
+#include "GameConfig.h"
 
 GameBattle* GameBattle::getInstance()
 {
@@ -24,6 +25,7 @@ bool GameBattle::init()
 	m_player->setForceType(ForceType::Player);
 	m_npc = new (std::nothrow) Army;
 	m_npc->setForceType(ForceType::AI);
+	initBasePosition();
 	return true;
 }
 
@@ -55,6 +57,16 @@ void GameBattle::update(float dt)
 {
 	m_player->update(dt);
 	m_npc->update(dt);
+	if (m_npcFindAttackTargetCdTime >= GameConfig::getInstance()->getCooldownConf()->npcFindTargetCdTime)
+	{
+		npcAttack();
+		m_npcFindAttackTargetCdTime = 0;
+	}
+	else
+	{
+		m_npcFindAttackTargetCdTime += dt;
+	}
+	
 }
 
 void GameBattle::playerMoveTo(const cocos2d::Vec2& postiion)
@@ -97,4 +109,71 @@ void GameBattle::touchProcess(const cocos2d::Vec2& position)
 	{
 		cocos2d::log("invalid touch");
 	}
+}
+
+void GameBattle::initBasePosition()
+{
+	cocos2d::Vec2 playerBase;
+	cocos2d::Vec2 npcBase;
+	auto& basePositions = MapManager::getInstance()->getBasePosition();
+	do
+	{
+		auto index1 = rand() % basePositions.size();
+		auto index2 = rand() % basePositions.size();
+		if (index1 != index2)
+		{
+			playerBase = basePositions.at(index1);
+			npcBase = basePositions.at(index2);
+			break;
+		}
+	} while (true);
+	//地图切到玩家视野
+	MapManager::getInstance()->setPosition(playerBase);
+	m_player->setBasePosition(playerBase);
+	m_npc->setBasePosition(npcBase);
+}
+
+void GameBattle::npcAttack()
+{
+	if (m_npcAttackTarget == nullptr)
+	{
+		m_npcAttackTarget = npcGetAttackTarget();
+	}
+	if (m_npcAttackTarget != nullptr)
+	{
+		m_npc->attackTarget(m_npcAttackTarget);
+	}
+}
+	
+
+GameObject* GameBattle::npcGetAttackTarget()
+{
+	std::vector<GameObject*> targetBuildings;
+	GameObject* target = nullptr;
+	//这里直接获取玩家建筑，作为攻击目标
+	auto& gameObjects = GameObjectManager::getInstance()->getGameObjectMap();
+	for (auto gameObjectIt : gameObjects)
+	{
+		auto& gameObject = gameObjectIt.second;
+		if ((gameObject->getGameObjectType() == GameObjectType::Building) && (gameObject->getForceType() == ForceType::Player))
+		{
+			//优先攻击主城
+			if (dynamic_cast<Building*>(gameObject)->getBuildingType() == BuildingType::MainTown)
+			{
+				target = gameObject;
+			}
+			else
+			{
+				targetBuildings.push_back(gameObject);
+			}
+		}
+	}
+	if ((target == nullptr) && (!targetBuildings.empty()))
+	{
+		auto size = targetBuildings.size();
+		auto index = rand() % size;
+		target = targetBuildings.at(index);
+	}
+
+	return target;
 }

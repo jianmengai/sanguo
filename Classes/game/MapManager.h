@@ -7,6 +7,7 @@ enum class TileMapLayerType
 
 	BackgroundLayer,
 	GameObjcetLayer,
+	ResourceLayer,
 
 	Total
 };
@@ -79,7 +80,11 @@ public:
 	cocos2d::Size getMapSize();
 	cocos2d::Size getContentSize();
 
+	//随机基地坐标
+	std::vector<cocos2d::Vec2>& getBasePosition();
 private:
+	bool initBasePosition();
+
 	void initTileNodeTable();
 
 	void drawTileTable();
@@ -96,4 +101,6 @@ private:
 	cocos2d::experimental::TMXLayer* m_gameObjectLayer;
 
 	cocos2d::DrawNode* m_drawNode = nullptr;
+
+	std::vector<cocos2d::Vec2> m_basePositions;
 };

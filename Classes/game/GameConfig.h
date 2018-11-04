@@ -107,6 +107,12 @@ typedef struct buildingConf_st
 	int maxCount = 0;  //最大建造数，0:不限制 
 }BuildingConf;
 
+typedef struct cooldownConf_st
+{
+	float npcFindTargetCdTime = 0;
+	float alertCdTime = 0;
+}CooldownConf;
+
 
 class GameConfig
 {
@@ -120,6 +126,7 @@ public:
 	SpecialEffectConf* getSpecialEffectConf(const std::string& specialEffectName);
 	SoldierConf* getSoldierConf(const SoldierType type);
 	BuildingConf* getBuildingConf(const BuildingType type);
+	CooldownConf* getCooldownConf();
 
 	/*std::string& getBuildingFileName(BuildingType type);
 	std::string& getSoldierFileName(SoldierType type);*/
@@ -139,4 +146,6 @@ private:
 	std::unordered_map<std::string, SpecialEffectConf*> m_specialEffectConf;
 	std::unordered_map<SoldierType, SoldierConf*> m_soldierConf;
 	std::unordered_map<BuildingType, BuildingConf*> m_buildingConf;
+
+	CooldownConf m_coolDownConf;
 };

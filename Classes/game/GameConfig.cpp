@@ -305,3 +305,8 @@ BuildingConf* GameConfig::getBuildingConf(const BuildingType type)
 
 	return nullptr;
 }
+
+CooldownConf * GameConfig::getCooldownConf()
+{
+	return &m_coolDownConf;
+}

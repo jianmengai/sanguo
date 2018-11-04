@@ -25,10 +25,19 @@ public:
 	void attackTarget(GameObject* gameObject);
 
 	void setForceType(ForceType forceType);
+
+	void setBasePosition(cocos2d::Vec2& position);
+
+protected:
+	//队伍中发现攻击目标，通知给队伍所有成员
+	//void notifyTeamMemberTarget();
 private:
 	int m_gold = 0;
 	SOLDIER_MAP m_soldiers;
 	BUILDING_MAP m_buildings;
 	std::vector<Soldier*> m_selectedSodiers;
 	ForceType m_forceType;
+
+	GameObject* m_attackTarget = nullptr; //指令攻击的目标
+	cocos2d::Vec2 m_basePosition;
 };

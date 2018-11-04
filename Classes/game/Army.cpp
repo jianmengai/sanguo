@@ -237,6 +237,11 @@ void Army::setForceType(ForceType forceType)
 	m_forceType = forceType;
 }
 
+void Army::setBasePosition(cocos2d::Vec2 & position)
+{
+	m_basePosition = position;
+}
+
 void Army::update(float dt)
 {
 	//士兵非战斗状态非满HP自动回复生命值
@@ -277,7 +282,11 @@ void Army::attackTarget(GameObject* gameObject)
 	{
 		return;
 	}
-	soldiersMoveTo(gameObject->getPosition());
+	if (m_attackTarget != gameObject)
+	{
+		m_attackTarget = gameObject;
+		soldiersMoveTo(gameObject->getPosition());
+	}
 }
 
 void Army::soldiersMoveTo(const cocos2d::Vec2& mapPos)
@@ -294,6 +303,7 @@ void Army::soldiersMoveTo(const cocos2d::Vec2& mapPos)
 	auto mapSize = MapManager::getInstance()->getMapSize();
 	for (auto& soldier : m_selectedSodiers)
 	{
+		soldier->attackTarget(m_attackTarget);
 		soldier->moveTo(moveToPos);
 		if (row - 1 >= 0)
 		{

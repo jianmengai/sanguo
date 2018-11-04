@@ -107,3 +107,5 @@ enum class UIEffectType
 	TrainFinished,
 	ButtonClick
 };
+
+constexpr auto INVALID_GAMEOBJECT_ID = 0;

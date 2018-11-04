@@ -18,6 +18,14 @@ public:
 	void touchProcess(const cocos2d::Vec2& position);
 	void playerMoveTo(const cocos2d::Vec2& postiion);
 private:
+	//设置基地位置
+	void initBasePosition();
+	void npcAttack();
+	GameObject* npcGetAttackTarget();
+private:
 	Army* m_player = nullptr;
 	Army* m_npc = nullptr;
+
+	float m_npcFindAttackTargetCdTime = 60;
+	GameObject* m_npcAttackTarget = nullptr; //npc攻击目标
 };

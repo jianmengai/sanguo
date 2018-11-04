@@ -15,7 +15,7 @@ Building* Building::create(BuildingType type, const cocos2d::Vec2& position)
 	{
 		CC_SAFE_DELETE(building);
 	}
-
+	
 	return building;
 }
 
@@ -27,13 +27,13 @@ bool Building::init(const BuildingType type, const cocos2d::Vec2& position)
 	}
 	m_objectType = GameObjectType::Building;
 	m_buildingStatus = BuildingStatus::Working;
-	setPosition(position);
+	this->setPosition(position);
 	initBuildingStatusSprites(type);
 	initBottomGridSprites(type);
 
 	setScale(1.5f);
 	m_uniqId = GameUtils::getLastestUniqId();
-
+	m_buildingType = type;
 	return true;
 }
 
@@ -148,4 +148,15 @@ const cocos2d::Size& Building::getContentSize()
 {
 	auto& prepareToBuildSprite = m_buildingStatusSpriteMap[BuildingStatus::PrepareToBuild];
 	return prepareToBuildSprite->getContentSize();
+}
+
+BuildingType Building::getBuildingType()
+{
+	return m_buildingType;
+}
+
+std::vector<cocos2d::Vec2>& Building::getBottonGirdPos()
+{
+	// TODO: 在此处插入 return 语句
+	return m_bottonGridPos;
 }
