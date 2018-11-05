@@ -120,7 +120,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     //}
 
     register_all_packages();
-	
+	srand(time(NULL));
 	std::vector<std::string> searchPaths;
 	searchPaths.push_back("./ui");
 	searchPaths.push_back("./building");

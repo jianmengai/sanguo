@@ -194,9 +194,18 @@ bool Army::createSoldier(SoldierType type)
 	return true;
 }
 
-bool Army::createBuilding(BuildingType type, const cocos2d::Vec2& position)
+bool Army::createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos)
 {
-	auto newPos = MapManager::getInstance()->toMapPos(position);
+	cocos2d::Vec2 newPos;
+	if (!isMapPos)
+	{
+		newPos = MapManager::getInstance()->toMapPos(position);
+	}
+	else
+	{
+		newPos = position;
+	}
+
 	Building* building = Building::create(type, newPos);
 	if (nullptr == building)
 	{
@@ -242,8 +251,25 @@ void Army::setBasePosition(cocos2d::Vec2 & position)
 	m_basePosition = position;
 }
 
+void Army::npcAutoCreating()
+{
+	//
+	if (m_buildings.count(BuildingType::MainTown) == 0)
+	{
+		createBuilding(BuildingType::MainTown, m_basePosition, true);
+	}
+	if (m_buildings.count(BuildingType::Barrack) == 0)
+	{
+		//createBuilding(BuildingType::Barrack, m_basePosition);
+	}
+}
+
 void Army::update(float dt)
 {
+	if (m_forceType == ForceType::AI)
+	{
+		npcAutoCreating();
+	}
 	//士兵非战斗状态非满HP自动回复生命值
 	for (auto& soldierIt : m_soldiers)
 	{

@@ -16,7 +16,7 @@ public:
 
 	void update(float dt);
 	bool createSoldier(SoldierType type);
-	bool createBuilding(BuildingType type, const cocos2d::Vec2& position);
+	bool createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos = false);
 	void soldiersMoveTo(const cocos2d::Vec2& position);
 
 	void addSelected(GameObject* gameObject);
@@ -31,6 +31,8 @@ public:
 protected:
 	//队伍中发现攻击目标，通知给队伍所有成员
 	//void notifyTeamMemberTarget();
+
+	void npcAutoCreating();
 private:
 	int m_gold = 0;
 	SOLDIER_MAP m_soldiers;

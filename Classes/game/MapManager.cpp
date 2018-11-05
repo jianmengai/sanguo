@@ -40,12 +40,7 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 	{
 		return false;
 	}
-
-	if (!initBasePosition())
-	{
-		return false;
-	}
-
+	//m_tiledMap->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
 	m_tiledMap->setScale(m_mapScale);
 	//m_tiledMap->setPosition(cocos2d::Vec2(-1700,-1200));
 
@@ -59,6 +54,12 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 	m_tileSize = m_tiledMap->getTileSize();
 
 	initTileNodeTable();
+
+	if (!initBasePosition())
+	{
+		return false;
+	}
+
 	AutoFindPath::initTileNodeTable(m_tileNodeTable);
 	
 	drawTileTable();
@@ -98,8 +99,11 @@ bool MapManager::initBasePosition()
 	{
 		cocos2d::Vec2 position;
 		auto& valueMap = value.asValueMap();
-		position.x = valueMap["x"].asFloat() * m_mapScale;
-		position.y = valueMap["y"].asFloat() * m_mapScale;
+		float x = valueMap["x"].asFloat();
+		float y = valueMap["y"].asFloat();
+		int columnIndex = x / m_tileSize.height;
+		int rowIndex = (m_mapSize.height * m_tileSize.height - y) / m_tileSize.height;
+		position = getTileNode(rowIndex, columnIndex)->position;
 		m_basePositions.push_back(position);
 	}
 
