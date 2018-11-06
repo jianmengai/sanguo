@@ -26,7 +26,7 @@ public:
 
 	void setForceType(ForceType forceType);
 
-	void setBasePosition(cocos2d::Vec2& position);
+	void setBasePosition(BasePosition& position);
 
 protected:
 	//队伍中发现攻击目标，通知给队伍所有成员
@@ -41,5 +41,5 @@ private:
 	ForceType m_forceType;
 
 	GameObject* m_attackTarget = nullptr; //指令攻击的目标
-	cocos2d::Vec2 m_basePosition;
+	BasePosition m_basePosition;
 };

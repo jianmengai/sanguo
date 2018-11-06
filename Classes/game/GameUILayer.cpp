@@ -116,7 +116,7 @@ void GameUILayer::onMinimapTouched(cocos2d::Ref* sender, cocos2d::ui::Widget::To
 			touchPosition.y / widgetSize.height * MapManager::getInstance()->getTileSize().height * mapScale - visibleSize.height / 2.0f);
 */
 		MapManager::getInstance()->setPosition(deltaPos, true);
-		WarFogLayer::getInstance()->setPosition(deltaPos);
+		//WarFogLayer::getInstance()->setPosition(deltaPos);
 
 		if (cocos2d::Director::getInstance()->isPaused())
 		{

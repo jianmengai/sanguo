@@ -1,6 +1,7 @@
 #include "MapManager.h"
 #include "AutoFindPath.h"
 #include "GameObjectManager.h"
+#include "WarFogLayer.h"
 
 static std::map<TileMapLayerType, std::string> s_tileMapLayerTypeToString = {
 	{ TileMapLayerType::BackgroundLayer, "backgroundLayer" },
@@ -94,17 +95,41 @@ bool MapManager::initBasePosition()
 	{
 		return false;
 	}
-	auto& objects = resourceLayer->getObjects();
-	for (auto& value : objects)
+	for (int i = 1; i <= 10; ++i)
 	{
-		cocos2d::Vec2 position;
-		auto& valueMap = value.asValueMap();
-		float x = valueMap["x"].asFloat();
-		float y = valueMap["y"].asFloat();
-		int columnIndex = x / m_tileSize.height;
-		int rowIndex = (m_mapSize.height * m_tileSize.height - y) / m_tileSize.height;
-		position = getTileNode(rowIndex, columnIndex)->position;
-		m_basePositions.push_back(position);
+		std::stringstream ss;
+		ss << "basePoint" << i;
+		std::string baseName = ss.str();
+		ss.str("");
+		ss << "barrackPoint" << i;
+		std::string barrackName = ss.str();
+		auto& baseNameValueMap = resourceLayer->getObject(baseName);
+		if (baseNameValueMap.empty())
+		{
+			break;
+		}
+		auto& barrackValueMap = resourceLayer->getObject(barrackName);
+		
+		BasePosition basePosition;
+		basePosition.basePosition = getObjectPosition(baseNameValueMap, baseName);
+		basePosition.barrackPosition = getObjectPosition(barrackValueMap, barrackName);
+		for (int j = 1; j <= 10; ++j)
+		{
+			int temp = i * 10;
+			int index = temp + j;
+			ss.str("");
+			ss << "archorTowerPoint" << index;
+			std::string archorTowerName = ss.str();
+			auto& archorTowerValueMap = resourceLayer->getObject(archorTowerName);
+			if (archorTowerValueMap.empty())
+			{
+				break;
+			}
+			auto archorTowerPostion = getObjectPosition(archorTowerValueMap, archorTowerName);
+			basePosition.archorTowerPositions.push_back(archorTowerPostion);
+		}
+		
+		m_basePositions.push_back(basePosition);
 	}
 
 	if (m_basePositions.empty())
@@ -126,7 +151,7 @@ float MapManager::getMapScale()
 	return m_mapScale;
 }
 
-std::vector<cocos2d::Vec2>& MapManager::getBasePosition()
+std::vector<BasePosition>& MapManager::getBasePosition()
 {
 	// TODO: 在此处插入 return 语句
 	return m_basePositions;
@@ -247,6 +272,11 @@ void MapManager::drawTileTable()
 
 void MapManager::setPosition(cocos2d::Vec2& position, bool isDelta)
 {
+	//if (isDelta)
+	//{
+	//	WarFogLayer::getInstance()->setPosition(position);
+	//}
+	
 	cocos2d::Vec2 newPosition = position * m_mapScale;
 	if (isDelta)
 	{
@@ -274,6 +304,7 @@ void MapManager::setPosition(cocos2d::Vec2& position, bool isDelta)
 	}
 	newPosition.negate();
 	m_tiledMap->setPosition(newPosition);
+	WarFogLayer::getInstance()->setPosition(newPosition);
 	//cocos2d::log("===>set map postion, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, position.y, m_mapScale);
 }
 
@@ -473,4 +504,13 @@ void MapManager::updateTileNodeTable()
 	{
 		GameObject* gameObject = it.second;
 	}
+}
+
+cocos2d::Vec2 & MapManager::getObjectPosition(cocos2d::ValueMap& valueMap, std::string& name)
+{
+	float x = valueMap["x"].asFloat();
+	float y = valueMap["y"].asFloat();
+	int columnIndex = x / m_tileSize.height;
+	int rowIndex = (m_mapSize.height * m_tileSize.height - y) / m_tileSize.height;
+	return getTileNode(rowIndex, columnIndex)->position;
 }

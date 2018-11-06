@@ -246,7 +246,7 @@ void Army::setForceType(ForceType forceType)
 	m_forceType = forceType;
 }
 
-void Army::setBasePosition(cocos2d::Vec2 & position)
+void Army::setBasePosition(BasePosition & position)
 {
 	m_basePosition = position;
 }
@@ -256,11 +256,17 @@ void Army::npcAutoCreating()
 	//
 	if (m_buildings.count(BuildingType::MainTown) == 0)
 	{
-		createBuilding(BuildingType::MainTown, m_basePosition, true);
+		createBuilding(BuildingType::MainTown, m_basePosition.basePosition, true);
 	}
 	if (m_buildings.count(BuildingType::Barrack) == 0)
 	{
-		//createBuilding(BuildingType::Barrack, m_basePosition);
+		createBuilding(BuildingType::Barrack, m_basePosition.barrackPosition, true);
+	}
+	if (m_soldiers.size() < 3)
+	{
+		createSoldier(SoldierType::Archer);
+		createSoldier(SoldierType::Cavalry);
+		createSoldier(SoldierType::Infantry);
 	}
 }
 

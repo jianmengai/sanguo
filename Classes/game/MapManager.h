@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "GameDefine.h"
 
 enum class TileMapLayerType
 {
@@ -30,6 +31,8 @@ struct TileNode
 
 	TileNode* parent = nullptr;
 };
+
+
 
 const int OBSTACLE_ID = 2;
 const int PASSABLE_ID = 0;
@@ -81,7 +84,7 @@ public:
 	cocos2d::Size getContentSize();
 
 	//随机基地坐标
-	std::vector<cocos2d::Vec2>& getBasePosition();
+	std::vector<BasePosition>& getBasePosition();
 private:
 	bool initBasePosition();
 
@@ -90,6 +93,8 @@ private:
 	void drawTileTable();
 
 	void updateTileNodeTable();
+
+	cocos2d::Vec2& getObjectPosition(cocos2d::ValueMap& valueMap, std::string& name);
 private:
 	float m_mapScale;
 	cocos2d::experimental::TMXTiledMap* m_tiledMap;
@@ -102,5 +107,6 @@ private:
 
 	cocos2d::DrawNode* m_drawNode = nullptr;
 
-	std::vector<cocos2d::Vec2> m_basePositions;
+
+	std::vector<BasePosition> m_basePositions;
 };

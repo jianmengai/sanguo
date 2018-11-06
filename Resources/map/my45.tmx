@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="158" tileheight="120" infinite="0" nextlayerid="5" nextobjectid="10">
+<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="158" tileheight="120" infinite="0" nextlayerid="5" nextobjectid="32">
  <tileset firstgid="1" name="grass" tilewidth="158" tileheight="120" tilecount="1" columns="1">
   <image source="263.0.png" width="158" height="120"/>
  </tileset>
@@ -30,6 +30,66 @@
    <point/>
   </object>
   <object id="9" name="basePoint5" x="4981.75" y="5234.92">
+   <point/>
+  </object>
+  <object id="10" name="barrackPoint1" x="668.076" y="1135.92">
+   <point/>
+  </object>
+  <object id="11" name="barrackPoint2" x="10865" y="1271.04">
+   <point/>
+  </object>
+  <object id="12" name="barrackPoint3" x="10371.4" y="10860.6">
+   <point/>
+  </object>
+  <object id="13" name="barrackPoint4" x="786.557" y="10137.4">
+   <point/>
+  </object>
+  <object id="15" name="barrackPoint5" x="4862.28" y="5937.72">
+   <point/>
+  </object>
+  <object id="16" name="archorTowerPoint11" x="1264.48" y="547.519">
+   <point/>
+  </object>
+  <object id="17" name="archorTowerPoint12" x="1280.35" y="1383.65">
+   <point/>
+  </object>
+  <object id="18" name="archorTowerPoint13" x="657.241" y="1738.76">
+   <point/>
+  </object>
+  <object id="19" name="archorTowerPoint21" x="10384.6" y="535.443">
+   <point/>
+  </object>
+  <object id="20" name="archorTowerPoint22" x="10391" y="1757.04">
+   <point/>
+  </object>
+  <object id="21" name="archorTowerPoint23" x="11118.4" y="1861.65">
+   <point/>
+  </object>
+  <object id="22" name="archorTowerPoint31" x="11233.1" y="10014.9">
+   <point/>
+  </object>
+  <object id="24" name="archorTowerPoint32" x="9900.2" y="10027.8">
+   <point/>
+  </object>
+  <object id="25" name="archorTowerPoint33" x="9563.75" y="10964.3">
+   <point/>
+  </object>
+  <object id="26" name="archorTowerPoint41" x="679.392" y="9416.61">
+   <point/>
+  </object>
+  <object id="27" name="archorTowerPoint42" x="1524.99" y="9767.01">
+   <point/>
+  </object>
+  <object id="28" name="archorTowerPoint43" x="1634.56" y="10745.4">
+   <point/>
+  </object>
+  <object id="29" name="archorTowerPoint51" x="4147.24" y="4988.76">
+   <point/>
+  </object>
+  <object id="30" name="archorTowerPoint52" x="4024" y="5944">
+   <point/>
+  </object>
+  <object id="31" name="archorTowerPoint53" x="4390.76" y="6669.24">
    <point/>
   </object>
  </objectgroup>

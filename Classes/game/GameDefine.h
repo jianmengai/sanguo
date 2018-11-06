@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cocos2d.h"
+
 constexpr auto LAST_ACCOUNT_NAME = "last-accout-name";
 constexpr auto LAST_PASSWORD = "last-pass-word";
 
@@ -109,3 +111,10 @@ enum class UIEffectType
 };
 
 constexpr auto INVALID_GAMEOBJECT_ID = 0;
+
+struct BasePosition
+{
+	cocos2d::Vec2 basePosition;
+	cocos2d::Vec2 barrackPosition;
+	std::vector<cocos2d::Vec2> archorTowerPositions;
+};

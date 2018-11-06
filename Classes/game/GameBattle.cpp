@@ -113,8 +113,8 @@ void GameBattle::touchProcess(const cocos2d::Vec2& position)
 
 void GameBattle::initBasePosition()
 {
-	cocos2d::Vec2 playerBase;
-	cocos2d::Vec2 npcBase;
+	BasePosition playerBase;
+	BasePosition npcBase;
 	auto& basePositions = MapManager::getInstance()->getBasePosition();
 	do
 	{
@@ -128,7 +128,7 @@ void GameBattle::initBasePosition()
 		}
 	} while (true);
 	//地图切到玩家视野
-	MapManager::getInstance()->setPosition(playerBase);
+	MapManager::getInstance()->setPosition(playerBase.basePosition);
 	m_player->setBasePosition(playerBase);
 	m_npc->setBasePosition(npcBase);
 }
