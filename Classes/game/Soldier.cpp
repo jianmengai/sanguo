@@ -367,11 +367,13 @@ void Soldier::findAndFight(float deltaTime)
 		//ÔÚ¹¥»÷·¶Î§ÄÚ
 		else if (isEnemyInAttackRange(enemy))
 		{
+			cocos2d::log(">>>> attack enemy:%d", enemy->getId());
 			toAttack();
 		}
 		//ÔÚ¾¯½ä·¶Î§ÄÚ£¬²»ÔÚ¹¥»÷·¶Î§ÄÚ
 		else
 		{
+			cocos2d::log(">>>> in alert range, move to enemy:%d", enemy->getId());
 			moveTo(enemy->getPosition());
 		}
 	}
@@ -391,8 +393,13 @@ void Soldier::searchEnemy()
 	for (auto& gameObjectIt : gameObjects)
 	{
 		auto gameObject = gameObjectIt.second;
+		if (m_forceType == gameObject->getForceType())
+		{
+			continue;
+		}
 		if (isEnemyInAlertRange(gameObject))
 		{
+			cocos2d::log(">>>> find enemy:%d", gameObject->getId());
 			setEnemyId(gameObject->getId());
 		}
 	}

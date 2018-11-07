@@ -14,14 +14,14 @@ Army::~Army()
 
 }
 
-bool Army::createSoldier(SoldierType type)
+Soldier* Army::createSoldier(SoldierType type)
 {
 	//获取兵营位置
 	auto barrackIt = m_buildings.find(BuildingType::Barrack);
 	if (barrackIt == m_buildings.end() || barrackIt->second.empty())
 	{
 		cocos2d::log("need building barrack first");
-		return false;
+		return nullptr;
 	}
 	
 	auto barracks = barrackIt->second;
@@ -174,14 +174,14 @@ bool Army::createSoldier(SoldierType type)
 	}
 	if (!found)
 	{
-		return false;
+		return nullptr;
 		cocos2d::log("no place to create soldier!");
 	}
 	
 	Soldier* soldier = Soldier::create(type, newPos, direction);
 	if (nullptr == soldier)
 	{
-		return false;
+		return nullptr;
 	}
 
 	soldier->setForceType(m_forceType);
@@ -191,10 +191,10 @@ bool Army::createSoldier(SoldierType type)
 	GameObjectManager::getInstance()->addGameObject(soldier);
 	MapManager::getInstance()->setOccupy(newPos, soldier->getContentSize());
 	WarFogLayer::getInstance()->inView(tileRow, tileCol);
-	return true;
+	return soldier;
 }
 
-bool Army::createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos)
+Building* Army::createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos)
 {
 	cocos2d::Vec2 newPos;
 	if (!isMapPos)
@@ -209,14 +209,14 @@ bool Army::createBuilding(BuildingType type, const cocos2d::Vec2& position, bool
 	Building* building = Building::create(type, newPos);
 	if (nullptr == building)
 	{
-		return false;
+		return nullptr;
 	}
 	const auto& contentSize = building->getContentSize();
 	if (!MapManager::getInstance()->checkOccupy(newPos, contentSize))
 	{
 		CC_SAFE_DELETE(building);
 		cocos2d::log("can not building here...");
-		return false;
+		return nullptr;
 	}
 	building->setForceType(m_forceType);
 	cocos2d::log("==> create building, pos:[x=%0.1f, y=%0.1f]\n", newPos.x, newPos.y);
@@ -238,7 +238,7 @@ bool Army::createBuilding(BuildingType type, const cocos2d::Vec2& position, bool
 			}
 		}
 	}
-	return true;
+	return building;
 }
 
 void Army::setForceType(ForceType forceType)
@@ -264,9 +264,21 @@ void Army::npcAutoCreating()
 	}
 	if (m_soldiers.size() < 3)
 	{
-		createSoldier(SoldierType::Archer);
-		createSoldier(SoldierType::Cavalry);
-		createSoldier(SoldierType::Infantry);
+		auto soldier = createSoldier(SoldierType::Archer);
+		if (soldier != nullptr)
+		{
+			m_selectedSodiers.push_back(soldier);
+		}
+		soldier = createSoldier(SoldierType::Cavalry);
+		if (soldier != nullptr)
+		{
+			m_selectedSodiers.push_back(soldier);
+		}
+		soldier = createSoldier(SoldierType::Infantry);
+		if (soldier != nullptr)
+		{
+			m_selectedSodiers.push_back(soldier);
+		}
 	}
 }
 
@@ -310,10 +322,10 @@ void Army::clearSelected()
 
 void Army::attackTarget(GameObject* gameObject)
 {
-	if (gameObject->getForceType() != ForceType::AI)
-	{
-		return;
-	}
+	//if (gameObject->getForceType() != ForceType::AI)
+	//{
+	//	return;
+	//}
 	if (m_attackTarget != gameObject)
 	{
 		m_attackTarget = gameObject;

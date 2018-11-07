@@ -15,8 +15,8 @@ public:
 	~Army();
 
 	void update(float dt);
-	bool createSoldier(SoldierType type);
-	bool createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos = false);
+	Soldier* createSoldier(SoldierType type);
+	Building* createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos = false);
 	void soldiersMoveTo(const cocos2d::Vec2& position);
 
 	void addSelected(GameObject* gameObject);

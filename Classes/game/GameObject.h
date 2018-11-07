@@ -42,8 +42,8 @@ protected:
 	//int m_type;
 	int m_attackPower;
 	int m_maxAttackPower;
-	float m_alertDistance;//警戒距离，距离内会被发现
-	float m_attackDistance; //攻击距离，距离内直接攻击
+	float m_alertDistance = 900; //警戒距离，距离内会被发现
+	float m_attackDistance = 300; //攻击距离，距离内直接攻击
 	BulletType m_bulletType = BulletType::Invalid;
 	DamageType m_damageType = DamageType::Invalid;
 	ForceType m_forceType = ForceType::Invalid;
