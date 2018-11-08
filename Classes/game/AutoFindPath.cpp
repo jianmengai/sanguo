@@ -63,23 +63,13 @@ std::list<TileNode*> AutoFindPath::computeTileNodePathListBetween(TileNode* star
 
 	startNode->isVisit = true;
 	g_closeList.push_back(startNode);
-
-	while (true)
+	do
 	{
 		auto nextPathNode = findNextPathNodeBeside(g_currentNode);
-		if (!nextPathNode)
+		if (nextPathNode == nullptr)
 		{
-			if (!g_openList.empty())
-			{
-				g_currentNode = startNode;
-				continue;
-			}
-			else
-			{
-				break;
-			}
+			break;
 		}
-
 		g_openList.remove(nextPathNode);
 		g_closeList.push_back(nextPathNode);
 		g_currentNode = nextPathNode;
@@ -90,22 +80,32 @@ std::list<TileNode*> AutoFindPath::computeTileNodePathListBetween(TileNode* star
 			pathList.pop_front();
 			break;
 		}
-	}
+	} while (!g_openList.empty());
 
 	return pathList;
 }
 
 bool AutoFindPath::canVisit(TileNode* node)
 {
-	bool result = true;
-
-	if (node->occupy == 1 ||
-		node->isVisit)
+	if (node->occupy == 1)
 	{
-		result = false;
+		return false;
 	}
-
-	return result;
+	for (auto closeNode : g_closeList)
+	{
+		if (closeNode == node)
+		{
+			return false;
+		}
+	}
+	for (auto openNode : g_openList)
+	{
+		if (openNode == node)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 bool isLeftSumWeightLessThanRight(const TileNode* left, const TileNode* right);
@@ -129,7 +129,7 @@ TileNode* AutoFindPath::findNextPathNodeBeside(TileNode* node)
 			{
 				prepareToVisitNode->isVisit = true;
 				prepareToVisitNode->parent = node;
-
+				
 				if (prepareToVisitNode->rowIndex != node->rowIndex &&
 					prepareToVisitNode->columnIndex != node->columnIndex)
 				{
@@ -146,41 +146,40 @@ TileNode* AutoFindPath::findNextPathNodeBeside(TileNode* node)
 
 				prepareToVisitNode->sumWeight = prepareToVisitNode->gotoStartNodeWeight + prepareToVisitNode->gotoEndNodeWeight;
 
-
+				//g_openList.push_back(prepareToVisitNode);
 				//在插入时就实现排序
+				
 				if (g_openList.empty())
 				{
 					g_openList.push_back(prepareToVisitNode);
 				}
 				else
 				{
-					bool shouldPushBack = false;
+					bool shouldPushBack = true;
 					int elementIndex = 0;
-					for (auto& tileNode : g_openList)
+					std::list<TileNode*>::iterator preIt = g_openList.end();
+					for (std::list<TileNode*>::iterator it = g_openList.begin();
+						it != g_openList.end(); ++it)
 					{
+						TileNode* tileNode = *it;
 						if (tileNode->sumWeight >= prepareToVisitNode->sumWeight)
 						{
+							shouldPushBack = false;
 							break;
 						}
-
-						if (elementIndex < (int)g_openList.size() - 1)
-						{
-							elementIndex++;
-						}
-						else
-						{
-							shouldPushBack = true;
-						}
+						preIt = it;
 					}
-
-					std::list<TileNode*>::iterator minGreaterIter = std::next(g_openList.begin(), elementIndex);
-					if (shouldPushBack)
+					if (preIt == g_openList.end())
+					{
+						g_openList.push_front(prepareToVisitNode);
+					}
+					else if (shouldPushBack)
 					{
 						g_openList.push_back(prepareToVisitNode);
 					}
 					else
 					{
-						g_openList.insert(minGreaterIter, prepareToVisitNode);
+						g_openList.insert(preIt, prepareToVisitNode);
 					}
 				}
 			}
@@ -189,22 +188,16 @@ TileNode* AutoFindPath::findNextPathNodeBeside(TileNode* node)
 
 	if (!g_openList.empty())
 	{
-		// 按sumWeight值从小到大排序
-		//g_openList.sort(isLeftSumWeightLessThanRight);
-		nextPathNode = g_openList.front();
-		for (auto alternativeNode : g_openList)
+		/*int sumWeight = INT_MAX;
+		for (auto openNode : g_openList)
 		{
-			if (nextPathNode->sumWeight > alternativeNode->sumWeight)
+			if (openNode->sumWeight < sumWeight)
 			{
-				nextPathNode = alternativeNode;
+				nextPathNode = openNode;
+				sumWeight = openNode->sumWeight;
 			}
-			/*if (alternativeNode->gotoStartNodeWeight > node->gotoStartNodeWeight)
-			{
-				nextPathNode = alternativeNode;
-
-				break;
-			}*/
-		}
+		}*/
+		nextPathNode = g_openList.front();
 	}
 
 	return nextPathNode;
