@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "ui/UILoadingBar.h"
 #include "GameDefine.h"
 
 class GameObject : public cocos2d::Sprite
@@ -12,14 +13,14 @@ public:
 	virtual DamageType getDamageType() { return m_damageType; }
 	virtual int getAttackPower() { return m_attackPower; }
 
-	virtual bool isReadyToRemove() { return m_readyToRemove; }
+	
 
 	virtual void reduceHP(int amount);
 	virtual void addHP(int amount);
 
 	virtual float getAoeDamageRadius();
 
-	void setForceType(ForceType forceType) { m_forceType = forceType; }
+	//void setForceType(ForceType forceType) { m_forceType = forceType; }
 	ForceType getForceType() { return m_forceType; }
 	GameObjectType getGameObjectType() { return m_objectType; }
 	GameObjectStatus getGameObjectStatus() { return m_objectStatus; }
@@ -28,9 +29,22 @@ public:
 
 	void setAttackTarget(GameObject* target);
 
+	void update(float dt);
+
+	virtual bool isReadyToRemove() = 0;
 protected:
 	GameObject();
 	bool init() override;
+
+	virtual void initHpBar() = 0;
+	void showHpBar();
+	void hideHpBar();
+
+	void updateHp();
+
+	virtual void onPrepareToRemove() = 0;
+	
+
 protected:
 	int m_uniqId;
 	int m_enemyId;     //自动警戒过程中触发的攻击目标
@@ -42,8 +56,8 @@ protected:
 	//int m_type;
 	int m_attackPower;
 	int m_maxAttackPower;
-	float m_alertDistance = 900; //警戒距离，距离内会被发现
-	float m_attackDistance = 300; //攻击距离，距离内直接攻击
+	float m_alertDistance = 1200; //警戒距离，距离内会被发现
+	float m_attackDistance = 500; //攻击距离，距离内直接攻击
 	BulletType m_bulletType = BulletType::Invalid;
 	DamageType m_damageType = DamageType::Invalid;
 	ForceType m_forceType = ForceType::Invalid;
@@ -53,4 +67,6 @@ protected:
 	bool m_selected = false;
 
 	GameObject* m_attackTarget = nullptr;  //待攻击的目标，这里手工指定的或者预先选定的攻击目标
+
+	cocos2d::ui::LoadingBar* m_hpBar = nullptr;
 };

@@ -113,13 +113,25 @@ typedef struct cooldownConf_st
 	float alertCdTime = 0;
 }CooldownConf;
 
+typedef struct buildingSoundEffectData_st
+{
+	std::string destroyedName;
+	std::string constructName;
+}BuildingSoundEffectData;
+
+typedef struct soldierSoundEffectData_st
+{
+	std::string attackName;
+	std::string deathName;
+	std::string selectName;
+	std::string moveName;
+}SoldierSoundEffectData;
 
 class GameConfig
 {
 public:
 	static GameConfig* getInstance();
 	bool init();
-	//float getMapScale();
 
 	MapConf* getMapConf(int mapId = 0);
 	BulletConf* getBulletConf(const BulletType type);
@@ -127,9 +139,8 @@ public:
 	SoldierConf* getSoldierConf(const SoldierType type);
 	BuildingConf* getBuildingConf(const BuildingType type);
 	CooldownConf* getCooldownConf();
-
-	/*std::string& getBuildingFileName(BuildingType type);
-	std::string& getSoldierFileName(SoldierType type);*/
+	BuildingSoundEffectData* getBuildingSoundEffectConf();
+	SoldierSoundEffectData* getSoldierSoundEffectConf();
 
 private:
 	bool parseMapConf(const tinyxml2::XMLElement* node);
@@ -137,6 +148,7 @@ private:
 	bool parseSpecialEffectConf(const tinyxml2::XMLElement* node);
 	bool parseSoldierConf(const tinyxml2::XMLElement* node);
 	bool parseBuildingConf(const tinyxml2::XMLElement* node);
+	bool parseSoundEffectConf(const tinyxml2::XMLElement* node);
 
 	bool loadRes();
 
@@ -148,4 +160,6 @@ private:
 	std::unordered_map<BuildingType, BuildingConf*> m_buildingConf;
 
 	CooldownConf m_coolDownConf;
+	BuildingSoundEffectData m_buidingSound;
+	SoldierSoundEffectData m_soldierSound;
 };

@@ -66,7 +66,7 @@ void GameBattle::update(float dt)
 	{
 		m_npcFindAttackTargetCdTime += dt;
 	}
-	
+	GameObjectManager::getInstance()->removeAllReadyToRemoveGameObjects();
 }
 
 void GameBattle::playerMoveTo(const cocos2d::Vec2& postiion)

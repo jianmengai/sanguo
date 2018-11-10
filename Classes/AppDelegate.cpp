@@ -124,6 +124,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	std::vector<std::string> searchPaths;
 	searchPaths.push_back("./ui");
 	searchPaths.push_back("./building");
+	searchPaths.push_back("./bullet");
 	searchPaths.push_back("./npc");
 	searchPaths.push_back("./npc/archer");
 	searchPaths.push_back("./npc/barbarian");

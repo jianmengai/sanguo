@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <vector>
 #include "GameObject.h"
 
 
@@ -14,6 +15,11 @@ public:
 	GameObject* getGameObjectById(int objectId);
 	void addGameObject(GameObject* gameObject);
 	GameObjectMap& getGameObjectMap();
+	void addReadyToRemoveGameObject(int gameObjectId);
+	void removeAllReadyToRemoveGameObjects();
+private:
+	void removeGameObjectById(int gameObjectId);
 private:
 	GameObjectMap m_gameObjects;
+	std::vector<int> m_readyToRemoveGameObjectIdList;
 };

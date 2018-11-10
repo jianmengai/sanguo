@@ -87,10 +87,10 @@ std::list<TileNode*> AutoFindPath::computeTileNodePathListBetween(TileNode* star
 
 bool AutoFindPath::canVisit(TileNode* node)
 {
-	if (node->occupy == 1)
+	/*if (node->occupy == 1)
 	{
 		return false;
-	}
+	}*/
 	for (auto closeNode : g_closeList)
 	{
 		if (closeNode == node)
@@ -179,6 +179,7 @@ TileNode* AutoFindPath::findNextPathNodeBeside(TileNode* node)
 					}
 					else
 					{
+						++ preIt;
 						g_openList.insert(preIt, prepareToVisitNode);
 					}
 				}

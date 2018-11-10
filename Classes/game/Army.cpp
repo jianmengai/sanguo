@@ -178,13 +178,12 @@ Soldier* Army::createSoldier(SoldierType type)
 		cocos2d::log("no place to create soldier!");
 	}
 	
-	Soldier* soldier = Soldier::create(type, newPos, direction);
+	Soldier* soldier = Soldier::create(m_forceType, type, newPos, direction);
 	if (nullptr == soldier)
 	{
 		return nullptr;
 	}
 
-	soldier->setForceType(m_forceType);
 	cocos2d::log("===>create soldier, pos:[%0.1f, %0.1f]", newPos.x, newPos.y);
 	m_soldiers[type].push_back(soldier);
 	MapManager::getInstance()->addChildToGameObjectLayer(soldier);
@@ -206,7 +205,7 @@ Building* Army::createBuilding(BuildingType type, const cocos2d::Vec2& position,
 		newPos = position;
 	}
 
-	Building* building = Building::create(type, newPos);
+	Building* building = Building::create(m_forceType, type, newPos);
 	if (nullptr == building)
 	{
 		return nullptr;
@@ -218,7 +217,7 @@ Building* Army::createBuilding(BuildingType type, const cocos2d::Vec2& position,
 		cocos2d::log("can not building here...");
 		return nullptr;
 	}
-	building->setForceType(m_forceType);
+
 	cocos2d::log("==> create building, pos:[x=%0.1f, y=%0.1f]\n", newPos.x, newPos.y);
 	m_buildings[type].push_back(building);
 	MapManager::getInstance()->addChildToGameObjectLayer(building);
@@ -262,14 +261,14 @@ void Army::npcAutoCreating()
 	{
 		createBuilding(BuildingType::Barrack, m_basePosition.barrackPosition, true);
 	}
-	if (m_soldiers.size() < 3)
+	if (m_soldiers.size() == 0)
 	{
 		auto soldier = createSoldier(SoldierType::Archer);
 		if (soldier != nullptr)
 		{
 			m_selectedSodiers.push_back(soldier);
 		}
-		soldier = createSoldier(SoldierType::Cavalry);
+		/*soldier = createSoldier(SoldierType::Cavalry);
 		if (soldier != nullptr)
 		{
 			m_selectedSodiers.push_back(soldier);
@@ -278,7 +277,7 @@ void Army::npcAutoCreating()
 		if (soldier != nullptr)
 		{
 			m_selectedSodiers.push_back(soldier);
-		}
+		}*/
 	}
 }
 

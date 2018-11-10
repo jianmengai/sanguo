@@ -9,10 +9,10 @@
 #include "AutoFindPath.h"
 #include "building.h"
 
-Soldier* Soldier::create(SoldierType type, const cocos2d::Vec2& position, FaceDirection direction)
+Soldier* Soldier::create(ForceType forceType, SoldierType type, const cocos2d::Vec2& position, FaceDirection direction)
 {
 	auto soldier = new (std::nothrow)Soldier;
-	if (soldier && soldier->init(type, position, direction))
+	if (soldier && soldier->init(forceType, type, position, direction))
 	{
 		soldier->autorelease();
 	}
@@ -24,14 +24,14 @@ Soldier* Soldier::create(SoldierType type, const cocos2d::Vec2& position, FaceDi
 	return soldier;
 }
 
-bool Soldier::init(SoldierType type, const cocos2d::Vec2& position, FaceDirection direction)
+bool Soldier::init(ForceType forceType, SoldierType type, const cocos2d::Vec2& position, FaceDirection direction)
 {
 	if (!GameObject::init())
 	{
 		return false;
 	}
 
-	
+	m_forceType = forceType;
 	m_objectType = GameObjectType::Soldier;
 	m_faceDirection = direction;
 
@@ -48,6 +48,7 @@ bool Soldier::init(SoldierType type, const cocos2d::Vec2& position, FaceDirectio
 	this->setScale(1.5);
 	this->setPosition(position);
 	
+	initHpBar();
 	
 	m_uniqId = GameUtils::getLastestUniqId();
 	
@@ -122,7 +123,15 @@ bool Soldier::initData(SoldierType type)
 	{
 		return false;
 	}
-	
+	m_curHp = m_maxHp = soldierConf->maxHp;
+	m_attackPower = soldierConf->attackPower;
+	m_attackDistance = soldierConf->maxAttackRadius;
+	m_alertDistance = soldierConf->maxAlertRadius;
+	m_moveSpeed = soldierConf->perSecondMoveSpeedByPixel;
+	m_attackPs = soldierConf->perSecondAttackCount;
+	m_bulletType = soldierConf->bulletType;
+	m_damageType = soldierConf->damageType;
+
 	return true;
 }
 
@@ -216,8 +225,10 @@ void Soldier::moveTo(const cocos2d::Vec2& pos)
 	toMove();
 }
 
+
 void Soldier::update(float deltaTime)
 {
+	GameObject::update(deltaTime);
 	//GameBattle里面已经控制指定攻击目标，之类只需要定时刷新状态，以及行进过程中的遭遇战
 	if (m_forceType == ForceType::AI)
 	{
@@ -303,8 +314,18 @@ void Soldier::toAttack()
 	{
 		m_pathList.clear();
 	}
+	stopAllActions();
 	runAction(m_attackAnimateMap[m_faceDirection]);
 	m_objectStatus = GameObjectStatus::Attack;
+}
+
+void Soldier::toDie()
+{
+	//SoundManager::getInstance()->playNpcEffect(_templateName, NpcSoundEffectType::Death);
+	m_soldierStatus == GameObjectStatus::Die;
+    stopAllActions();
+    runAction(m_dieAnimate);
+
 }
 
 FaceDirection Soldier::getFaceDirection(const cocos2d::Vec2& moveToPos)
@@ -350,14 +371,52 @@ float Soldier::getMoveToDuration(const cocos2d::Vec2& moveToPos)
 	return distance / m_moveSpeed;
 }
 
+bool Soldier::isReadyToRemove()
+{
+	return m_soldierStatus == GameObjectStatus::Die;
+}
+
+void Soldier::onPrepareToRemove()
+{
+	toDie();
+}
+
+void Soldier::initHpBar()
+{
+	if (m_forceType == ForceType::Player)
+	{
+		m_hpBar = cocos2d::ui::LoadingBar::create(PLAYER_HP_BAR_TEXTURE_NAME);
+	}
+	else
+	{
+		m_hpBar = cocos2d::ui::LoadingBar::create(AI_HP_BAR_TEXTURE_NAME);
+	}
+
+	m_hpBar->setAnchorPoint(cocos2d::Vec2::ZERO);
+	m_hpBar->setPercent(100.0f);
+
+	auto hpBarBackground = Sprite::create(HP_BAR_BACKGROUND_TEXTURE_NAME);
+	hpBarBackground->setCascadeOpacityEnabled(true);
+	hpBarBackground->setScale(0.5f);
+	hpBarBackground->addChild(m_hpBar);
+	hpBarBackground->setVisible(true);
+
+	addChild(hpBarBackground);
+
+	auto contentSize = getContentSize();
+	hpBarBackground->setPosition(cocos2d::Vec2(contentSize.width / 2.0, contentSize.height + 10));
+}
+
 void Soldier::findAndFight(float deltaTime)
 {
+	static bool moveToEnemy = false;
 	m_alertTimeCd += deltaTime;
 	if (m_enemyId != INVALID_GAMEOBJECT_ID)
 	{
 		auto enemy = GameObjectManager::getInstance()->getGameObjectById(m_enemyId);
 		if (enemy == nullptr)
 		{
+			moveToEnemy = false;
 			m_enemyId = INVALID_GAMEOBJECT_ID;
 			if (m_attackTarget != nullptr)
 			{
@@ -367,6 +426,7 @@ void Soldier::findAndFight(float deltaTime)
 		//在攻击范围内
 		else if (isEnemyInAttackRange(enemy))
 		{
+			moveToEnemy = false;
 			cocos2d::log(">>>> attack enemy:%d", enemy->getId());
 			toAttack();
 		}
@@ -374,11 +434,17 @@ void Soldier::findAndFight(float deltaTime)
 		else
 		{
 			cocos2d::log(">>>> in alert range, move to enemy:%d", enemy->getId());
-			moveTo(enemy->getPosition());
+			if (!moveToEnemy)
+			{
+				moveTo(enemy->getPosition());
+				moveToEnemy = true;
+			}
+			
 		}
 	}
 	else
 	{
+		moveToEnemy = false;
 		if (m_alertTimeCd >= GameConfig::getInstance()->getCooldownConf()->alertCdTime)
 		{
 			searchEnemy();

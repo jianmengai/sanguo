@@ -6,4 +6,5 @@ class SoundManager
 public:
 	static SoundManager* getInstance();
 	void playUIEffect(UIEffectType type);
+	void playBuildingEffect(BuildingSoundEffectType type);
 };

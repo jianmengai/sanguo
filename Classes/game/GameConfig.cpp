@@ -33,7 +33,7 @@ bool GameConfig::init()
 		doc = nullptr;
 		return false;
 	}
-	if (!parseBuildingConf(root))
+	if (!parseBulletConf(root))
 	{
 		delete doc;
 		doc = nullptr;
@@ -52,6 +52,12 @@ bool GameConfig::init()
 		return false;
 	}
 	if (!parseBuildingConf(root))
+	{
+		delete doc;
+		doc = nullptr;
+		return false;
+	}
+	if (!parseSoundEffectConf(root))
 	{
 		delete doc;
 		doc = nullptr;
@@ -127,6 +133,30 @@ bool GameConfig::parseBulletConf(const tinyxml2::XMLElement* node)
 		return false;
 	}
 	const tinyxml2::XMLElement* bulletNode = node->FirstChildElement("Bullet");
+	if (bulletNode == nullptr)
+	{
+		return false;
+	}
+	const tinyxml2::XMLElement* brotherNode = bulletNode->FirstChildElement();
+	while (brotherNode != nullptr)
+	{
+		std::string type = GameUtils::escapeString(brotherNode->Attribute("type"));
+		if (type.empty())
+		{
+			return false;
+		}
+		BulletType bulletType = BulletType::Invalid;
+		if (type == "Arrow")
+		{
+			bulletType = BulletType::Arrow;
+		}
+		BulletConf* bulletConf = new (std::nothrow)BulletConf;
+		bulletConf->fileName = GameUtils::escapeString(brotherNode->Attribute("bulletFileName"));
+		bulletConf->specialEffect = GameUtils::escapeString(brotherNode->Attribute("specialEffectName"));
+		bulletConf->speed = atof(brotherNode->Attribute("speed"));
+		m_bulletConf[bulletType] = bulletConf;
+		brotherNode = brotherNode->NextSiblingElement();
+	}
 	
 	return true;
 }
@@ -251,6 +281,39 @@ bool GameConfig::parseBuildingConf(const tinyxml2::XMLElement* node)
 	return true;
 }
 
+bool GameConfig::parseSoundEffectConf(const tinyxml2::XMLElement * node)
+{
+	if (node == nullptr)
+	{
+		return false;
+	}
+	const tinyxml2::XMLElement* bulletNode = node->FirstChildElement("SoundEffect");
+	if (bulletNode == nullptr)
+	{
+		return false;
+	}
+	const tinyxml2::XMLElement* brotherNode = bulletNode->FirstChildElement();
+	while (brotherNode != nullptr)
+	{
+		std::string type = GameUtils::escapeString(brotherNode->Attribute("type"));
+		if (type == "building")
+		{
+			m_buidingSound.constructName = GameUtils::escapeString(brotherNode->Attribute("constructFileName"));
+			m_buidingSound.destroyedName = GameUtils::escapeString(brotherNode->Attribute("destroyFileName"));
+		}
+		else if (type == "soldier")
+		{
+			m_soldierSound.attackName = GameUtils::escapeString(brotherNode->Attribute("atkFileName"));
+			m_soldierSound.moveName = GameUtils::escapeString(brotherNode->Attribute("moveFileName"));
+			m_soldierSound.selectName = GameUtils::escapeString(brotherNode->Attribute("selectFileName"));
+			m_soldierSound.deathName = GameUtils::escapeString(brotherNode->Attribute("dieFileName"));
+		}
+		brotherNode = brotherNode->NextSiblingElement();
+	}
+
+	return true;
+}
+
 MapConf* GameConfig::getMapConf(int mapId)
 {
 	auto it = m_mapConf.find(mapId);
@@ -309,4 +372,14 @@ BuildingConf* GameConfig::getBuildingConf(const BuildingType type)
 CooldownConf * GameConfig::getCooldownConf()
 {
 	return &m_coolDownConf;
+}
+
+BuildingSoundEffectData * GameConfig::getBuildingSoundEffectConf()
+{
+	return &m_buidingSound;
+}
+
+SoldierSoundEffectData * GameConfig::getSoldierSoundEffectConf()
+{
+	return &m_soldierSound;
 }

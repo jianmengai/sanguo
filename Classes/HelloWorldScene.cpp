@@ -26,6 +26,7 @@
 #include "SimpleAudioEngine.h"
 
 #include "WarFogLayer.h"
+#include "ui/UILoadingBar.h"
 
 USING_NS_CC;
 
@@ -115,8 +116,8 @@ bool HelloWorld::init()
     else
     {
         // position the sprite on the center of the screen
-       // sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-		sprite->setPosition(Vec2(0, 0));
+        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+		//sprite->setPosition(Vec2(0, 0));
 		sprite->setAnchorPoint(Vec2(0, 0));
 		//sprite->setAnchorPoint(Vec2(1, 1));
 		sprite->setRotation(45);
@@ -137,6 +138,26 @@ bool HelloWorld::init()
 		//warFog->inView(12, 12);
 
     }
+
+	cocos2d::ui::LoadingBar* hpBar = nullptr;
+	hpBar = cocos2d::ui::LoadingBar::create("AIHPBar.png");
+	
+	hpBar->setAnchorPoint(cocos2d::Vec2::ZERO);
+	hpBar->setPercent(100.0f);
+
+	auto hpBarBackground = Sprite::create("HPBarBackground.png");
+	hpBarBackground->setCascadeOpacityEnabled(true);
+	hpBarBackground->setScaleY(0.5f);
+	hpBarBackground->addChild(hpBar);
+	hpBarBackground->setVisible(true);
+
+	auto contentSize = sprite->getContentSize();
+	hpBarBackground->setPosition(cocos2d::Vec2(contentSize.width / 2.0, contentSize.height + 10));
+	
+
+	sprite->addChild(hpBarBackground);
+
+
     return true;
 }
 

@@ -11,6 +11,10 @@ SpecialEffectManager* SpecialEffectManager::getInstance()
 
 cocos2d::Sprite* SpecialEffectManager::createSpecialEffect(const std::string& effectName, const cocos2d::Vec2& inMapPosition, bool isRepeat)
 {
+	if (effectName == "null")
+	{
+		return nullptr;
+	}
 	auto specialEffectConf =  GameConfig::getInstance()->getSpecialEffectConf(effectName);
 
 	auto effectSprite = cocos2d::Sprite::create();

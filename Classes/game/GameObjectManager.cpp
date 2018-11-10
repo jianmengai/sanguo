@@ -38,3 +38,27 @@ GameObjectMap& GameObjectManager::getGameObjectMap()
 {
 	return m_gameObjects;
 }
+
+void GameObjectManager::addReadyToRemoveGameObject(int gameObjectId)
+{
+	m_readyToRemoveGameObjectIdList.push_back(gameObjectId);
+}
+
+void GameObjectManager::removeAllReadyToRemoveGameObjects()
+{
+	for (auto gameObjectId : m_readyToRemoveGameObjectIdList)
+	{
+		removeGameObjectById(gameObjectId);
+	}
+	m_readyToRemoveGameObjectIdList.clear();
+}
+
+void GameObjectManager::removeGameObjectById(int gameObjectId)
+{
+	auto gameObjectIter = m_gameObjects.find(gameObjectId);
+	if (gameObjectIter != m_gameObjects.end())
+	{
+		gameObjectIter->second->removeFromParent();
+		m_gameObjects.erase(gameObjectId);
+	}
+}

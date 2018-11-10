@@ -2,12 +2,14 @@
 #include "GameConfig.h"
 #include "MapManager.h"
 #include "GameUtils.h"
+#include "GameObjectManager.h"
+#include "SoundManager.h"
 
 
-Building* Building::create(BuildingType type, const cocos2d::Vec2& position)
+Building* Building::create(ForceType forceType, BuildingType type, const cocos2d::Vec2& position)
 {
 	auto building = new Building();
-	if (building && building->init(type, position))
+	if (building && building->init(forceType, type, position))
 	{
 		building->autorelease();
 	}
@@ -19,21 +21,29 @@ Building* Building::create(BuildingType type, const cocos2d::Vec2& position)
 	return building;
 }
 
-bool Building::init(const BuildingType type, const cocos2d::Vec2& position)
+bool Building::init(ForceType forceType, const BuildingType type, const cocos2d::Vec2& position)
 {
 	if (!GameObject::init())
 	{
 		return false;
 	}
+	m_forceType = forceType;
 	m_objectType = GameObjectType::Building;
 	m_buildingStatus = BuildingStatus::Working;
 	this->setPosition(position);
+	m_bottonGridPos.push_back(position);
 	initBuildingStatusSprites(type);
 	initBottomGridSprites(type);
-
+	initData(type);
 	setScale(1.5f);
 	m_uniqId = GameUtils::getLastestUniqId();
 	m_buildingType = type;
+	
+	auto cs = getContentSize();
+	initHpBar();
+
+	scheduleUpdate();
+	
 	return true;
 }
 
@@ -144,6 +154,55 @@ void Building::initBottomGridSprites(const BuildingType type)
 	}
 }
 
+void Building::initData(const BuildingType type)
+{
+	auto buildingConf = GameConfig::getInstance()->getBuildingConf(type);
+	if (buildingConf == nullptr)
+	{
+		return ;
+	}
+	m_curHp = m_maxHp = buildingConf->maxHP;
+}
+
+bool Building::isReadyToRemove()
+{
+	return m_buildingStatus == BuildingStatus::Destory;
+}
+
+void Building::onPrepareToRemove()
+{
+	
+}
+
+void Building::initHpBar()
+{
+	if (m_forceType == ForceType::Player)
+	{
+		m_hpBar = cocos2d::ui::LoadingBar::create(PLAYER_HP_BAR_TEXTURE_NAME);
+	}
+	else
+	{
+		m_hpBar = cocos2d::ui::LoadingBar::create(AI_HP_BAR_TEXTURE_NAME);
+	}
+
+	m_hpBar->setAnchorPoint(cocos2d::Vec2::ZERO);
+	m_hpBar->setPercent(100.0f);
+
+	auto hpBarBackground = Sprite::create(HP_BAR_BACKGROUND_TEXTURE_NAME);
+	hpBarBackground->setCascadeOpacityEnabled(true);
+	hpBarBackground->setScale(0.5f);
+	hpBarBackground->addChild(m_hpBar);
+	hpBarBackground->setVisible(true);
+
+	addChild(hpBarBackground);
+
+	auto contentSize = m_buildingStatusSpriteMap[BuildingStatus::Working]->getContentSize();
+	auto hpContentSize = hpBarBackground->getContentSize();
+	auto scaleX = contentSize.width / hpContentSize.width;
+	hpBarBackground->setScaleX(scaleX);
+	hpBarBackground->setPosition(cocos2d::Vec2(0, contentSize.height / 2.0));
+}
+
 const cocos2d::Size& Building::getContentSize()
 {
 	auto& prepareToBuildSprite = m_buildingStatusSpriteMap[BuildingStatus::PrepareToBuild];
@@ -159,4 +218,102 @@ std::vector<cocos2d::Vec2>& Building::getBottonGirdPos()
 {
 	// TODO: 在此处插入 return 语句
 	return m_bottonGridPos;
+}
+
+void Building::update(float deltaTime)
+{
+	GameObject::update(deltaTime);
+}
+
+
+void Building::updateStatus(BuildingStatus buildingStatus)
+{
+	for (auto& buildStatusSpriteIter : m_buildingStatusSpriteMap)
+	{
+		if (buildStatusSpriteIter.first == buildingStatus)
+		{
+			buildStatusSpriteIter.second->setVisible(true);
+
+			auto buildingSize = buildStatusSpriteIter.second->getContentSize();
+			setContentSize(buildingSize);
+			buildStatusSpriteIter.second->setPosition(cocos2d::Vec2(buildingSize.width / 2.0f, buildingSize.height / 2.0f));
+
+			//auto buildingTemplate = TemplateManager::getInstance()->getBuildingTemplateBy(_templateName);
+			float selectedTipsYPosition = m_bottomGridsPlaneCenterPositionInLocalSpace.y;
+
+			switch (buildingStatus)
+			{
+			case BuildingStatus::BeingBuilt:
+			{
+				if (m_forceType == ForceType::Player)
+				{
+					//SoundManager::getInstance()->playBuildingEffect(BuildingSoundEffectType::Construct);
+				}
+
+				if (m_bottonGridPos.empty())
+				{
+					//initBottomGridInMapPositionList();
+				}
+
+				//updateCoveredByBuildingTileNodesGID(OBSTACLE_ID);
+
+				//hideHPBar();
+				//showBeingBuiltProgressBar();
+
+				auto onUpdateToWorkingStatus = cocos2d::CallFunc::create(CC_CALLBACK_0(Building::onConstructionComplete, this));
+				auto sequenceAction = cocos2d::Sequence::create(cocos2d::DelayTime::create(_buildingTimeBySecond), onUpdateToWorkingStatus, nullptr);
+				runAction(sequenceAction);
+
+				//selectedTipsYPosition = buildingTemplate->shadowYPositionInBeingBuiltStatus;
+			}
+			break;
+			case BuildingStatus::Working:
+			{
+				_defenceNpc = createDefenceNpc(_templateName);
+
+				if (_bottomGridInMapPositionList.empty())
+				{
+					initBottomGridInMapPositionList();
+				}
+
+				// 因为有些建筑物不需要经历建造阶段就可以直接进入working状态，因此这里需要再次更新占用格子的gid
+				//updateCoveredByBuildingTileNodesGID(OBSTACLE_ID);
+
+				//selectedTipsYPosition = buildingTemplate->shadowYPositionInWorkingStatus;
+			}
+			break;
+			case BuildingStatus::Destory:
+			{
+				SoundManager::getInstance()->playBuildingEffect(BuildingSoundEffectType::Destroyed);
+
+				if (_defenceNpc)
+				{
+					removeDefenceNpc();
+				}
+
+				//GameWorldCallBackFunctionsManager::getInstance()->_createSpecialEffect(_destroySpecialEffectTemplateName, getPosition(), false);
+
+				auto onReadyToRemove = cocos2d::CallFunc::create(CC_CALLBACK_0(Building::addToRemoveQueue, this));
+				auto sequenceAction = cocos2d::Sequence::create(cocos2d::DelayTime::create(BUILDING_DELAY_REMOVE_TIME), onReadyToRemove, nullptr);
+				runAction(sequenceAction);
+			}
+			break;
+			default:    break;
+			}
+
+			//_selectedTips->setPosition(Vec2(buildingSize.width / 2.0f, selectedTipsYPosition));
+		}
+		else
+		{
+			buildStatusSpriteIter.second->setVisible(false);
+		}
+	}
+
+	m_buildingStatus = buildingStatus;
+}
+
+void Building::addToRemoveQueue()
+{
+	//updateCoveredByBuildingTileNodesGID(PASSABLE_ID);
+	GameObjectManager::getInstance()->addReadyToRemoveGameObject(m_uniqId);
 }

@@ -63,7 +63,7 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 
 	AutoFindPath::initTileNodeTable(m_tileNodeTable);
 	
-	drawTileTable();
+	//drawTileTable();
 
 	m_mapContentSize = m_tiledMap->getContentSize();
 	m_clientWinSize = cocos2d::Director::getInstance()->getWinSize();
