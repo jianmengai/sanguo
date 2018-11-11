@@ -34,6 +34,8 @@ protected:
 
 	void npcAutoCreating();
 private:
+	bool canBuild(BuildingType buildingType);
+private:
 	int m_gold = 0;
 	SOLDIER_MAP m_soldiers;
 	BUILDING_MAP m_buildings;

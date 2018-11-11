@@ -77,31 +77,43 @@ bool GameConfig::loadRes()
 {
 	std::vector<std::string> plistRes;
 	plistRes.push_back("BuildingCommon.plist");
-	for (auto& it : m_soldierConf)
+	for (auto i = 0; i < 2; ++i)
 	{
-		SoldierConf* soldierConf = it.second;
-		plistRes.push_back(soldierConf->attackToEastAnimationPList);
-		plistRes.push_back(soldierConf->attackToNorthEastAnimationPList);
-		plistRes.push_back(soldierConf->attackToNorthWestAnimationPList);
-		plistRes.push_back(soldierConf->attackToSouthEastAnimationPList);
-		plistRes.push_back(soldierConf->attackToSouthWestAnimationPList);
-		plistRes.push_back(soldierConf->attackToWestAnimationPList);
+		std::unordered_map<SoldierType, SoldierConf*>* pointer = nullptr;
+		if (i == 0)
+		{
+			pointer = &m_playerSoldierConf;
+		}
+		else
+		{
+			pointer = &m_npcSoldierConf;
+		}
+		for (auto& it :*pointer)
+		{
+			SoldierConf* soldierConf = it.second;
+			plistRes.push_back(soldierConf->attackToEastAnimationPList);
+			plistRes.push_back(soldierConf->attackToNorthEastAnimationPList);
+			plistRes.push_back(soldierConf->attackToNorthWestAnimationPList);
+			plistRes.push_back(soldierConf->attackToSouthEastAnimationPList);
+			plistRes.push_back(soldierConf->attackToSouthWestAnimationPList);
+			plistRes.push_back(soldierConf->attackToWestAnimationPList);
 
-		plistRes.push_back(soldierConf->standAndFaceToEastAnimationPList);
-		plistRes.push_back(soldierConf->standAndFaceToNorthEastAnimationPList);
-		plistRes.push_back(soldierConf->standAndFaceToNorthWestAnimationPList);
-		plistRes.push_back(soldierConf->standAndFaceToSouthEastAnimationPList);
-		plistRes.push_back(soldierConf->standAndFaceToSouthWestAnimationPList);
-		plistRes.push_back(soldierConf->standAndFaceToWestAnimationPList);
+			plistRes.push_back(soldierConf->standAndFaceToEastAnimationPList);
+			plistRes.push_back(soldierConf->standAndFaceToNorthEastAnimationPList);
+			plistRes.push_back(soldierConf->standAndFaceToNorthWestAnimationPList);
+			plistRes.push_back(soldierConf->standAndFaceToSouthEastAnimationPList);
+			plistRes.push_back(soldierConf->standAndFaceToSouthWestAnimationPList);
+			plistRes.push_back(soldierConf->standAndFaceToWestAnimationPList);
 
-		plistRes.push_back(soldierConf->moveToEastAnimationPList);
-		plistRes.push_back(soldierConf->moveToNorthEastAnimationPList);
-		plistRes.push_back(soldierConf->moveToNorthWestAnimationPList);
-		plistRes.push_back(soldierConf->moveToSouthEastAnimationPList);
-		plistRes.push_back(soldierConf->moveToSouthWestAnimationPList);
-		plistRes.push_back(soldierConf->moveToWestAnimationPList);
+			plistRes.push_back(soldierConf->moveToEastAnimationPList);
+			plistRes.push_back(soldierConf->moveToNorthEastAnimationPList);
+			plistRes.push_back(soldierConf->moveToNorthWestAnimationPList);
+			plistRes.push_back(soldierConf->moveToSouthEastAnimationPList);
+			plistRes.push_back(soldierConf->moveToSouthWestAnimationPList);
+			plistRes.push_back(soldierConf->moveToWestAnimationPList);
+		}
 	}
-
+	
 	for (auto& it : plistRes)
 	{
 		cocos2d::SpriteFrameCache::getInstance()->addSpriteFramesWithFile(it);
@@ -178,65 +190,85 @@ bool GameConfig::parseSoldierConf(const tinyxml2::XMLElement* node)
 	{
 		return false;
 	}
-	const tinyxml2::XMLElement* soldierNode = node->FirstChildElement("Soldier");
-	if (soldierNode == nullptr)
+	for (auto i = 0; i < 2; ++i)
 	{
-		return false;
-	}
-	const tinyxml2::XMLElement* brotherNode = soldierNode->FirstChildElement();
-	while (brotherNode != nullptr)
-	{
-		const char* p = brotherNode->Attribute("type");
-		if (p == nullptr)
+		const tinyxml2::XMLElement* parentNode = nullptr;
+		if (i == 0)
 		{
-			break;
+			parentNode = node->FirstChildElement("Player");
 		}
-		SoldierType soldierType = static_cast<SoldierType>(atoi(p));
-		
-		SoldierConf* soldierConf = new (std::nothrow)SoldierConf;
-		if (soldierConf == nullptr)
+		else
 		{
-			break;
+			parentNode = node->FirstChildElement("Npc");
 		}
+		const tinyxml2::XMLElement* soldierNode = parentNode->FirstChildElement("Soldier");
+		if (soldierNode == nullptr)
+		{
+			return false;
+		}
+		const tinyxml2::XMLElement* brotherNode = soldierNode->FirstChildElement();
+		while (brotherNode != nullptr)
+		{
+			const char* p = brotherNode->Attribute("type");
+			if (p == nullptr)
+			{
+				break;
+			}
+			SoldierType soldierType = static_cast<SoldierType>(atoi(p));
 
-		soldierConf->attackToEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToEPlist"));
-		soldierConf->attackToNorthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToNEPlist"));
-		soldierConf->attackToNorthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToSEPlist"));
-		soldierConf->attackToSouthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToWPlist"));
-		soldierConf->attackToSouthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToNWPlist"));
-		soldierConf->attackToWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToSWPlist"));
+			SoldierConf* soldierConf = new (std::nothrow)SoldierConf;
+			if (soldierConf == nullptr)
+			{
+				break;
+			}
 
-		soldierConf->standAndFaceToEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToEPlist"));
-		soldierConf->standAndFaceToNorthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToNEPlist"));
-		soldierConf->standAndFaceToNorthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToNWPlist"));
-		soldierConf->standAndFaceToSouthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToSEPlist"));
-		soldierConf->standAndFaceToSouthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToSWPlist"));
-		soldierConf->standAndFaceToWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToWPlist"));
+			soldierConf->attackToEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToEPlist"));
+			soldierConf->attackToNorthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToNEPlist"));
+			soldierConf->attackToNorthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToSEPlist"));
+			soldierConf->attackToSouthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToWPlist"));
+			soldierConf->attackToSouthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToNWPlist"));
+			soldierConf->attackToWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToSWPlist"));
 
-		soldierConf->moveToNorthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToNEPlist"));
-		soldierConf->moveToEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToEPlist"));
-		soldierConf->moveToSouthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToSEPlist"));
-		soldierConf->moveToSouthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToSWPlist"));
-		soldierConf->moveToWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToWPlist"));
-		soldierConf->moveToNorthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToNWPlist"));
+			soldierConf->standAndFaceToEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToEPlist"));
+			soldierConf->standAndFaceToNorthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToNEPlist"));
+			soldierConf->standAndFaceToNorthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToNWPlist"));
+			soldierConf->standAndFaceToSouthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToSEPlist"));
+			soldierConf->standAndFaceToSouthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToSWPlist"));
+			soldierConf->standAndFaceToWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToWPlist"));
 
-		soldierConf->dieAnimationPList = GameUtils::escapeString(brotherNode->Attribute("diePlist"));
+			soldierConf->moveToNorthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToNEPlist"));
+			soldierConf->moveToEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToEPlist"));
+			soldierConf->moveToSouthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToSEPlist"));
+			soldierConf->moveToSouthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToSWPlist"));
+			soldierConf->moveToWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToWPlist"));
+			soldierConf->moveToNorthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("moveToNWPlist"));
 
-		soldierConf->maxHp = atoi(brotherNode->Attribute("maxHp"));
-		soldierConf->attackPower = atoi(brotherNode->Attribute("atkPower"));
-		soldierConf->maxAttackRadius = atoi(brotherNode->Attribute("maxAtkRadius"));
-		soldierConf->maxAlertRadius = atoi(brotherNode->Attribute("maxAlertRadius"));
-		soldierConf->perSecondAttackCount = atoi(brotherNode->Attribute("atkSpeed"));
-		soldierConf->perSecondMoveSpeedByPixel = atof(brotherNode->Attribute("moveSpeed"));
-		soldierConf->bulletType = static_cast<BulletType>(atoi(brotherNode->Attribute("bulletType")));
-		soldierConf->damageType = static_cast<DamageType>(atoi(brotherNode->Attribute("damageType")));
-		soldierConf->aoeDamageRadius = atof(brotherNode->Attribute("aoeDamageRadius"));
-		soldierConf->standAnimateDelayPerUnit = atof(brotherNode->Attribute("standAnimatePerUnit"));
-		soldierConf->moveAnimateDelayPerUnit = atof(brotherNode->Attribute("moveAnimatePerUnit"));
-		soldierConf->dieAnimateDelayPerUnit = atof(brotherNode->Attribute("dieAnimatePerUnit"));
-		m_soldierConf[soldierType] = soldierConf;
-		brotherNode = brotherNode->NextSiblingElement();
+			soldierConf->dieAnimationPList = GameUtils::escapeString(brotherNode->Attribute("diePlist"));
+
+			soldierConf->maxHp = atoi(brotherNode->Attribute("maxHp"));
+			soldierConf->attackPower = atoi(brotherNode->Attribute("atkPower"));
+			soldierConf->maxAttackRadius = atoi(brotherNode->Attribute("maxAtkRadius"));
+			soldierConf->maxAlertRadius = atoi(brotherNode->Attribute("maxAlertRadius"));
+			soldierConf->perSecondAttackCount = atoi(brotherNode->Attribute("atkSpeed"));
+			soldierConf->perSecondMoveSpeedByPixel = atof(brotherNode->Attribute("moveSpeed"));
+			soldierConf->bulletType = static_cast<BulletType>(atoi(brotherNode->Attribute("bulletType")));
+			soldierConf->damageType = static_cast<DamageType>(atoi(brotherNode->Attribute("damageType")));
+			soldierConf->aoeDamageRadius = atof(brotherNode->Attribute("aoeDamageRadius"));
+			soldierConf->standAnimateDelayPerUnit = atof(brotherNode->Attribute("standAnimatePerUnit"));
+			soldierConf->moveAnimateDelayPerUnit = atof(brotherNode->Attribute("moveAnimatePerUnit"));
+			soldierConf->dieAnimateDelayPerUnit = atof(brotherNode->Attribute("dieAnimatePerUnit"));
+			if (i == 0)
+			{
+				m_playerSoldierConf[soldierType] = soldierConf;
+			}
+			else
+			{
+				m_npcSoldierConf[soldierType] = soldierConf;
+			}
+			brotherNode = brotherNode->NextSiblingElement();
+		}
 	}
+	
 	return true;
 }
 
@@ -246,38 +278,59 @@ bool GameConfig::parseBuildingConf(const tinyxml2::XMLElement* node)
 	{
 		return false;
 	}
-	const tinyxml2::XMLElement* buildingNode = node->FirstChildElement("Building");
-	if (buildingNode == nullptr)
+	for (auto i = 0; i < 2; ++i)
 	{
-		return false;
-	}
-	const tinyxml2::XMLElement* brotherNode = buildingNode->FirstChildElement();
-	while (brotherNode != nullptr)
-	{
-		const char* p = brotherNode->Attribute("type");
-		if (p == nullptr)
+		const tinyxml2::XMLElement* parentNode = nullptr;
+		if (i == 0)
 		{
-			break;
+			parentNode = node->FirstChildElement("Player");
 		}
-		BuildingType buildingType = static_cast<BuildingType>(atoi(p));
-		BuildingConf* buildingConf = new (std::nothrow)BuildingConf;
-		if (buildingConf == nullptr)
+		else
 		{
-			break;
+			parentNode = node->FirstChildElement("Npc");
 		}
-		buildingConf->prepareToBuildStatusTextureName = GameUtils::escapeString(brotherNode->Attribute("prepareTexture"));
-		buildingConf->beingBuiltStatusTextureName = GameUtils::escapeString(brotherNode->Attribute("beingTexture"));
-		buildingConf->workingStatusTextureName = GameUtils::escapeString(brotherNode->Attribute("workingTexture"));
-		buildingConf->destroyStatusTextureName = GameUtils::escapeString(brotherNode->Attribute("destroyTexture"));
-		buildingConf->shadowTextureName = GameUtils::escapeString(brotherNode->Attribute("shadowTexture"));
-		buildingConf->destroySpecialEffectTemplateName = GameUtils::escapeString(brotherNode->Attribute("destroySpecialEffect"));
-		buildingConf->maxHP = atoi(brotherNode->Attribute("maxHp"));
-		buildingConf->attackPower = atof(brotherNode->Attribute("atkPower"));
-		buildingConf->attackRange = atof(brotherNode->Attribute("maxAtkRadius"));
-		buildingConf->maxCount = atoi(brotherNode->Attribute("maxCount"));
-		m_buildingConf[buildingType] = buildingConf;
-		brotherNode = brotherNode->NextSiblingElement();
+		const tinyxml2::XMLElement* buildingNode = parentNode->FirstChildElement("Building");
+		if (buildingNode == nullptr)
+		{
+			return false;
+		}
+		const tinyxml2::XMLElement* brotherNode = buildingNode->FirstChildElement();
+		while (brotherNode != nullptr)
+		{
+			const char* p = brotherNode->Attribute("type");
+			if (p == nullptr)
+			{
+				break;
+			}
+			BuildingType buildingType = static_cast<BuildingType>(atoi(p));
+			BuildingConf* buildingConf = new (std::nothrow)BuildingConf;
+			if (buildingConf == nullptr)
+			{
+				break;
+			}
+			buildingConf->prepareToBuildStatusTextureName = GameUtils::escapeString(brotherNode->Attribute("prepareTexture"));
+			buildingConf->beingBuiltStatusTextureName = GameUtils::escapeString(brotherNode->Attribute("beingTexture"));
+			buildingConf->workingStatusTextureName = GameUtils::escapeString(brotherNode->Attribute("workingTexture"));
+			buildingConf->destroyStatusTextureName = GameUtils::escapeString(brotherNode->Attribute("destroyTexture"));
+			buildingConf->shadowTextureName = GameUtils::escapeString(brotherNode->Attribute("shadowTexture"));
+			buildingConf->destroySpecialEffectTemplateName = GameUtils::escapeString(brotherNode->Attribute("destroySpecialEffect"));
+			buildingConf->maxHP = atoi(brotherNode->Attribute("maxHp"));
+			buildingConf->attackPower = atof(brotherNode->Attribute("atkPower"));
+			buildingConf->attackRange = atof(brotherNode->Attribute("maxAtkRadius"));
+			buildingConf->maxCount = atoi(brotherNode->Attribute("maxCount"));
+			buildingConf->buildingTimeBySecond = atof(brotherNode->Attribute("buildingTime"));
+			if (i == 0)
+			{
+				m_playerBuildingConf[buildingType] = buildingConf;
+			}
+			else
+			{
+				m_npcBuildingConf[buildingType] = buildingConf;
+			}
+			brotherNode = brotherNode->NextSiblingElement();
+		}
 	}
+
 	return true;
 }
 
@@ -298,8 +351,8 @@ bool GameConfig::parseSoundEffectConf(const tinyxml2::XMLElement * node)
 		std::string type = GameUtils::escapeString(brotherNode->Attribute("type"));
 		if (type == "building")
 		{
-			m_buidingSound.constructName = GameUtils::escapeString(brotherNode->Attribute("constructFileName"));
-			m_buidingSound.destroyedName = GameUtils::escapeString(brotherNode->Attribute("destroyFileName"));
+			m_buildingSound.constructName = GameUtils::escapeString(brotherNode->Attribute("constructFileName"));
+			m_buildingSound.destroyedName = GameUtils::escapeString(brotherNode->Attribute("destroyFileName"));
 		}
 		else if (type == "soldier")
 		{
@@ -347,25 +400,46 @@ SpecialEffectConf* GameConfig::getSpecialEffectConf(const std::string& specialEf
 	return nullptr;
 }
 
-SoldierConf* GameConfig::getSoldierConf(const SoldierType type)
+SoldierConf* GameConfig::getSoldierConf(ForceType forceType, const SoldierType type)
 {
-	auto it = m_soldierConf.find(type);
-	if (it != m_soldierConf.end())
+	if (forceType == ForceType::Player)
 	{
-		return it->second;
+		auto it = m_playerSoldierConf.find(type);
+		if (it != m_playerSoldierConf.end())
+		{
+			return it->second;
+		}
 	}
-
+	else if (forceType == ForceType::AI)
+	{
+		auto it = m_npcSoldierConf.find(type);
+		if (it != m_npcSoldierConf.end())
+		{
+			return it->second;
+		}
+	}
 	return nullptr;
 }
 
-BuildingConf* GameConfig::getBuildingConf(const BuildingType type)
+BuildingConf* GameConfig::getBuildingConf(ForceType forceType, const BuildingType type)
 {
-	auto it = m_buildingConf.find(type);
-	if (it != m_buildingConf.end())
+	if (forceType == ForceType::Player)
 	{
-		return it->second;
+		auto it = m_playerBuildingConf.find(type);
+		if (it != m_playerBuildingConf.end())
+		{
+			return it->second;
+		}
 	}
-
+	else if (forceType == ForceType::AI)
+	{
+		auto it = m_npcBuildingConf.find(type);
+		if (it != m_npcBuildingConf.end())
+		{
+			return it->second;
+		}
+	}
+	
 	return nullptr;
 }
 
@@ -376,7 +450,7 @@ CooldownConf * GameConfig::getCooldownConf()
 
 BuildingSoundEffectData * GameConfig::getBuildingSoundEffectConf()
 {
-	return &m_buidingSound;
+	return &m_buildingSound;
 }
 
 SoldierSoundEffectData * GameConfig::getSoldierSoundEffectConf()

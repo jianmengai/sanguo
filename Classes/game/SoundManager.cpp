@@ -1,4 +1,6 @@
+#include  <io.h>
 #include "SoundManager.h"
+#include "audio/include/AudioEngine.h"
 
 SoundManager* SoundManager::getInstance()
 {
@@ -14,18 +16,41 @@ void SoundManager::playUIEffect(UIEffectType type)
 
 void SoundManager::playBuildingEffect(BuildingSoundEffectType type)
 {
+	if (m_buildingSoundEffectData == nullptr)
+	{
+		m_buildingSoundEffectData = GameConfig::getInstance()->getBuildingSoundEffectConf();
+	}
+	if (m_buildingSoundEffectData == nullptr)
+	{
+		return;
+	}
 	if (type == BuildingSoundEffectType::Construct)
 	{
-		if (canPlay(_buildingSoundEffectData.constructName))
+		
+		if (canPlay(m_buildingSoundEffectData->constructName))
 		{
-			AudioEngine::play2d(_buildingSoundEffectData.constructName, false, _effectVolume);
+			cocos2d::experimental::AudioEngine::play2d(m_buildingSoundEffectData->constructName, false, m_effectVolume);
 		}
 	}
 	else
 	{
-		if (canPlay(_buildingSoundEffectData.destroyedName))
+		if (canPlay(m_buildingSoundEffectData->destroyedName))
 		{
-			AudioEngine::play2d(_buildingSoundEffectData.destroyedName, false, _effectVolume);
+			cocos2d::experimental::AudioEngine::play2d(m_buildingSoundEffectData->destroyedName, false, m_effectVolume);
 		}
 	}
+}
+
+
+bool SoundManager::canPlay(const std::string& fileName)
+{
+	bool result = false;
+
+	auto fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
+	if (_access(fullPath.c_str(), 0) != -1)
+	{
+		result = true;
+	}
+
+	return result;
 }

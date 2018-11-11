@@ -136,8 +136,8 @@ public:
 	MapConf* getMapConf(int mapId = 0);
 	BulletConf* getBulletConf(const BulletType type);
 	SpecialEffectConf* getSpecialEffectConf(const std::string& specialEffectName);
-	SoldierConf* getSoldierConf(const SoldierType type);
-	BuildingConf* getBuildingConf(const BuildingType type);
+	SoldierConf* getSoldierConf(ForceType forceType, const SoldierType type);
+	BuildingConf* getBuildingConf(ForceType forceType, const BuildingType type);
 	CooldownConf* getCooldownConf();
 	BuildingSoundEffectData* getBuildingSoundEffectConf();
 	SoldierSoundEffectData* getSoldierSoundEffectConf();
@@ -156,10 +156,11 @@ private:
 	std::unordered_map<int, MapConf*> m_mapConf;
 	std::unordered_map<BulletType, BulletConf*> m_bulletConf;
 	std::unordered_map<std::string, SpecialEffectConf*> m_specialEffectConf;
-	std::unordered_map<SoldierType, SoldierConf*> m_soldierConf;
-	std::unordered_map<BuildingType, BuildingConf*> m_buildingConf;
-
+	std::unordered_map<SoldierType, SoldierConf*> m_playerSoldierConf;
+	std::unordered_map<SoldierType, SoldierConf*> m_npcSoldierConf;
+	std::unordered_map<BuildingType, BuildingConf*> m_playerBuildingConf;
+	std::unordered_map<BuildingType, BuildingConf*> m_npcBuildingConf;
 	CooldownConf m_coolDownConf;
-	BuildingSoundEffectData m_buidingSound;
+	BuildingSoundEffectData m_buildingSound;
 	SoldierSoundEffectData m_soldierSound;
 };

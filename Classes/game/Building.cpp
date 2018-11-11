@@ -29,7 +29,7 @@ bool Building::init(ForceType forceType, const BuildingType type, const cocos2d:
 	}
 	m_forceType = forceType;
 	m_objectType = GameObjectType::Building;
-	m_buildingStatus = BuildingStatus::Working;
+	m_buildingStatus = BuildingStatus::PrepareToBuild;
 	this->setPosition(position);
 	m_bottonGridPos.push_back(position);
 	initBuildingStatusSprites(type);
@@ -41,9 +41,10 @@ bool Building::init(ForceType forceType, const BuildingType type, const cocos2d:
 	
 	auto cs = getContentSize();
 	initHpBar();
+	initBeingBuiltProgressBar();
 
 	scheduleUpdate();
-	
+	updateStatus(BuildingStatus::BeingBuilt);
 	return true;
 }
 
@@ -59,7 +60,7 @@ void Building::initBuildingStatusSprites(const BuildingType type)
 
 cocos2d::Sprite* Building::createBuildingStatusSprite(const BuildingType type, BuildingStatus buildingStatus, int opacity /* = 255 */)
 {
-	auto buildingConf = GameConfig::getInstance()->getBuildingConf(type);
+	auto buildingConf = GameConfig::getInstance()->getBuildingConf(m_forceType, type);
 	if (buildingConf == nullptr)
 	{
 		return nullptr;
@@ -117,7 +118,7 @@ cocos2d::Sprite* Building::createBuildingStatusSprite(const BuildingType type, B
 
 void Building::initBottomGridSprites(const BuildingType type)
 {
-	auto buildingConf = GameConfig::getInstance()->getBuildingConf(type);
+	auto buildingConf = GameConfig::getInstance()->getBuildingConf(m_forceType, type);
 	if (buildingConf == nullptr)
 	{
 		return ;
@@ -156,12 +157,13 @@ void Building::initBottomGridSprites(const BuildingType type)
 
 void Building::initData(const BuildingType type)
 {
-	auto buildingConf = GameConfig::getInstance()->getBuildingConf(type);
+	auto buildingConf = GameConfig::getInstance()->getBuildingConf(m_forceType, type);
 	if (buildingConf == nullptr)
 	{
 		return ;
 	}
 	m_curHp = m_maxHp = buildingConf->maxHP;
+	m_buildingTimeBySecond = buildingConf->buildingTimeBySecond;
 }
 
 bool Building::isReadyToRemove()
@@ -171,7 +173,7 @@ bool Building::isReadyToRemove()
 
 void Building::onPrepareToRemove()
 {
-	
+	updateStatus(BuildingStatus::Destory);
 }
 
 void Building::initHpBar()
@@ -200,7 +202,7 @@ void Building::initHpBar()
 	auto hpContentSize = hpBarBackground->getContentSize();
 	auto scaleX = contentSize.width / hpContentSize.width;
 	hpBarBackground->setScaleX(scaleX);
-	hpBarBackground->setPosition(cocos2d::Vec2(0, contentSize.height / 2.0));
+	hpBarBackground->setPosition(cocos2d::Vec2(contentSize.width / 2.0, contentSize.height));
 }
 
 const cocos2d::Size& Building::getContentSize()
@@ -214,6 +216,11 @@ BuildingType Building::getBuildingType()
 	return m_buildingType;
 }
 
+BuildingStatus Building::getBuildingStatus()
+{
+	return m_buildingStatus;
+}
+
 std::vector<cocos2d::Vec2>& Building::getBottonGirdPos()
 {
 	// TODO: 在此处插入 return 语句
@@ -223,8 +230,64 @@ std::vector<cocos2d::Vec2>& Building::getBottonGirdPos()
 void Building::update(float deltaTime)
 {
 	GameObject::update(deltaTime);
+	if (m_buildingStatus == BuildingStatus::BeingBuilt)
+	{
+		hideHpBar();
+		updateBeingBuiltProgressBar(deltaTime);
+	}
 }
 
+
+void Building::initBeingBuiltProgressBar()
+{
+	m_beingBuildProgressBar = cocos2d::ui::LoadingBar::create(BEING_BUILT_PROGRESS_BAR);
+	m_beingBuildProgressBar->setAnchorPoint(cocos2d::Vec2::ZERO);
+	m_beingBuildProgressBar->setPercent(0.0f);
+
+	auto beingBuiltProgressBarBackground = Sprite::create(HP_BAR_BACKGROUND_TEXTURE_NAME);
+	beingBuiltProgressBarBackground->setCascadeOpacityEnabled(true);
+	beingBuiltProgressBarBackground->setScale(0.5f);
+	beingBuiltProgressBarBackground->addChild(m_beingBuildProgressBar);
+	beingBuiltProgressBarBackground->setVisible(false);
+	addChild(beingBuiltProgressBarBackground);
+
+	auto barContentSize = beingBuiltProgressBarBackground->getContentSize();
+	auto contentSize = m_buildingStatusSpriteMap[BuildingStatus::BeingBuilt]->getContentSize();
+	auto scaleX = contentSize.width / barContentSize.width;
+	beingBuiltProgressBarBackground->setScaleX(scaleX);
+	beingBuiltProgressBarBackground->setPosition(cocos2d::Vec2(contentSize.width / 2.0, contentSize.height));
+}
+
+void Building::updateBeingBuiltProgressBar(float deltaTime)
+{
+	auto percent = m_passTimeBySecondInBeingBuiltStatus / m_buildingTimeBySecond * 100.0f;
+	m_beingBuildProgressBar->setPercent(percent);
+	m_passTimeBySecondInBeingBuiltStatus += deltaTime;
+}
+
+void Building::showBeingBuiltProgressBar()
+{
+	auto background = m_beingBuildProgressBar->getParent();
+	background->setVisible(true);
+}
+
+void Building::hideBeingBuiltProgressBar()
+{
+	auto background = m_beingBuildProgressBar->getParent();
+	background->setVisible(false);
+}
+
+void Building::onConstructionComplete()
+{
+	hideBeingBuiltProgressBar();
+
+	if (isSelected())
+	{
+		showHpBar();
+	}
+	cocos2d::log("construct done...");
+	updateStatus(BuildingStatus::Working);
+}
 
 void Building::updateStatus(BuildingStatus buildingStatus)
 {
@@ -257,11 +320,11 @@ void Building::updateStatus(BuildingStatus buildingStatus)
 
 				//updateCoveredByBuildingTileNodesGID(OBSTACLE_ID);
 
-				//hideHPBar();
-				//showBeingBuiltProgressBar();
+				hideHpBar();
+				showBeingBuiltProgressBar();
 
 				auto onUpdateToWorkingStatus = cocos2d::CallFunc::create(CC_CALLBACK_0(Building::onConstructionComplete, this));
-				auto sequenceAction = cocos2d::Sequence::create(cocos2d::DelayTime::create(_buildingTimeBySecond), onUpdateToWorkingStatus, nullptr);
+				auto sequenceAction = cocos2d::Sequence::create(cocos2d::DelayTime::create(m_buildingTimeBySecond), onUpdateToWorkingStatus, nullptr);
 				runAction(sequenceAction);
 
 				//selectedTipsYPosition = buildingTemplate->shadowYPositionInBeingBuiltStatus;
@@ -269,12 +332,12 @@ void Building::updateStatus(BuildingStatus buildingStatus)
 			break;
 			case BuildingStatus::Working:
 			{
-				_defenceNpc = createDefenceNpc(_templateName);
+				/*_defenceNpc = createDefenceNpc(_templateName);
 
 				if (_bottomGridInMapPositionList.empty())
 				{
 					initBottomGridInMapPositionList();
-				}
+				}*/
 
 				// 因为有些建筑物不需要经历建造阶段就可以直接进入working状态，因此这里需要再次更新占用格子的gid
 				//updateCoveredByBuildingTileNodesGID(OBSTACLE_ID);
@@ -286,10 +349,10 @@ void Building::updateStatus(BuildingStatus buildingStatus)
 			{
 				SoundManager::getInstance()->playBuildingEffect(BuildingSoundEffectType::Destroyed);
 
-				if (_defenceNpc)
+				/*if (_defenceNpc)
 				{
 					removeDefenceNpc();
-				}
+				}*/
 
 				//GameWorldCallBackFunctionsManager::getInstance()->_createSpecialEffect(_destroySpecialEffectTemplateName, getPosition(), false);
 

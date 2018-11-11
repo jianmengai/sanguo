@@ -6,6 +6,7 @@ constexpr auto ENABLE_BUILD_GRID_FILE_NAME = "EnableBuildGBrid.png";
 
 constexpr auto MAX_GAME_OBJECT_COUNT = 1000;
 
+constexpr auto BEING_BUILT_PROGRESS_BAR = "PlayerHPBar.png";
 constexpr auto PLAYER_HP_BAR_TEXTURE_NAME = "PlayerHPBar.png";
 constexpr auto AI_HP_BAR_TEXTURE_NAME = "AIHPBar.png";
 constexpr auto HP_BAR_BACKGROUND_TEXTURE_NAME = "HPBarBackground.png";
@@ -129,11 +130,6 @@ enum class UIEffectType
 	ButtonClick
 };
 
-enum class BuildingSoundEffectType
-{
-	Construct,
-	Destroyed
-};
 
 
 struct BasePosition

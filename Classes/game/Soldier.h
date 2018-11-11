@@ -28,6 +28,8 @@ private:
 	FaceDirection getFaceDirection(const cocos2d::Vec2& moveToPos);
 	float getMoveToDuration(const cocos2d::Vec2& moveToPos);
 
+	bool isEnemyDiappear(GameObject* enemy);
+
 	bool isReadyToRemove();
 	void onPrepareToRemove();
 	void initHpBar();

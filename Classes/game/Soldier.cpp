@@ -79,7 +79,7 @@ void Soldier::clear()
 
 bool Soldier::initAnimate(SoldierType type)
 {
-	auto soldierConf = GameConfig::getInstance()->getSoldierConf(type);
+	auto soldierConf = GameConfig::getInstance()->getSoldierConf(m_forceType, type);
 	if (soldierConf == nullptr)
 	{
 		return false;
@@ -93,7 +93,7 @@ bool Soldier::initAnimate(SoldierType type)
 	m_moveAnimateMap[FaceDirection::FaceToWest] = createAnimateWithPlist(soldierConf->moveToWestAnimationPList, soldierConf->moveAnimateDelayPerUnit, GameObjectStatus::Move);
 	
 	//这里放开导致战争迷雾有问题，待确认
-	//m_dieAnimate = createAnimateWithPlist(soldierConf->dieAnimationPList, soldierConf->dieAnimateDelayPerUnit, GameObjectStatus::Die);
+	m_dieAnimate = createAnimateWithPlist(soldierConf->dieAnimationPList, soldierConf->dieAnimateDelayPerUnit, GameObjectStatus::Die);
 	
 	m_standAnimateMap[FaceDirection::FaceToEast] = createAnimateWithPlist(soldierConf->standAndFaceToEastAnimationPList, soldierConf->standAnimateDelayPerUnit, GameObjectStatus::Stand);
 	m_standAnimateMap[FaceDirection::FaceToNorthEast] = createAnimateWithPlist(soldierConf->standAndFaceToNorthEastAnimationPList, soldierConf->standAnimateDelayPerUnit, GameObjectStatus::Stand);
@@ -118,7 +118,7 @@ bool Soldier::initAnimate(SoldierType type)
 
 bool Soldier::initData(SoldierType type)
 {
-	auto soldierConf = GameConfig::getInstance()->getSoldierConf(type);
+	auto soldierConf = GameConfig::getInstance()->getSoldierConf(m_forceType, type);
 	if (soldierConf == nullptr)
 	{
 		return false;
@@ -187,7 +187,10 @@ void Soldier::onAttackAnimationEnd()
 	if (m_bulletType != BulletType::Invalid)
 	{
 		auto bullet = BulletManager::getInstance()->createBullet(m_bulletType, m_uniqId, m_enemyId);
-		MapManager::getInstance()->addChildToGameObjectLayer(bullet);
+		if (bullet != nullptr)
+		{
+			MapManager::getInstance()->addChildToGameObjectLayer(bullet);
+		}
 	}
 	else
 	{
@@ -203,7 +206,7 @@ void Soldier::onAttackAnimationEnd()
 
 void Soldier::onDieAnimationEnd()
 {
-
+	GameObjectManager::getInstance()->addReadyToRemoveGameObject(m_uniqId);
 }
 
 void Soldier::moveTo(const cocos2d::Vec2& pos)
@@ -371,6 +374,15 @@ float Soldier::getMoveToDuration(const cocos2d::Vec2& moveToPos)
 	return distance / m_moveSpeed;
 }
 
+bool Soldier::isEnemyDiappear(GameObject * enemy)
+{
+	if ((enemy == nullptr) || (enemy->isReadyToRemove()))
+	{
+		return true;
+	}
+	return false;
+}
+
 bool Soldier::isReadyToRemove()
 {
 	return m_soldierStatus == GameObjectStatus::Die;
@@ -414,7 +426,7 @@ void Soldier::findAndFight(float deltaTime)
 	if (m_enemyId != INVALID_GAMEOBJECT_ID)
 	{
 		auto enemy = GameObjectManager::getInstance()->getGameObjectById(m_enemyId);
-		if (enemy == nullptr)
+		if (isEnemyDiappear(enemy))
 		{
 			moveToEnemy = false;
 			m_enemyId = INVALID_GAMEOBJECT_ID;

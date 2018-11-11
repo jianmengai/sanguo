@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include "ui/UILoadingBar.h"
 #include "GameObject.h"
 
 
@@ -11,6 +12,7 @@ public:
 	static Building* create(ForceType forceType, BuildingType type , const cocos2d::Vec2& position);
 	const cocos2d::Size& getContentSize();
 	BuildingType getBuildingType();
+	BuildingStatus getBuildingStatus();
 	std::vector<cocos2d::Vec2>& getBottonGirdPos();
 	
 	void update(float deltaTime);
@@ -26,6 +28,12 @@ private:
 	void onPrepareToRemove();
 	void initHpBar();
 
+	void initBeingBuiltProgressBar();
+	void showBeingBuiltProgressBar();
+	void hideBeingBuiltProgressBar();
+	void updateBeingBuiltProgressBar(float deltaTime);
+
+	void onConstructionComplete();
 	void updateStatus(BuildingStatus buildingStatus);
 	void addToRemoveQueue();
 
@@ -36,4 +44,7 @@ private:
 	std::vector<cocos2d::Sprite*> m_bottomGridSpritesList;
 	BuildingType m_buildingType = BuildingType::Invalid;
 	std::vector<cocos2d::Vec2> m_bottonGridPos;
+	cocos2d::ui::LoadingBar* m_beingBuildProgressBar = nullptr;
+	float m_buildingTimeBySecond = 0;
+	float m_passTimeBySecondInBeingBuiltStatus = 0;
 };

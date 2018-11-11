@@ -3,6 +3,7 @@
 #include "GameObjectManager.h"
 #include "AutoFindPath.h"
 #include "WarFogLayer.h"
+#include "GameConfig.h"
 
 Army::Army()
 {
@@ -16,6 +17,7 @@ Army::~Army()
 
 Soldier* Army::createSoldier(SoldierType type)
 {
+
 	//获取兵营位置
 	auto barrackIt = m_buildings.find(BuildingType::Barrack);
 	if (barrackIt == m_buildings.end() || barrackIt->second.empty())
@@ -25,6 +27,11 @@ Soldier* Army::createSoldier(SoldierType type)
 	}
 	
 	auto barracks = barrackIt->second;
+	auto barrack = barracks[0];
+	if (barrack->getBuildingStatus() != BuildingStatus::Working)
+	{
+		return nullptr;
+	}
 	auto pos = barracks[0]->getPosition();
 	auto posToTileNode = MapManager::getInstance()->toTileRowCol(pos);
 	auto barracksSize = barracks[0]->getContentSize();
@@ -195,6 +202,10 @@ Soldier* Army::createSoldier(SoldierType type)
 
 Building* Army::createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos)
 {
+	if (!canBuild(type))
+	{
+		return nullptr;
+	}
 	cocos2d::Vec2 newPos;
 	if (!isMapPos)
 	{
@@ -281,6 +292,64 @@ void Army::npcAutoCreating()
 	}
 }
 
+bool Army::canBuild(BuildingType buildingType)
+{
+	bool canBuild = true;
+	switch (buildingType)
+	{
+	case BuildingType::MainTown:
+	{
+		auto it = m_buildings.find(buildingType);
+		if (it != m_buildings.end())
+		{
+			auto buildingConf = GameConfig::getInstance()->getBuildingConf(m_forceType, buildingType);
+			if (buildingConf == nullptr)
+			{
+				canBuild = false;
+			}
+			else
+			{
+				auto& buildings = it->second;
+				if (buildings.size() >= buildingConf->maxCount)
+				{
+					canBuild = false;
+				}
+			}
+			
+		}
+	}
+	break;
+	case BuildingType::DefenceTower:
+	case BuildingType::Barrack:
+	{
+		auto it = m_buildings.find(BuildingType::MainTown);
+		if (it == m_buildings.end())
+		{
+			canBuild = false;
+		}
+		else
+		{
+			auto& buildings = it->second;
+			if (buildings.empty())
+			{
+				canBuild = false;
+			}
+			else
+			{
+				auto mainTown = buildings.at(0);
+				if (mainTown->getBuildingStatus() != BuildingStatus::Working)
+				{
+					canBuild = false;
+				}
+			}
+		}
+	}
+	default:
+		break;
+	}
+	return canBuild;
+}
+
 void Army::update(float dt)
 {
 	if (m_forceType == ForceType::AI)
@@ -346,7 +415,7 @@ void Army::soldiersMoveTo(const cocos2d::Vec2& mapPos)
 	auto mapSize = MapManager::getInstance()->getMapSize();
 	for (auto& soldier : m_selectedSodiers)
 	{
-		soldier->attackTarget(m_attackTarget);
+		//soldier->attackTarget(m_attackTarget);
 		soldier->moveTo(moveToPos);
 		if (row - 1 >= 0)
 		{
