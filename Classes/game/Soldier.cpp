@@ -233,10 +233,11 @@ void Soldier::update(float deltaTime)
 {
 	GameObject::update(deltaTime);
 	//GameBattle里面已经控制指定攻击目标，之类只需要定时刷新状态，以及行进过程中的遭遇战
-	if (m_forceType == ForceType::AI)
+	//if (m_forceType == ForceType::AI)
 	{
 		findAndFight(deltaTime);
 	}
+	
 }
 
 void Soldier::attackTarget(GameObject * target)
@@ -430,10 +431,11 @@ void Soldier::findAndFight(float deltaTime)
 		{
 			moveToEnemy = false;
 			m_enemyId = INVALID_GAMEOBJECT_ID;
-			if (m_attackTarget != nullptr)
+			/*if (m_attackTarget != nullptr)
 			{
 				attackTarget(m_attackTarget);
-			}
+			}*/
+			toStand();
 		}
 		//在攻击范围内
 		else if (isEnemyInAttackRange(enemy))

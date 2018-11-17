@@ -15,7 +15,7 @@ cocos2d::Sprite* BulletManager::createBullet(BulletType bulletType, int attacker
 	cocos2d::Sprite* bullet = nullptr;
 	GameObject* attacker = GameObjectManager::getInstance()->getGameObjectById(attackerId);
 	GameObject* attackTarget = GameObjectManager::getInstance()->getGameObjectById(attackTargetId);
-	if (attacker == nullptr || attackTarget == nullptr)
+	if (attacker == nullptr || attacker->isReadyToRemove() || attackTarget == nullptr || attackTarget->isReadyToRemove())
 	{
 		return nullptr;
 	}

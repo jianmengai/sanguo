@@ -36,7 +36,7 @@ bool WarFogLayer::init(cocos2d::Layer* parentLayer, int w, int h)
 
 	m_scaleY = tileSize.height / tileSize.width;
 
-	setFogPosition(cocos2d::Vec2(0, m_mapContentSize.height / 2.0));
+	//setFogPosition(cocos2d::Vec2(0, m_mapContentSize.height / 2.0));
 
 	setAnchorPoint(cocos2d::Vec2(0.0f, 0.0f));
 	setScaleY(tileSize.height / tileSize.width);
