@@ -125,12 +125,14 @@ bool HelloWorld::init()
         // add the sprite as a child to this layer
         this->addChild(sprite, 0);
 
-		//auto mapContentSize = cocos2d::Size(25, 25);
-		//auto warFog = WarFogLayer::create(mapContentSize.width, mapContentSize.height);
-		//if (nullptr == warFog)
-		//{
-		//	return false;
-		//}
+		/*
+		auto mapContentSize = cocos2d::Size(25, 25);
+		auto warFog = WarFogLayer::create(mapContentSize.width, mapContentSize.height);
+		if (nullptr == warFog)
+		{
+			return false;
+		}
+		*/
 		////warFog->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
 		//warFog->setTileSize(cocos2d::Size(158, 120));
 		////warFog->setScale(0.3f);
