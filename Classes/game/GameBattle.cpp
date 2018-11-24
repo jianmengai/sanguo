@@ -2,6 +2,7 @@
 #include "MapManager.h"
 #include "GameObjectManager.h"
 #include "GameConfig.h"
+#include "WarfogLayer.h"
 
 GameBattle* GameBattle::getInstance()
 {
@@ -55,8 +56,8 @@ bool GameBattle::createSoldier(ForceType forceType, SoldierType soldierType)
 
 void GameBattle::update(float dt)
 {
-	m_player->update(dt);
-	m_npc->update(dt);
+	//m_player->update(dt);
+	//m_npc->update(dt);
 	if (m_npcFindAttackTargetCdTime >= GameConfig::getInstance()->getCooldownConf()->npcFindTargetCdTime)
 	{
 		npcAttack();
@@ -136,6 +137,7 @@ void GameBattle::initBasePosition()
 	} while (true);
 	//地图切到玩家视野
 	MapManager::getInstance()->setPosition(playerBase.basePosition);
+	//WarFogLayer::getInstance()->setFogPosition(playerBase.basePosition);
 	m_player->setBasePosition(playerBase);
 	m_npc->setBasePosition(npcBase);
 }

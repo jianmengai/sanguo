@@ -116,6 +116,7 @@ void GameScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 	m_preTouchPos = curPosition;
 	//cocos2d::log("GameScene::onTouchMoved, x:%0.1f, y:%0.1f", deltaPos.x, deltaPos.y);
 	MapManager::getInstance()->setPosition(deltaPos, true);
+	WarFogLayer::getInstance()->setPosition(deltaPos);
 	
 }
 

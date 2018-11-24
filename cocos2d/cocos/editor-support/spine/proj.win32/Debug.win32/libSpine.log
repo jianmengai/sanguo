@@ -26,6 +26,14 @@
   SkeletonBinary.c
   SkeletonBounds.c
   SkeletonClipping.c
+<<<<<<< HEAD
+=======
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(310): warning C4018: “<”: 有符号/无符号不匹配
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(372): warning C4018: “<”: 有符号/无符号不匹配
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(484): warning C4018: “<”: 有符号/无符号不匹配
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(649): warning C4018: “<”: 有符号/无符号不匹配
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(652): warning C4018: “<”: 有符号/无符号不匹配
+>>>>>>> 5e805b5fe82d81420cee85db01b02c106c66f90a
   SkeletonData.c
   SkeletonJson.c
   Skin.c
@@ -37,11 +45,18 @@ e:\cocos\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(372): warnin
 e:\cocos\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(484): warning C4018: “<”: 有符号/无符号不匹配
 e:\cocos\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(649): warning C4018: “<”: 有符号/无符号不匹配
   TransformConstraintData.c
+<<<<<<< HEAD
 e:\cocos\sanguo\cocos2d\cocos\editor-support\spine\skeletonbinary.c(652): warning C4018: “<”: 有符号/无符号不匹配
   Triangulator.c
   VertexAttachment.c
   VertexEffect.c
 e:\cocos\sanguo\cocos2d\cocos\editor-support\spine\skeletonjson.c(97): warning C4018: “>=”: 有符号/无符号不匹配
+=======
+d:\codes\sanguo\cocos2d\cocos\editor-support\spine\skeletonjson.c(97): warning C4018: “>=”: 有符号/无符号不匹配
+  Triangulator.c
+  VertexAttachment.c
+  VertexEffect.c
+>>>>>>> 5e805b5fe82d81420cee85db01b02c106c66f90a
   extension.c
   AttachmentVertices.cpp
   Cocos2dAttachmentLoader.cpp

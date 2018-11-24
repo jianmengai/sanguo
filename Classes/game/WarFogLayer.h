@@ -9,12 +9,12 @@ public:
 	virtual bool init(cocos2d::Layer* parentLayer, int w, int h);
 	void inView(int x, int y);
 	void outView(int x, int y);
-	void setPosition(cocos2d::Vec2& pos);
+	void setPosition(cocos2d::Vec2& pos, bool isDelta = true);
 	WarFogLayer();
 	~WarFogLayer();
 private:
-	void setFogPosition(cocos2d::Vec2& pos);
 	cocos2d::Vec2 getFogPosition();
+	void setFogPosition(cocos2d::Vec2& pos);
 private:
 	cocos2d::Size m_layerSize;
 	cocos2d::Size m_clientWinSize;

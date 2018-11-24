@@ -7,6 +7,7 @@
   DetourPathQueue.cpp
   DetourProximityGrid.cpp
   DetourTileCache.cpp
+d:\codes\sanguo\cocos2d\external\recast\detourcrowd\detourobstacleavoidance.cpp(334): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
   DetourTileCacheBuilder.cpp
   DetourAlloc.cpp
   DetourCommon.cpp

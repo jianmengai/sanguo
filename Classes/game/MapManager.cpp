@@ -272,11 +272,6 @@ void MapManager::drawTileTable()
 
 void MapManager::setPosition(cocos2d::Vec2& position, bool isDelta)
 {
-	//if (isDelta)
-	//{
-	//	WarFogLayer::getInstance()->setPosition(position);
-	//}
-	
 	cocos2d::Vec2 newPosition = position * m_mapScale;
 	if (isDelta)
 	{
@@ -304,8 +299,9 @@ void MapManager::setPosition(cocos2d::Vec2& position, bool isDelta)
 	}
 	newPosition.negate();
 	m_tiledMap->setPosition(newPosition);
-	WarFogLayer::getInstance()->setPosition(newPosition);
-	//cocos2d::log("===>set map postion, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, position.y, m_mapScale);
+	//WarFogLayer::getInstance()->setPosition(newPosition);
+	WarFogLayer::getInstance()->setPosition(newPosition, isDelta);
+	cocos2d::log("===>set map postion, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, position.y, m_mapScale);
 }
 
 
