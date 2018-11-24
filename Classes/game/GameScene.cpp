@@ -68,7 +68,7 @@ void GameScene::update(float deltaTime)
 {
 	MapManager::getInstance()->update(deltaTime);
 	GameBattle::getInstance()->update(deltaTime);
-	updateWarFog();
+	//updateWarFog();
 }
 
 

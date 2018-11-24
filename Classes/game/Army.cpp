@@ -4,7 +4,7 @@
 #include "AutoFindPath.h"
 #include "WarFogLayer.h"
 #include "GameConfig.h"
-
+#include "TeamManager.h"
 Army::Army()
 {
 
@@ -196,7 +196,7 @@ Soldier* Army::createSoldier(SoldierType type)
 	MapManager::getInstance()->addChildToGameObjectLayer(soldier);
 	GameObjectManager::getInstance()->addGameObject(soldier);
 	MapManager::getInstance()->setOccupy(newPos, soldier->getContentSize());
-	WarFogLayer::getInstance()->inView(tileRow, tileCol);
+	//WarFogLayer::getInstance()->inView(tileRow, tileCol);
 	return soldier;
 }
 
@@ -244,7 +244,7 @@ Building* Army::createBuilding(BuildingType type, const cocos2d::Vec2& position,
 		{
 			if (i >= 0 && j >= 0 && i < tileSize.width && j < tileSize.height)
 			{
-				WarFogLayer::getInstance()->inView(i, j);
+				//WarFogLayer::getInstance()->inView(i, j);
 			}
 		}
 	}
@@ -261,9 +261,34 @@ void Army::setBasePosition(BasePosition & position)
 	m_basePosition = position;
 }
 
+int Army::getTechPoint()
+{
+	return m_techPoint;
+}
+
+void Army::selectTeam(TeamNo teamNo)
+{
+	auto it = m_teams.find(teamNo);
+	if (it == m_teams.end())
+	{
+		return;
+	}
+	auto teamId = it->second;
+	auto members = TeamManager::getInstance()->getTeamMembers(teamId);
+	if (!members.empty())
+	{
+		m_selectedSodiers.clear();
+		for (auto member : members)
+		{
+			m_selectedSodiers.push_back(dynamic_cast<Soldier*>(member));
+		}
+	}
+	
+}
+
 void Army::npcAutoCreating()
 {
-	//
+
 	if (m_buildings.count(BuildingType::MainTown) == 0)
 	{
 		createBuilding(BuildingType::MainTown, m_basePosition.basePosition, true);
@@ -272,23 +297,25 @@ void Army::npcAutoCreating()
 	{
 		createBuilding(BuildingType::Barrack, m_basePosition.barrackPosition, true);
 	}
-	if (m_soldiers.size() == 0)
+	if (m_teams.count(TeamNo::One) == 0)
 	{
-		auto soldier = createSoldier(SoldierType::Archer);
-		if (soldier != nullptr)
+		auto archorSoldier = createSoldier(SoldierType::Archer);
+		if (archorSoldier != nullptr)
 		{
-			m_selectedSodiers.push_back(soldier);
+			addToTeam(TeamNo::One, archorSoldier);
 		}
-		/*soldier = createSoldier(SoldierType::Cavalry);
-		if (soldier != nullptr)
+		/*
+		auto cavalrySoldier = createSoldier(SoldierType::Cavalry);
+		if (cavalrySoldier != nullptr)
 		{
-			m_selectedSodiers.push_back(soldier);
+			addToTeam(TeamNo::One, cavalrySoldier);
 		}
-		soldier = createSoldier(SoldierType::Infantry);
-		if (soldier != nullptr)
+		auto infantrySoldier = createSoldier(SoldierType::Infantry);
+		if (infantrySoldier != nullptr)
 		{
-			m_selectedSodiers.push_back(soldier);
-		}*/
+			addToTeam(TeamNo::One, infantrySoldier);
+		}
+		*/
 	}
 }
 
@@ -350,6 +377,35 @@ bool Army::canBuild(BuildingType buildingType)
 	return canBuild;
 }
 
+void Army::updateTechPoint(float dt)
+{
+	static time_t lastUpdateTime = time(nullptr);
+	time_t now = time(nullptr);
+	//每秒增加一次
+	if ((now - lastUpdateTime) >= 1)
+	{
+		m_techPoint += 100;
+		lastUpdateTime = now;
+	}
+}
+
+void Army::addToTeam(TeamNo teamNo, GameObject * object)
+{
+	auto it = m_teams.find(teamNo);
+	auto teamId = 0;
+	if (it != m_teams.end())
+	{
+		teamId = it->second;
+	}
+	if (teamId == 0)
+	{
+		teamId = TeamManager::getInstance()->getUniqTeamId();
+		m_teams[teamNo] = teamId;
+	}
+	
+	TeamManager::getInstance()->addTeam(teamId, object);
+}
+
 void Army::update(float dt)
 {
 	if (m_forceType == ForceType::AI)
@@ -361,11 +417,9 @@ void Army::update(float dt)
 	{
 
 	}
-	//建筑cd
-	for (auto buildingIt : m_buildings)
-	{
 
-	}
+	updateTechPoint(dt);
+	
 }
 
 void Army::addSelected(GameObject* gameObject)
@@ -396,26 +450,42 @@ void Army::attackTarget(GameObject* gameObject)
 	//}
 	if (m_attackTarget != gameObject)
 	{
-		m_attackTarget = gameObject;
-		soldiersMoveTo(gameObject->getPosition());
+		if (soldiersMoveTo(gameObject->getPosition()))
+		{
+			m_attackTarget = gameObject;
+		}
 	}
 }
 
-void Army::soldiersMoveTo(const cocos2d::Vec2& mapPos)
+bool Army::soldiersMoveTo(const cocos2d::Vec2& mapPos)
 {
 	if (m_selectedSodiers.empty())
 	{
-		return;
+		selectTeam(TeamNo::One);
+		if (m_selectedSodiers.empty())
+		{
+			return false;
+		}
 	}
+	float teamSpeed = FLT_MAX;
+	for (auto sodier : m_selectedSodiers)
+	{
+		if (teamSpeed > sodier->getMoveSpeed())
+		{
+			teamSpeed = sodier->getMoveSpeed();
+		}
+	}
+
 	//auto mapPos = MapManager::getInstance()->toMapPos(position);
 	auto endTileNode = MapManager::getInstance()->getTileNode(mapPos);
 	int row = endTileNode->rowIndex;
 	int col = endTileNode->columnIndex;
 	auto moveToPos = mapPos;
 	auto mapSize = MapManager::getInstance()->getMapSize();
-	for (auto& soldier : m_selectedSodiers)
+	for (auto soldier : m_selectedSodiers)
 	{
 		//soldier->attackTarget(m_attackTarget);
+		soldier->setTeamSpeed(teamSpeed);
 		soldier->moveTo(moveToPos);
 		if (row - 1 >= 0)
 		{
@@ -432,4 +502,6 @@ void Army::soldiersMoveTo(const cocos2d::Vec2& mapPos)
 			continue;
 		}
 	}
+
+	return true;
 }

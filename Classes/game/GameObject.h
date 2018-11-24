@@ -32,6 +32,11 @@ public:
 	void update(float dt);
 
 	virtual bool isReadyToRemove() = 0;
+
+	virtual void setVisible(bool isVisible)
+	{
+		cocos2d::Sprite::setVisible(isVisible);
+	}
 protected:
 	GameObject();
 	bool init() override;
@@ -46,16 +51,16 @@ protected:
 	
 
 protected:
-	int m_uniqId;
-	int m_enemyId;     //自动警戒过程中触发的攻击目标
-	int m_curHp;
-	int m_maxHp;
-	int m_maxDefence;
-	int m_curDefence;
+	int m_uniqId = 0;
+	int m_enemyId = 0;     //自动警戒过程中触发的攻击目标
+	int m_curHp = 0;
+	int m_maxHp = 0;
+	int m_maxDefence = 0;
+	int m_curDefence = 0;
 	GameObjectStatus m_objectStatus = GameObjectStatus::Invalid;
 	//int m_type;
-	int m_attackPower;
-	int m_maxAttackPower;
+	int m_attackPower = 0;
+	int m_maxAttackPower = 0;
 	float m_alertDistance = 1200; //警戒距离，距离内会被发现
 	float m_attackDistance = 500; //攻击距离，距离内直接攻击
 	BulletType m_bulletType = BulletType::Invalid;

@@ -19,6 +19,11 @@ public:
 	void attackTarget(GameObject* target);
 	//Ñ°Â·Ö¸Áî
 	void moveTo(const cocos2d::Vec2& pos);
+
+	float getMoveSpeed() { return m_moveSpeed; }
+	void setTeamSpeed(float speed);
+	void resumeNormalSpeed();
+
 private:
 	bool init(ForceType forceType, SoldierType type, const cocos2d::Vec2& position, FaceDirection direction);
 	bool initAnimate(SoldierType type);
@@ -40,6 +45,7 @@ private:
 	void searchEnemy();
 	bool isEnemyInAlertRange(GameObject* enemy);
 	cocos2d::Vec2 getEnemyPosition(GameObject* enemy);
+	cocos2d::Vec2 getEnemyNearByPosition(cocos2d::Vec2& enemyPosition);
 	bool isEnemyInAttackRange(GameObject* enemy);
 
 	void toMove();
@@ -62,6 +68,7 @@ private:
 	GameObjectStatus m_soldierStatus;
 
 	float m_moveSpeed = 50;
+	float m_curSpeed = 50;
 	int m_attackPs = 1;
 
 	float m_alertTimeCd = 0;

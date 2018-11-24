@@ -62,6 +62,11 @@ void TeamManager::clearTeam()
 	m_teams.clear();
 }
 
+std::vector<GameObject*>& TeamManager::getTeamMembers(int teamId)
+{
+	return m_teams[teamId];
+}
+
 void TeamManager::notifyTeamMemberEnemy(int teamId, GameObject * enemy)
 {
 	if (teamId <= 0)

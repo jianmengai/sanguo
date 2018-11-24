@@ -32,6 +32,7 @@ private:
 	void updateMiniMap();
 	void updateGameTime();
 	void updateButtonStatus();
+	void updateTechPoint();
 
 	bool createBuilding(BuildingType type);
 	bool createSoldier(SoldierType type);

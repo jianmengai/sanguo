@@ -130,6 +130,20 @@ enum class UIEffectType
 	ButtonClick
 };
 
+enum class TeamNo
+{
+	Invalid = 0,
+	One,
+	Two,
+	Three,
+	Four,
+	Five,
+	Six,
+	Seven,
+	Eight,
+	Nine
+};
+
 
 
 struct BasePosition

@@ -45,6 +45,14 @@ bool Building::init(ForceType forceType, const BuildingType type, const cocos2d:
 
 	scheduleUpdate();
 	updateStatus(BuildingStatus::BeingBuilt);
+
+	//敌方单位默认不显示
+	/*
+	if (m_forceType == ForceType::AI)
+	{
+		setVisible(false);
+	}
+	*/
 	return true;
 }
 

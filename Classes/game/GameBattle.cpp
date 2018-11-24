@@ -67,11 +67,18 @@ void GameBattle::update(float dt)
 		m_npcFindAttackTargetCdTime += dt;
 	}
 	GameObjectManager::getInstance()->removeAllReadyToRemoveGameObjects();
+
+	updateVisible();
 }
 
 void GameBattle::playerMoveTo(const cocos2d::Vec2& postiion)
 {
 	m_player->soldiersMoveTo(postiion);
+}
+
+int GameBattle::getPlayerTechPoint()
+{
+	return m_player->getTechPoint();
 }
 
 void GameBattle::touchProcess(const cocos2d::Vec2& position)
@@ -135,7 +142,7 @@ void GameBattle::initBasePosition()
 
 void GameBattle::npcAttack()
 {
-	if (m_npcAttackTarget == nullptr)
+	if ((m_npcAttackTarget == nullptr))
 	{
 		m_npcAttackTarget = npcGetAttackTarget();
 	}
@@ -176,4 +183,39 @@ GameObject* GameBattle::npcGetAttackTarget()
 	}
 
 	return target;
+}
+
+void GameBattle::updateVisible()
+{
+	/*
+	auto winSize = cocos2d::Director::getInstance()->getWinSize();
+	auto& gameObjests = GameObjectManager::getInstance()->getGameObjectMap();
+	for (auto& objectPair1 : gameObjests)
+	{
+		auto object1 = objectPair1.second;
+		if (object1->getForceType() == ForceType::AI)
+		{
+			continue;
+		}
+		auto position = object1->getPosition() * MapManager::getInstance()->getMapScale();
+		cocos2d::Rect checkRect(position.x - winSize.width, position.y - winSize.height, winSize.width * 2, winSize.height * 2);
+		for (auto& objectPair2 : gameObjests)
+		{
+			auto object2 = objectPair2.second;
+			if (object2->getForceType() == ForceType::Player)
+			{
+				continue;
+			}
+			auto enemyPos = object2->getPosition() * MapManager::getInstance()->getMapScale();
+			if (checkRect.containsPoint(enemyPos))
+			{
+				object2->setVisible(true);
+			}
+			else
+			{
+				object2->setVisible(false);
+			}
+		}
+	}
+	*/
 }

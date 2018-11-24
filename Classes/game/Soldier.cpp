@@ -53,7 +53,14 @@ bool Soldier::init(ForceType forceType, SoldierType type, const cocos2d::Vec2& p
 	m_uniqId = GameUtils::getLastestUniqId();
 	
 	scheduleUpdate();
-
+	
+	//敌方单位默认不显示
+	/*
+	if (m_forceType == ForceType::AI)
+	{
+		setVisible(false);
+	}
+	*/
 	return true;
 }
 
@@ -128,6 +135,7 @@ bool Soldier::initData(SoldierType type)
 	m_attackDistance = soldierConf->maxAttackRadius;
 	m_alertDistance = soldierConf->maxAlertRadius;
 	m_moveSpeed = soldierConf->perSecondMoveSpeedByPixel;
+	m_curSpeed = m_moveSpeed;
 	m_attackPs = soldierConf->perSecondAttackCount;
 	m_bulletType = soldierConf->bulletType;
 	m_damageType = soldierConf->damageType;
@@ -225,8 +233,22 @@ void Soldier::moveTo(const cocos2d::Vec2& pos)
 	m_pathList = AutoFindPath::computeTileNodePathListBetween(curTileNode, endTileNode);
 	
 	cocos2d::log("find path, node size:%lu", m_pathList.size());
+			
+	//stopAllActions();
 	toMove();
 }
+
+void Soldier::setTeamSpeed(float speed)
+{
+	m_curSpeed = speed;
+}
+
+void Soldier::resumeNormalSpeed()
+{
+	m_curSpeed = m_moveSpeed;
+}
+
+
 
 
 void Soldier::update(float deltaTime)
@@ -279,6 +301,7 @@ void Soldier::toMove()
 	m_pathList.pop_front();
 	cocos2d::log("-->[%d, %d]==>[%0.1f, %0.1f]", curNode->rowIndex, curNode->columnIndex, curNode->position.x, curNode->position.y);
 	FaceDirection faceDirection = getFaceDirection(curNode->position);
+	cocos2d::log("face direction:%d", faceDirection);
 	auto animteIt = m_moveAnimateMap.find(faceDirection);
 	if (animteIt != m_moveAnimateMap.end())
 	{
@@ -302,9 +325,9 @@ void Soldier::toMove()
 		{
 			moveEndEvent = cocos2d::CallFunc::create(CC_CALLBACK_0(Soldier::toMove, this));
 		}
+		//auto spawn = cocos2d::Spawn::createWithTwoActions(moveBy, animteIt->second);
 		auto sequenceAction = cocos2d::Sequence::create(moveBy, moveEndEvent, nullptr);
 		runAction(sequenceAction);
-		
 	}
 }
 
@@ -326,7 +349,7 @@ void Soldier::toAttack()
 void Soldier::toDie()
 {
 	//SoundManager::getInstance()->playNpcEffect(_templateName, NpcSoundEffectType::Death);
-	m_soldierStatus == GameObjectStatus::Die;
+	m_soldierStatus = GameObjectStatus::Die;
     stopAllActions();
     runAction(m_dieAnimate);
 
@@ -372,7 +395,7 @@ float Soldier::getMoveToDuration(const cocos2d::Vec2& moveToPos)
 	float distance = std::sqrt((moveToPos.x - position.x) * (moveToPos.x - position.x) +
 		(moveToPos.y - position.y) * (moveToPos.y - position.y));
 
-	return distance / m_moveSpeed;
+	return distance / m_curSpeed;
 }
 
 bool Soldier::isEnemyDiappear(GameObject * enemy)
@@ -523,6 +546,52 @@ cocos2d::Vec2 Soldier::getEnemyPosition(GameObject * enemy)
 		}
 	}
 	return targetPos;
+}
+
+cocos2d::Vec2 Soldier::getEnemyNearByPosition(cocos2d::Vec2 & enemyPosition)
+{
+	auto faceDirection = getFaceDirection(enemyPosition);
+	auto tileNodeRowCol = MapManager::getInstance()->toTileRowCol(enemyPosition);
+	switch (faceDirection)
+	{
+	case FaceDirection::FaceToEast:
+	{
+		++tileNodeRowCol.x;
+		--tileNodeRowCol.y;
+	}
+	break;
+	case FaceDirection::FaceToNorthEast:
+	{
+		--tileNodeRowCol.x;
+	}
+	break;
+	case FaceDirection::FaceToNorthWest:
+	{
+		--tileNodeRowCol.y;
+	}
+	break;
+	case FaceDirection::FaceToSouthEast:
+	{
+
+	}
+	break;
+	case FaceDirection::FaceToSouthWest:
+	{
+
+	}
+	break;
+	case FaceDirection::FaceToWest:
+	{
+
+	}
+	break;
+	default:
+	{
+
+	}
+	break;
+	}
+	return cocos2d::Vec2();
 }
 
 bool Soldier::isEnemyInAttackRange(GameObject * enemy)

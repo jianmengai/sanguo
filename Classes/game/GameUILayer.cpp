@@ -7,6 +7,7 @@
 #include "GameBattle.h"
 #include "FixUI.h"
 #include "WarFogLayer.h"
+#include "GameBattle.h"
 
 GameUILayer::GameUILayer()
 {
@@ -97,7 +98,7 @@ bool GameUILayer::initCreateButton()
 
 void GameUILayer::onMinimapTouched(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
-	cocos2d::log("minimap touched");
+	//cocos2d::log("minimap touched");
 	if (touchType == cocos2d::ui::Widget::TouchEventType::MOVED)
 	{
 		
@@ -130,6 +131,7 @@ void GameUILayer::update(float dt)
 	updateMiniMap();
 	updateGameTime();
 	//updateButtonStatus();
+	updateTechPoint();
 }
 
 void GameUILayer::updateMiniMap()
@@ -203,7 +205,14 @@ void GameUILayer::updateGameTime()
 
 void GameUILayer::updateButtonStatus()
 {
+	
+}
 
+void GameUILayer::updateTechPoint()
+{
+	auto gameMainPanel = m_gameUI->getChildByName("Panel_Creating");
+	auto techPointLabel = gameMainPanel->getChildByName<cocos2d::ui::Text*>("Text_TechPoint");
+	techPointLabel->setString(cocos2d::StringUtils::format("%d", GameBattle::getInstance()->getPlayerTechPoint()));
 }
 
 void GameUILayer::onCreateObject(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType)

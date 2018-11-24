@@ -59,6 +59,7 @@ void GameObjectManager::removeGameObjectById(int gameObjectId)
 	if (gameObjectIter != m_gameObjects.end())
 	{
 		gameObjectIter->second->removeFromParent();
+		gameObjectIter->second = nullptr;
 		m_gameObjects.erase(gameObjectId);
 	}
 }

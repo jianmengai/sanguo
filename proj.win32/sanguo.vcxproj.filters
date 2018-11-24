@@ -108,6 +108,9 @@
     <ClCompile Include="..\Classes\game\TextureSprite.cpp">
       <Filter>Classes\game\warfog</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\game\TeamManager.cpp">
+      <Filter>Classes\game\manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\game\TextureSprite.h">
       <Filter>Classes\game\warfog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\game\TeamManager.h">
+      <Filter>Classes\game\manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

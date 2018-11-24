@@ -17,6 +17,8 @@ public:
 	
 	void update(float deltaTime);
 
+
+
 private:
 	bool init(ForceType forceType, const BuildingType type, const cocos2d::Vec2& position);
 	cocos2d::Sprite* Building::createBuildingStatusSprite(const BuildingType type, BuildingStatus buildingStatus, int opacity = 255);

@@ -224,10 +224,10 @@ bool GameConfig::parseSoldierConf(const tinyxml2::XMLElement* node)
 
 			soldierConf->attackToEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToEPlist"));
 			soldierConf->attackToNorthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToNEPlist"));
-			soldierConf->attackToNorthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToSEPlist"));
-			soldierConf->attackToSouthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToWPlist"));
-			soldierConf->attackToSouthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToNWPlist"));
-			soldierConf->attackToWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToSWPlist"));
+			soldierConf->attackToNorthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToNWPlist"));
+			soldierConf->attackToSouthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToSEPlist"));
+			soldierConf->attackToSouthWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToSWPlist"));
+			soldierConf->attackToWestAnimationPList = GameUtils::escapeString(brotherNode->Attribute("atkToWPlist"));
 
 			soldierConf->standAndFaceToEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToEPlist"));
 			soldierConf->standAndFaceToNorthEastAnimationPList = GameUtils::escapeString(brotherNode->Attribute("standFaceToNEPlist"));

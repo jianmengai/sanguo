@@ -129,13 +129,13 @@
                 <EndColor A="255" R="255" G="255" B="255" />
                 <ColorVector ScaleY="1.0000" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Image_GameTime" ActionTag="1625363496" Tag="11" IconVisible="False" LeftMargin="-191.3440" RightMargin="228.3440" TopMargin="-8.5424" BottomMargin="168.5424" Scale9Width="163" Scale9Height="40" ctype="ImageViewObjectData">
+              <AbstractNodeData Name="Image_GameTime" ActionTag="1625363496" Tag="11" IconVisible="False" LeftMargin="-409.6533" RightMargin="446.6533" TopMargin="-4.7257" BottomMargin="164.7257" Scale9Width="163" Scale9Height="40" ctype="ImageViewObjectData">
                 <Size X="163.0000" Y="40.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="-109.8440" Y="188.5424" />
+                <Position X="-328.1533" Y="184.7257" />
                 <Scale ScaleX="1.5012" ScaleY="0.8473" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="-0.5492" Y="0.9427" />
+                <PrePosition X="-1.6408" Y="0.9236" />
                 <PreSize X="0.8150" Y="0.2000" />
                 <FileData Type="Normal" Path="res/GameTime.png" Plist="" />
               </AbstractNodeData>
@@ -149,13 +149,34 @@
                 <PreSize X="0.7350" Y="0.5600" />
                 <FileData Type="Normal" Path="res/MiniMapNormal.png" Plist="" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Text_GameTime" ActionTag="-1327071681" Tag="22" IconVisible="False" LeftMargin="-96.3380" RightMargin="216.3380" TopMargin="-0.8350" BottomMargin="180.8350" FontSize="20" LabelText="00:00:00" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+              <AbstractNodeData Name="Text_GameTime" ActionTag="-1327071681" Tag="22" IconVisible="False" LeftMargin="-313.2377" RightMargin="433.2377" TopMargin="2.9840" BottomMargin="177.0160" FontSize="20" LabelText="00:00:00" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                 <Size X="80.0000" Y="20.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="-56.3380" Y="190.8350" />
+                <Position X="-273.2377" Y="187.0160" />
                 <Scale ScaleX="1.2817" ScaleY="0.7710" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="-0.2817" Y="0.9542" />
+                <PrePosition X="-1.3662" Y="0.9351" />
+                <PreSize X="0.0000" Y="0.0000" />
+                <OutlineColor A="255" R="255" G="0" B="0" />
+                <ShadowColor A="255" R="110" G="110" B="110" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="Image_TechPoint" ActionTag="-342988420" Tag="16" IconVisible="False" LeftMargin="-185.8597" RightMargin="221.8597" TopMargin="0.0339" BottomMargin="169.9661" Scale9Width="164" Scale9Height="30" ctype="ImageViewObjectData">
+                <Size X="164.0000" Y="30.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="-103.8597" Y="184.9661" />
+                <Scale ScaleX="1.4466" ScaleY="0.8473" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="-0.5193" Y="0.9248" />
+                <PreSize X="0.8200" Y="0.1500" />
+                <FileData Type="Normal" Path="res/TechnologyPoint.png" Plist="" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="Text_TechPoint" ActionTag="-1012267274" Tag="18" IconVisible="False" LeftMargin="-69.9027" RightMargin="259.9027" TopMargin="2.7488" BottomMargin="177.2512" FontSize="20" LabelText="0" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                <Size X="10.0000" Y="20.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="-64.9027" Y="187.2512" />
+                <Scale ScaleX="1.2817" ScaleY="0.7710" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="-0.3245" Y="0.9363" />
                 <PreSize X="0.0000" Y="0.0000" />
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
