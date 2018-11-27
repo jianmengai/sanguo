@@ -146,11 +146,17 @@ void GameBattle::npcAttack()
 {
 	if ((m_npcAttackTarget == nullptr))
 	{
+		cocos2d::log("find target");
 		m_npcAttackTarget = npcGetAttackTarget();
 	}
 	if (m_npcAttackTarget != nullptr)
 	{
 		m_npc->attackTarget(m_npcAttackTarget);
+	}
+	if ((m_npcAttackTarget != nullptr) && m_npcAttackTarget->isReadyToRemove())
+	{
+		cocos2d::log("current target is null");
+		m_npcAttackTarget = nullptr;
 	}
 }
 	
@@ -182,6 +188,8 @@ GameObject* GameBattle::npcGetAttackTarget()
 		auto size = targetBuildings.size();
 		auto index = rand() % size;
 		target = targetBuildings.at(index);
+
+		cocos2d::log("find attack target...");
 	}
 
 	return target;

@@ -41,6 +41,8 @@ private:
 	bool canBuild(BuildingType buildingType);
 	void updateTechPoint(float dt);
 
+	void updateSelectAndTeam();
+
 	void addToTeam(TeamNo teamNo, GameObject* object);
 private:
 	int m_techPoint = 1000;

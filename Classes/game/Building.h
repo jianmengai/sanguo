@@ -17,7 +17,7 @@ public:
 	
 	void update(float deltaTime);
 
-
+	bool isReadyToRemove();
 
 private:
 	bool init(ForceType forceType, const BuildingType type, const cocos2d::Vec2& position);
@@ -26,7 +26,7 @@ private:
 	void initBottomGridSprites(const BuildingType type);
 	void initData(const BuildingType type);
 
-	bool isReadyToRemove();
+	
 	void onPrepareToRemove();
 	void initHpBar();
 

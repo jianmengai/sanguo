@@ -35,7 +35,7 @@ void GameObject::reduceHP(int amount)
 {
 	showHpBar();
 	m_curHp = (m_curHp >= amount) ? (m_curHp - amount) : 0;
-	cocos2d::log("id:%d, hp:%d", m_uniqId, m_curHp);
+	//cocos2d::log("id:%d, hp:%d", m_uniqId, m_curHp);
 	if (m_curHp <= 0)
 	{
 		hideHpBar();

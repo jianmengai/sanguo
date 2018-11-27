@@ -306,14 +306,14 @@ void MapManager::setPosition(cocos2d::Vec2& position, bool isDelta)
 	m_tiledMap->setPosition(newPosition);
 	//WarFogLayer::getInstance()->setPosition(newPosition);
 	WarFogLayer::getInstance()->setPosition(newPosition, isDelta);
-	cocos2d::log("===>set map postion, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, position.y, m_mapScale);
+	//cocos2d::log("===>set map postion, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, position.y, m_mapScale);
 }
 
 
 void MapManager::addChildToGameObjectLayer(cocos2d::Sprite* unit, int zOrder)
 {
 	m_gameObjectLayer->addChild(unit, zOrder);
-	cocos2d::log("child scale:%0.1f", unit->getScale());
+	//cocos2d::log("child scale:%0.1f", unit->getScale());
 }
 
 cocos2d::Vec2 MapManager::getPosition()

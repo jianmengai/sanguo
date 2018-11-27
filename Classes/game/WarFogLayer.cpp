@@ -53,7 +53,7 @@ bool WarFogLayer::init(cocos2d::Layer* parentLayer, int w, int h)
 void WarFogLayer::setFogPosition(cocos2d::Vec2& pos)
 {
 	pos.y /= m_scaleY;
-	cocos2d::log("----set war fog, x:%0.1f, y:%0.1f", pos.x, pos.y);
+	//cocos2d::log("----set war fog, x:%0.1f, y:%0.1f", pos.x, pos.y);
 	m_base->setPosition(pos);
 }
 

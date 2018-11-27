@@ -178,7 +178,7 @@ cocos2d::RepeatForever* Soldier::createAnimateWithPlist(const std::string& plist
 		auto dieSequenceAction = cocos2d::Sequence::create(cocos2d::Animate::create(animation), animationEndFunc, nullptr);
 		repeatForeverAnimate = cocos2d::RepeatForever::create(dieSequenceAction);
 
-		m_dieAnimationFrameSize = animation->getFrames().at(0)->getSpriteFrame()->getOriginalSizeInPixels();
+		//m_dieAnimationFrameSize = animation->getFrames().at(0)->getSpriteFrame()->getOriginalSizeInPixels();
 	}
 	break;
 	default:    
@@ -220,12 +220,17 @@ void Soldier::onDieAnimationEnd()
 
 void Soldier::moveTo(const cocos2d::Vec2& pos)
 {
-	cocos2d::log("soldier:%d will move to:[%0.1f, %0.1f]",m_uniqId, pos.x, pos.y);
-	auto toRowCol = MapManager::getInstance()->toTileRowCol(pos);
-	if (toRowCol == m_moveToPosRowCol)
+	if (m_soldierStatus == GameObjectStatus::Die)
 	{
 		return;
 	}
+	
+	auto toRowCol = MapManager::getInstance()->toTileRowCol(pos);
+	if ((toRowCol == m_moveToPosRowCol) )
+	{
+		return;
+	}
+	cocos2d::log("soldier:%d will move to:[%0.1f, %0.1f]", m_uniqId, pos.x, pos.y);
 	m_moveToPosRowCol = toRowCol;
 	//接收到新的目的点，清空之前的寻路路径
 	if (!m_pathList.empty())
@@ -308,7 +313,7 @@ void Soldier::toMove()
 	m_pathList.pop_front();
 	cocos2d::log("-->[%d, %d]==>[%0.1f, %0.1f]", curNode->rowIndex, curNode->columnIndex, curNode->position.x, curNode->position.y);
 	FaceDirection faceDirection = getFaceDirection(curNode->position);
-	cocos2d::log("face direction:%d", faceDirection);
+	//cocos2d::log("face direction:%d", faceDirection);
 	auto animteIt = m_moveAnimateMap.find(faceDirection);
 	if (animteIt != m_moveAnimateMap.end())
 	{
@@ -322,7 +327,7 @@ void Soldier::toMove()
 		
 		const auto& curPosition = getPosition();
 		auto moveDuration = getMoveToDuration(curPosition, curNode->position);
-		cocos2d::log("-->move duration:%0.1f", moveDuration);
+		//cocos2d::log("-->move duration:%0.1f", moveDuration);
 		auto moveDelta = curNode->position - curPosition;
 		auto moveBy = cocos2d::MoveBy::create(moveDuration, moveDelta);
 		cocos2d::CallFunc* moveEndEvent = nullptr;
@@ -412,7 +417,7 @@ float Soldier::getMoveToDuration(const cocos2d::Vec2& startPos, const cocos2d::V
 {
 	float distance = std::sqrt((moveToPos.x - startPos.x) * (moveToPos.x - startPos.x) +
 		(moveToPos.y - startPos.y) * (moveToPos.y - startPos.y));
-	cocos2d::log("-----> start:[%0.1f, %0.1f] -> end:[%0.1f, %0.1f], distance:%0.1f", startPos.x, startPos.y, moveToPos.x, moveToPos.y, distance);
+	//cocos2d::log("-----> start:[%0.1f, %0.1f] -> end:[%0.1f, %0.1f], distance:%0.1f", startPos.x, startPos.y, moveToPos.x, moveToPos.y, distance);
 	return distance / m_curSpeed;
 }
 

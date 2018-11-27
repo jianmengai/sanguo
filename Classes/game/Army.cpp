@@ -389,6 +389,26 @@ void Army::updateTechPoint(float dt)
 	}
 }
 
+void Army::updateSelectAndTeam()
+{
+	for (auto it = m_selectedSodiers.begin(); it != m_selectedSodiers.end(); ++it)
+	{
+		Soldier* soldier = *it;
+		if (soldier != nullptr)
+		{
+			if (soldier->isReadyToRemove())
+			{
+				m_selectedSodiers.erase(it);
+			}
+		}
+		else
+		{
+			m_selectedSodiers.erase(it);
+		}
+	}
+
+}
+
 void Army::addToTeam(TeamNo teamNo, GameObject * object)
 {
 	auto it = m_teams.find(teamNo);
@@ -419,7 +439,7 @@ void Army::update(float dt)
 	}
 
 	updateTechPoint(dt);
-	
+	updateSelectAndTeam();
 }
 
 void Army::addSelected(GameObject* gameObject)
@@ -448,7 +468,7 @@ void Army::attackTarget(GameObject* gameObject)
 	//{
 	//	return;
 	//}
-	if (m_attackTarget != gameObject)
+	//if (m_attackTarget != gameObject)
 	{
 		if (soldiersMoveTo(gameObject->getPosition()))
 		{

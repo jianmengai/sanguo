@@ -24,6 +24,7 @@ public:
 	void setTeamSpeed(float speed);
 	void resumeNormalSpeed();
 
+	bool isReadyToRemove();
 private:
 	bool init(ForceType forceType, SoldierType type, const cocos2d::Vec2& position, FaceDirection direction);
 	bool initAnimate(SoldierType type);
@@ -35,7 +36,7 @@ private:
 
 	bool isEnemyDiappear(GameObject* enemy);
 
-	bool isReadyToRemove();
+	
 	void onPrepareToRemove();
 	void initHpBar();
 
