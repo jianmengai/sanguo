@@ -54,6 +54,9 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 	m_mapSize = m_tiledMap->getMapSize();
 	m_tileSize = m_tiledMap->getTileSize();
 
+	
+	m_tileMapOriginCoor = cocos2d::Vec2(m_mapSize.width / 2.0 * m_tileSize.width, m_mapSize.height * m_tileSize.height - m_tileSize.height / 2.0);
+
 	initTileNodeTable();
 
 	if (!initBasePosition())
@@ -63,7 +66,7 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 
 	AutoFindPath::initTileNodeTable(m_tileNodeTable);
 	
-	//drawTileTable();
+	drawTileTable();
 
 	m_mapContentSize = m_tiledMap->getContentSize();
 	m_clientWinSize = cocos2d::Director::getInstance()->getWinSize();
@@ -197,6 +200,8 @@ void MapManager::initTileNodeTable()
 
 	auto tileSize = m_tiledMap->getTileSize();
 
+	auto halfTileSize = tileSize / 2.0;
+
 	auto gameObjectLayer = m_tiledMap->getLayer(s_tileMapLayerTypeToString[TileMapLayerType::GameObjcetLayer]);
 
 	for (int rowIndex = 0; rowIndex < (int)mapSize.height; ++rowIndex)
@@ -216,8 +221,8 @@ void MapManager::initTileNodeTable()
 			positionInTileMap.y = (mapSize.height - ((float)columnIndex + (float)rowIndex) / 2.0f) *  tileSize.height;
 			m_tileNodeTable[rowIndex][columnIndex]->position = positionInTileMap;*/
 
-			m_tileNodeTable[rowIndex][columnIndex]->position.x = (((float)columnIndex - (float)rowIndex) / 2.0f + mapSize.width / 2.0f) * tileSize.width;
-			m_tileNodeTable[rowIndex][columnIndex]->position.y = (mapSize.height - ((float)columnIndex + (float)rowIndex) / 2.0f - 0.5f) *  tileSize.height;;
+			m_tileNodeTable[rowIndex][columnIndex]->position.x = m_tileMapOriginCoor.x + columnIndex * halfTileSize.width - rowIndex * halfTileSize.width;//(((float)columnIndex - (float)rowIndex) / 2.0f + mapSize.width / 2.0f) * tileSize.width;
+			m_tileNodeTable[rowIndex][columnIndex]->position.y = m_tileMapOriginCoor.y - columnIndex * halfTileSize.height - rowIndex * halfTileSize.height;//(mapSize.height - ((float)columnIndex + (float)rowIndex) / 2.0f - 0.5f) *  tileSize.height;;
 
 
 			m_tileNodeTable[rowIndex][columnIndex]->rowIndex = rowIndex;
@@ -363,8 +368,13 @@ cocos2d::Vec2 MapManager::toTileRowCol(const cocos2d::Vec2& pos)
 	//菱形 45度地图行列计算
 	//pos.x = ((col - row) / 2.0 + mapSize.width / 2.0) * tileSize.width;
 	//pos.y = (mapSize.height - (col + row) / 2.0 + 0.5) * tileSize.height;
-	int row = m_mapSize.height - pos.y / m_tileSize.height - pos.x / m_tileSize.width + m_mapSize.width / 2.0 - 0.5;
-	int col = pos.x / m_tileSize.width + m_mapSize.height - m_mapSize.width / 2.0 - pos.y / m_tileSize.height - 0.5;
+	
+	//int row = m_mapSize.height - pos.y / m_tileSize.height - pos.x / m_tileSize.width + m_mapSize.width / 2.0 - 0.5;
+	//int col = pos.x / m_tileSize.width + m_mapSize.height - m_mapSize.width / 2.0 - pos.y / m_tileSize.height - 0.5;
+	float width = m_tileSize.width / 2.0;
+	float height = m_tileSize.height / 2.0;
+	int row = (m_tileMapOriginCoor.y * width - pos.y * width + m_tileMapOriginCoor.x * height - pos.x * height) / (2 * width * height);
+	int col = (m_tileMapOriginCoor.y * width - pos.y * width + pos.x * height - m_tileMapOriginCoor.x * height) / (2 * width * height);
 	if (row < 0 || row >= m_mapSize.height)
 	{
 		row = 0;
@@ -398,21 +408,29 @@ void MapManager::setOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& conten
 		return ;
 	}
 
-	int dtCol = contentSize.width / m_tileSize.width;
+	int dtCol = contentSize.width / 2.0 / m_tileSize.width;
 	int dtRow = contentSize.height / 2.0 / m_tileSize.height;
 	cocos2d::Vec2 endRowCol = rowCol;
-	endRowCol.x -= dtRow;
+	endRowCol.x += dtRow;
 	endRowCol.y += dtCol;
 	if (endRowCol.x < 0)
 	{
 		return ;
 	}
 
+	rowCol.x -= dtRow;
+	rowCol.y -= dtCol;
+
 	int startRow = std::min(rowCol.x, endRowCol.x);
+	startRow = std::max(0, startRow);
+
 	int endRow = std::max(rowCol.x, endRowCol.x);
+	endRow = std::min((float)endRow, m_mapSize.height);
 
 	int startCol = std::min(rowCol.y, endRowCol.y);
+	startCol = std::max(0, startCol);
 	int endCol = std::max(rowCol.y, endRowCol.y);
+	endCol = std::min((float)endCol, m_mapSize.width);
 
 	for (int i = startRow; i <= endRow; ++i)
 	{

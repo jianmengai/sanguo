@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="right-down" width="10" height="10" tilewidth="158" tileheight="120" infinite="0" nextlayerid="2" nextobjectid="1">
+ <layer id="1" name="块层 1" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFgwkAAAGQAAE=
+  </data>
+ </layer>
+</map>

@@ -31,7 +31,7 @@ private:
 	cocos2d::RepeatForever* createAnimateWithPlist(const std::string& plistFile, float animateDelayPerUnit, GameObjectStatus status);
 
 	FaceDirection getFaceDirection(const cocos2d::Vec2& moveToPos);
-	float getMoveToDuration(const cocos2d::Vec2& moveToPos);
+	float getMoveToDuration(const cocos2d::Vec2& startPos, const cocos2d::Vec2& moveToPos);
 
 	bool isEnemyDiappear(GameObject* enemy);
 
@@ -39,6 +39,8 @@ private:
 	void onPrepareToRemove();
 	void initHpBar();
 
+	//寻路时，如果终点格子被占用，则选取格子周边的未被占用的格子
+	TileNode* adjustEndNode(TileNode* endNode);
 	
 	//npc自动寻找攻击对象，攻击
 	void findAndFight(float deltaTime);
@@ -72,4 +74,8 @@ private:
 	int m_attackPs = 1;
 
 	float m_alertTimeCd = 0;
+
+	cocos2d::Vec2 m_moveToPosRowCol;
+	bool m_moveToEnemy = false;
+	bool m_attacking = false;
 };

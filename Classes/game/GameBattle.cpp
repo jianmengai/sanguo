@@ -56,8 +56,8 @@ bool GameBattle::createSoldier(ForceType forceType, SoldierType soldierType)
 
 void GameBattle::update(float dt)
 {
-	//m_player->update(dt);
-	//m_npc->update(dt);
+	m_player->update(dt);
+	m_npc->update(dt);
 	if (m_npcFindAttackTargetCdTime >= GameConfig::getInstance()->getCooldownConf()->npcFindTargetCdTime)
 	{
 		npcAttack();

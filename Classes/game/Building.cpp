@@ -30,6 +30,8 @@ bool Building::init(ForceType forceType, const BuildingType type, const cocos2d:
 	m_forceType = forceType;
 	m_objectType = GameObjectType::Building;
 	m_buildingStatus = BuildingStatus::PrepareToBuild;
+	auto rowCol = MapManager::getInstance()->toTileRowCol(position);
+	cocos2d::log("==================row:%0.1f, col:%0.1f===============", rowCol.x, rowCol.y);
 	this->setPosition(position);
 	m_bottonGridPos.push_back(position);
 	initBuildingStatusSprites(type);

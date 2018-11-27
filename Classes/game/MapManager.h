@@ -107,6 +107,8 @@ private:
 
 	cocos2d::DrawNode* m_drawNode = nullptr;
 
+	cocos2d::Vec2 m_tileMapOriginCoor;   //tilemap格子原点(0,0)在openGL坐标系中的坐标位置
+
 
 	std::vector<BasePosition> m_basePositions;
 };

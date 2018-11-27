@@ -195,7 +195,7 @@ Soldier* Army::createSoldier(SoldierType type)
 	m_soldiers[type].push_back(soldier);
 	MapManager::getInstance()->addChildToGameObjectLayer(soldier);
 	GameObjectManager::getInstance()->addGameObject(soldier);
-	MapManager::getInstance()->setOccupy(newPos, soldier->getContentSize());
+	//MapManager::getInstance()->setOccupy(newPos, soldier->getContentSize());
 	//WarFogLayer::getInstance()->inView(tileRow, tileCol);
 	return soldier;
 }
@@ -233,7 +233,7 @@ Building* Army::createBuilding(BuildingType type, const cocos2d::Vec2& position,
 	m_buildings[type].push_back(building);
 	MapManager::getInstance()->addChildToGameObjectLayer(building);
 	GameObjectManager::getInstance()->addGameObject(building);
-	MapManager::getInstance()->setOccupy(newPos, contentSize);
+	//MapManager::getInstance()->setOccupy(newPos, contentSize);
 	
 	//¾Å¹¬¸ñ¿ªÊÓÒ°
 	auto posToTileNode = MapManager::getInstance()->toTileRowCol(newPos);
