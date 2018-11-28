@@ -16,6 +16,7 @@ public:
 
 	void update(float deltaTime);
 
+	void addAttackTarget(GameObject* target);
 	void attackTarget(GameObject* target);
 	//寻路指令
 	void moveTo(const cocos2d::Vec2& pos);
@@ -46,7 +47,7 @@ private:
 	//npc自动寻找攻击对象，攻击
 	void findAndFight(float deltaTime);
 	void searchEnemy();
-	bool isEnemyInAlertRange(GameObject* enemy);
+	bool isEnemyInAlertRange(GameObject* enemy, float& distance);
 	cocos2d::Vec2 getEnemyPosition(GameObject* enemy);
 	cocos2d::Vec2 getEnemyNearByPosition(cocos2d::Vec2& enemyPosition);
 	bool isEnemyInAttackRange(GameObject* enemy);
@@ -55,6 +56,8 @@ private:
 	void toStand();
 	void toAttack();
 	void toDie();
+
+	void clearMoveToRowCol();
 
 private:
 	cocos2d::Size m_dieAnimationFrameSize;
@@ -79,4 +82,6 @@ private:
 	cocos2d::Vec2 m_moveToPosRowCol;
 	bool m_moveToEnemy = false;
 	bool m_attacking = false;
+
+	std::list<GameObject*> m_attackTargetList;
 };

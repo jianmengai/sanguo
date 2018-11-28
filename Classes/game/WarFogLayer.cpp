@@ -92,7 +92,7 @@ void WarFogLayer::setPosition(cocos2d::Vec2& pos, bool isDelta)
 		newPosition.x = minX;
 	}
 	setFogPosition(newPosition);
-	cocos2d::log("new warfog positin, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, pos.y, m_scale);
+	//cocos2d::log("new warfog positin, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, pos.y, m_scale);
 }
 
 void WarFogLayer::inView(int x, int y) 

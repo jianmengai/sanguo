@@ -11,7 +11,7 @@ constexpr auto PLAYER_HP_BAR_TEXTURE_NAME = "PlayerHPBar.png";
 constexpr auto AI_HP_BAR_TEXTURE_NAME = "AIHPBar.png";
 constexpr auto HP_BAR_BACKGROUND_TEXTURE_NAME = "HPBarBackground.png";
 
-constexpr auto BUILDING_DELAY_REMOVE_TIME = 2.0f;
+constexpr auto BUILDING_DELAY_REMOVE_TIME = 0.5f;
 
 constexpr auto INVALID_GAMEOBJECT_ID = 0;
 
