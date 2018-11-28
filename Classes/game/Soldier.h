@@ -46,8 +46,10 @@ private:
 	
 	//npc自动寻找攻击对象，攻击
 	void findAndFight(float deltaTime);
-	void searchEnemy();
+	GameObject* searchEnemy();
+	void searchNearbyEnemy();
 	bool isEnemyInAlertRange(GameObject* enemy, float& distance);
+	float getEnemyDistance(GameObject* enemy);
 	cocos2d::Vec2 getEnemyPosition(GameObject* enemy);
 	cocos2d::Vec2 getEnemyNearByPosition(cocos2d::Vec2& enemyPosition);
 	bool isEnemyInAttackRange(GameObject* enemy);

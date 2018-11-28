@@ -144,6 +144,7 @@ void GameBattle::initBasePosition()
 
 void GameBattle::npcAttack()
 {
+	/*
 	if ((m_npcAttackTarget == nullptr))
 	{
 		cocos2d::log("find target");
@@ -158,6 +159,7 @@ void GameBattle::npcAttack()
 		cocos2d::log("current target is null");
 		m_npcAttackTarget = nullptr;
 	}
+	*/
 }
 	
 

@@ -553,19 +553,97 @@ void Soldier::findAndFight(float deltaTime)
 			
 		}
 	}
-	else
+	
+	
+	if (m_alertTimeCd >= GameConfig::getInstance()->getCooldownConf()->alertCdTime)
 	{
-		m_moveToEnemy = false;
-		m_attacking = false;
-		if (m_alertTimeCd >= GameConfig::getInstance()->getCooldownConf()->alertCdTime)
+		auto object = searchEnemy();
+		if (object != m_attackTarget)
 		{
-			searchEnemy();
-			m_alertTimeCd = 0;
+			m_attackTarget = object;
+			setEnemyId(object->getId());
+			m_moveToEnemy = false;
+			m_attacking = false;
 		}
+		m_alertTimeCd = 0;
 	}
+	
 }
 
-void Soldier::searchEnemy()
+GameObject* Soldier::searchEnemy()
+{
+	GameObject* nearbyObject = nullptr;
+	float distance = 0;
+	auto& gameObjects = GameObjectManager::getInstance()->getGameObjectMap();
+	std::map<float, std::vector<GameObject*> > enemyDistance;
+	//优先查找建筑
+	for (auto& gameObjectIt : gameObjects)
+	{
+		auto gameObject = gameObjectIt.second;
+		if ((gameObject == nullptr) || (m_forceType == gameObject->getForceType()) || gameObject->isReadyToRemove())
+		{
+			continue;
+		}
+		distance = getEnemyDistance(gameObject);
+		enemyDistance[distance].push_back(gameObject);
+	}
+	for (auto pairs : enemyDistance)
+	{
+		//在警戒距离内
+		if (pairs.first <= m_alertDistance)
+		{
+			for (auto object : pairs.second)
+			{
+				cocos2d::log("in alert range, distance:%0.1f, alert:%0.1f, id:%d", pairs.first, m_alertDistance, object->getId());
+				nearbyObject = object;
+				break;
+			}
+			if (nearbyObject != nullptr)
+			{
+				break;
+			}
+		}
+		else
+		{
+			//先找建筑单位
+			for (auto object : pairs.second)
+			{
+				if (object->getGameObjectType() == GameObjectType::Building)
+				{
+					cocos2d::log("nearby building, distance:%0.1f, alert:%0.1f, id:%d", pairs.first, m_alertDistance, object->getId());
+					nearbyObject = object;
+					break;
+				}
+			}
+			if (nearbyObject != nullptr)
+			{
+				break;
+			}
+		}
+	}
+	
+	if (m_attackTarget == nullptr)
+	{
+		for (auto pairs : enemyDistance)
+		{
+			for (auto object : pairs.second)
+			{
+				cocos2d::log("nearby soldier, distance:%0.1f, alert:%0.1f, id:%d", pairs.first, m_alertDistance, object->getId());
+
+				nearbyObject = object;
+				break;
+			}
+			if (nearbyObject != nullptr)
+			{
+				break;
+			}
+		}
+	}
+
+	return nearbyObject;
+}
+
+void Soldier::searchNearbyEnemy()
 {
 	GameObject* nearbyObject = nullptr;
 	float minDistance = FLT_MAX;
@@ -578,20 +656,13 @@ void Soldier::searchEnemy()
 		{
 			continue;
 		}
-		if ((!gameObject->isReadyToRemove()) && isEnemyInAlertRange(gameObject, distance))
-		{
-			if (distance < minDistance)
-			{
-				minDistance = distance;
-				nearbyObject = gameObject;
-			}
-		}
+		
 	}
 	if (nearbyObject != nullptr)
 	{
 		setEnemyId(nearbyObject->getId());
 		m_attackTarget = nearbyObject;
-		cocos2d::log("find enemy, id:%d", m_enemyId);
+		cocos2d::log("find nearby enemy, id:%d", m_enemyId);
 	}
 }
 
@@ -605,6 +676,13 @@ bool Soldier::isEnemyInAlertRange(GameObject * enemy, float& distance)
 		return true;
 	}
 	return false;
+}
+
+float Soldier::getEnemyDistance(GameObject * enemy)
+{
+	auto& startPos = this->getPosition();
+	auto enemyPos = getEnemyPosition(enemy);
+	return GameUtils::computeDistanceBetween(startPos, enemyPos);
 }
 
 
