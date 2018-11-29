@@ -16,7 +16,6 @@ public:
 
 	void update(float deltaTime);
 
-	void addAttackTarget(GameObject* target);
 	void attackTarget(GameObject* target);
 	//寻路指令
 	void moveTo(const cocos2d::Vec2& pos);
@@ -26,6 +25,8 @@ public:
 	void resumeNormalSpeed();
 
 	bool isReadyToRemove();
+
+	void setPath(std::list<cocos2d::Vec2>& path);
 private:
 	bool init(ForceType forceType, SoldierType type, const cocos2d::Vec2& position, FaceDirection direction);
 	bool initAnimate(SoldierType type);
@@ -47,7 +48,7 @@ private:
 	//npc自动寻找攻击对象，攻击
 	void findAndFight(float deltaTime);
 	GameObject* searchEnemy();
-	void searchNearbyEnemy();
+	GameObject* searchNearbyEnemy();
 	bool isEnemyInAlertRange(GameObject* enemy, float& distance);
 	float getEnemyDistance(GameObject* enemy);
 	cocos2d::Vec2 getEnemyPosition(GameObject* enemy);
@@ -60,6 +61,10 @@ private:
 	void toDie();
 
 	void clearMoveToRowCol();
+
+	void updatePreparePath();
+	bool canMoveToPos(cocos2d::Vec2& pos);
+	void movePath();
 
 private:
 	cocos2d::Size m_dieAnimationFrameSize;
@@ -85,5 +90,6 @@ private:
 	bool m_moveToEnemy = false;
 	bool m_attacking = false;
 
-	std::list<GameObject*> m_attackTargetList;
+	//预设路线
+	std::list<cocos2d::Vec2> m_preparePathList;
 };

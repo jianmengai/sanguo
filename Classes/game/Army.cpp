@@ -504,7 +504,6 @@ bool Army::soldiersMoveTo(const cocos2d::Vec2& mapPos)
 	auto mapSize = MapManager::getInstance()->getMapSize();
 	for (auto soldier : m_selectedSodiers)
 	{
-		soldier->addAttackTarget(m_attackTarget);
 		soldier->setTeamSpeed(teamSpeed);
 		soldier->moveTo(moveToPos);
 		if (row - 1 >= 0)

@@ -44,4 +44,8 @@ private:
 	time_t m_gameStartTime;
 	std::unordered_map<cocos2d::Ref*, std::function<bool()> > m_createCallback;
 	cocos2d::Vec2 m_touchPos;
+
+	//¬∑æ∂…Ë÷√µÿÕº
+	cocos2d::ui::ImageView* m_middleMapImgView = nullptr;
+	cocos2d::DrawNode* m_middleMapDrawNode = nullptr;
 };

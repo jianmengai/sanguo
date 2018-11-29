@@ -271,25 +271,9 @@ void Soldier::update(float deltaTime)
 	{
 		findAndFight(deltaTime);
 	}
-	
+	movePath();
 }
 
-void Soldier::addAttackTarget(GameObject * target)
-{
-	bool hasInList = false;
-	for (auto enemy : m_attackTargetList)
-	{
-		if (enemy == target)
-		{
-			hasInList = true;
-			break;
-		}
-	}
-	if (!hasInList)
-	{
-		m_attackTargetList.push_back(target);
-	}
-}
 
 void Soldier::attackTarget(GameObject * target)
 {
@@ -410,6 +394,33 @@ void Soldier::clearMoveToRowCol()
 	m_moveToPosRowCol.y = 0;
 }
 
+void Soldier::updatePreparePath()
+{
+
+}
+
+bool Soldier::canMoveToPos(cocos2d::Vec2 & pos)
+{
+	auto tileRowCol = MapManager::getInstance()->toTileRowCol(pos);
+	return MapManager::getInstance()->checkOccupy(tileRowCol.x, tileRowCol.y);
+}
+
+void Soldier::movePath()
+{
+	if (m_preparePathList.empty())
+	{
+		return;
+	}
+	auto& pos = m_preparePathList.front();
+	moveTo(pos);
+	//已经到达当前位置
+	if (getPosition() == pos)
+	{
+		m_preparePathList.pop_front();
+	}
+	
+}
+
 FaceDirection Soldier::getFaceDirection(const cocos2d::Vec2& moveToPos)
 {
 	FaceDirection faceToDirection = FaceDirection::Invalid;
@@ -466,6 +477,11 @@ bool Soldier::isReadyToRemove()
 	return m_soldierStatus == GameObjectStatus::Die;
 }
 
+void Soldier::setPath(std::list<cocos2d::Vec2>& path)
+{
+	m_preparePathList = path;
+}
+
 void Soldier::onPrepareToRemove()
 {
 	cocos2d::log("onPrepareToRemove  to die");
@@ -504,6 +520,7 @@ TileNode * Soldier::adjustEndNode(TileNode * endNode)
 	{
 		return nullptr;
 	}
+
 
 	return nullptr;
 }
@@ -557,7 +574,16 @@ void Soldier::findAndFight(float deltaTime)
 	
 	if (m_alertTimeCd >= GameConfig::getInstance()->getCooldownConf()->alertCdTime)
 	{
-		auto object = searchEnemy();
+		GameObject* object = nullptr;
+		if (m_forceType == ForceType::AI)
+		{
+			object = searchEnemy();
+		}
+		//所有周围alter范围内的目标
+		else
+		{
+			object = searchNearbyEnemy();
+		}
 		if (object != m_attackTarget)
 		{
 			m_attackTarget = object;
@@ -643,7 +669,7 @@ GameObject* Soldier::searchEnemy()
 	return nearbyObject;
 }
 
-void Soldier::searchNearbyEnemy()
+GameObject* Soldier::searchNearbyEnemy()
 {
 	GameObject* nearbyObject = nullptr;
 	float minDistance = FLT_MAX;
@@ -652,18 +678,24 @@ void Soldier::searchNearbyEnemy()
 	for (auto& gameObjectIt : gameObjects)
 	{
 		auto gameObject = gameObjectIt.second;
-		if (m_forceType == gameObject->getForceType())
+		if ((gameObject == nullptr) || (m_forceType == gameObject->getForceType()) || gameObject->isReadyToRemove())
 		{
 			continue;
 		}
+		distance = getEnemyDistance(gameObject);
+		if (distance < minDistance)
+		{
+			minDistance = distance;
+			nearbyObject = gameObject;
+		}
 		
 	}
-	if (nearbyObject != nullptr)
+	if (minDistance <= m_alertDistance)
 	{
-		setEnemyId(nearbyObject->getId());
-		m_attackTarget = nearbyObject;
-		cocos2d::log("find nearby enemy, id:%d", m_enemyId);
+		return nearbyObject;
 	}
+
+	return nullptr;
 }
 
 bool Soldier::isEnemyInAlertRange(GameObject * enemy, float& distance)
