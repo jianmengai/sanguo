@@ -10,6 +10,7 @@ GameConfig* GameConfig::getInstance()
 
 bool GameConfig::init()
 {
+	cocos2d::log("GameConfig::init");
 	std::string configFileName = "config.xml";
 	std::string fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(configFileName);
 	tinyxml2::XMLDocument* doc = new (std::nothrow)tinyxml2::XMLDocument;
@@ -18,12 +19,21 @@ bool GameConfig::init()
 		cocos2d::log("new tinyxml2::XMLDocument failed");
 		return false;
 	}
-	tinyxml2::XMLError err = doc->LoadFile(fullPath.c_str());
+	ssize_t contentSize = 0;   
+	unsigned char* content = cocos2d::FileUtils::getInstance()->getFileData(configFileName, "r", &contentSize);
+	//cocos2d::Data data = cocos2d::FileUtils::getInstance()->getDataFromFile(fullPath);
+	if (content == nullptr)
+	{
+		cocos2d::log("load config file failed, file:%s", fullPath.c_str());
+		return false;
+	}
+
+	tinyxml2::XMLError err = doc->Parse((const char*)content, contentSize); //(fullPath.c_str());
 	if (err != 0)
 	{
+		cocos2d::log("load config file failed, file:%s, err:%d", fullPath.c_str(), static_cast<int>(err));
 		delete doc;
 		doc = nullptr;
-		cocos2d::log("XMLDocument load failed, file:%s", fullPath.c_str());
 		return false;
 	}
 	tinyxml2::XMLElement* root = doc->RootElement();
@@ -79,7 +89,7 @@ bool GameConfig::loadRes()
 	plistRes.push_back("BuildingCommon.plist");
 	for (auto i = 0; i < 2; ++i)
 	{
-		std::unordered_map<SoldierType, SoldierConf*>* pointer = nullptr;
+		std::map<SoldierType, SoldierConf*>* pointer = nullptr;
 		if (i == 0)
 		{
 			pointer = &m_playerSoldierConf;

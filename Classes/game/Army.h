@@ -1,12 +1,12 @@
 #pragma once
-#include <unordered_map>
+#include <map>
 #include <vector>
 
 #include "Building.h"
 #include "Soldier.h"
 
-typedef std::unordered_map<SoldierType, std::vector<Soldier*> > SOLDIER_MAP;
-typedef std::unordered_map<BuildingType, std::vector<Building*> > BUILDING_MAP;
+typedef std::map<SoldierType, std::vector<Soldier*> > SOLDIER_MAP;
+typedef std::map<BuildingType, std::vector<Building*> > BUILDING_MAP;
 
 class Army
 {
@@ -54,5 +54,5 @@ private:
 	GameObject* m_attackTarget = nullptr; //指令攻击的目标
 	BasePosition m_basePosition;
 
-	std::unordered_map<TeamNo, int> m_teams;  //key:team number, value:team id
+	std::map<TeamNo, int> m_teams;  //key:team number, value:team id
 };

@@ -72,9 +72,9 @@ private:
 	cocos2d::RepeatForever* m_dieAnimate = nullptr;
 	FaceDirection m_faceDirection = FaceDirection::Invalid;
 
-	std::unordered_map<FaceDirection, cocos2d::RepeatForever*> m_moveAnimateMap;
-	std::unordered_map<FaceDirection, cocos2d::RepeatForever*> m_standAnimateMap;
-	std::unordered_map<FaceDirection, cocos2d::RepeatForever*> m_attackAnimateMap;
+	std::map<FaceDirection, cocos2d::RepeatForever*> m_moveAnimateMap;
+	std::map<FaceDirection, cocos2d::RepeatForever*> m_standAnimateMap;
+	std::map<FaceDirection, cocos2d::RepeatForever*> m_attackAnimateMap;
 
 	std::list<TileNode*> m_pathList;
 	int m_teamId = 0;

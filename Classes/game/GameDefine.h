@@ -152,3 +152,16 @@ struct BasePosition
 	cocos2d::Vec2 barrackPosition;
 	std::vector<cocos2d::Vec2> archorTowerPositions;
 };
+
+namespace std
+{
+
+
+	template<> struct hash<SoldierType>
+	{
+		size_t operator()(SoldierType type) const
+		{
+			return hash<int>()(static_cast<int>(type));
+		}
+	};
+}

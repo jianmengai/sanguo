@@ -106,12 +106,12 @@ bool MapManager::initBasePosition()
 		ss.str("");
 		ss << "barrackPoint" << i;
 		std::string barrackName = ss.str();
-		auto& baseNameValueMap = resourceLayer->getObject(baseName);
+		auto baseNameValueMap = resourceLayer->getObject(baseName);
 		if (baseNameValueMap.empty())
 		{
 			break;
 		}
-		auto& barrackValueMap = resourceLayer->getObject(barrackName);
+		auto barrackValueMap = resourceLayer->getObject(barrackName);
 		
 		BasePosition basePosition;
 		basePosition.basePosition = getObjectPosition(baseNameValueMap, baseName);
@@ -123,7 +123,7 @@ bool MapManager::initBasePosition()
 			ss.str("");
 			ss << "archorTowerPoint" << index;
 			std::string archorTowerName = ss.str();
-			auto& archorTowerValueMap = resourceLayer->getObject(archorTowerName);
+			auto archorTowerValueMap = resourceLayer->getObject(archorTowerName);
 			if (archorTowerValueMap.empty())
 			{
 				break;
@@ -305,7 +305,7 @@ void MapManager::setPosition(cocos2d::Vec2& position, bool isDelta)
 	newPosition.negate();
 	m_tiledMap->setPosition(newPosition);
 	//WarFogLayer::getInstance()->setPosition(newPosition);
-	WarFogLayer::getInstance()->setPosition(newPosition, isDelta);
+	//WarFogLayer::getInstance()->setPosition(newPosition, isDelta);
 	//cocos2d::log("===>set map postion, x:%0.1f, y:%0.1f, delta y:%0.1f, scale:%0.1f", newPosition.x, newPosition.y, position.y, m_mapScale);
 }
 
@@ -321,17 +321,17 @@ cocos2d::Vec2 MapManager::getPosition()
 	return m_tiledMap->getPosition();
 }
 
-cocos2d::Size MapManager::getTileSize()
+const cocos2d::Size& MapManager::getTileSize()
 {
 	return m_tiledMap->getTileSize();
 }
 
-cocos2d::Size MapManager::getMapSize()
+cocos2d::Size& MapManager::getMapSize()
 {
 	return m_mapSize;
 }
 
-cocos2d::Size MapManager::getContentSize()
+cocos2d::Size& MapManager::getContentSize()
 {
 	return m_mapContentSize;
 }

@@ -1,4 +1,4 @@
-#include  <io.h>
+#include "cocos2d.h"
 #include "SoundManager.h"
 #include "audio/include/AudioEngine.h"
 
@@ -47,7 +47,7 @@ bool SoundManager::canPlay(const std::string& fileName)
 	bool result = false;
 
 	auto fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
-	if (_access(fullPath.c_str(), 0) != -1)
+	if (cocos2d::FileUtils::getInstance()->isFileExist(fullPath))
 	{
 		result = true;
 	}

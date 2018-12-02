@@ -24,10 +24,11 @@
 
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
-#include "GameSceneManager.h"
+
 #include "GameScene.h"
 #include "GameUtils.h"
 #include "GameConfig.h"
+
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -93,7 +94,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #endif
         director->setOpenGLView(glview);
     }
-
     // turn on display FPS
     director->setDisplayStats(true);
 
@@ -119,29 +119,39 @@ bool AppDelegate::applicationDidFinishLaunching() {
     //    director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
     //}
 
+	cocos2d::log("sanguo start...");
+
     register_all_packages();
 	srand(time(NULL));
+	
 	std::vector<std::string> searchPaths;
-	searchPaths.push_back("./ui");
-	searchPaths.push_back("./sound");
-	searchPaths.push_back("./building");
-	searchPaths.push_back("./bullet");
-	searchPaths.push_back("./npc");
-	searchPaths.push_back("./npc/archer");
-	searchPaths.push_back("./npc/barbarian");
-	searchPaths.push_back("./npc/enchanter");
-	searchPaths.push_back("./npc/balloon");
-	searchPaths.push_back("./npc/garg");
-	searchPaths.push_back("./npc/common");
-	FileUtils::getInstance()->setSearchPaths(searchPaths);
+	FileUtils::getInstance()->addSearchPath("ui");
+	FileUtils::getInstance()->addSearchPath("sound");
+	FileUtils::getInstance()->addSearchPath("building");
+	FileUtils::getInstance()->addSearchPath("bullet");
+	FileUtils::getInstance()->addSearchPath("npc");
+	FileUtils::getInstance()->addSearchPath("npc/archer");
+	FileUtils::getInstance()->addSearchPath("npc/barbarian");
+	FileUtils::getInstance()->addSearchPath("npc/enchanter");
+	FileUtils::getInstance()->addSearchPath("npc/balloon");
+	FileUtils::getInstance()->addSearchPath("npc/garg");
+	FileUtils::getInstance()->addSearchPath("npc/common");
+	//FileUtils::getInstance()->setSearchPaths(searchPaths);
+	
     // create a scene. it's an autorelease object
+
+	
 	GameUtils::setDesignResolutionSize(designResolutionSize);
+	
 	
 	if (!GameConfig::getInstance()->init())
 	{
 		return false;
 	}
+	
+	
 	auto gameScene = GameScene::scene();
+	
 	//auto gameScene = HelloWorld::createScene();
 	director->runWithScene(gameScene);
 

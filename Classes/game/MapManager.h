@@ -79,9 +79,9 @@ public:
 	//gameObject层添
 	void addChildToGameObjectLayer(cocos2d::Sprite* unit, int zOrder = 1);
 
-	cocos2d::Size getTileSize();
-	cocos2d::Size getMapSize();
-	cocos2d::Size getContentSize();
+	const cocos2d::Size& getTileSize();
+	cocos2d::Size& getMapSize();
+	cocos2d::Size& getContentSize();
 
 	//随机基地坐标
 	std::vector<BasePosition>& getBasePosition();

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include "GameObject.h"
 
 
-typedef std::unordered_map<int, GameObject*> GameObjectMap;
+typedef std::map<int, GameObject*> GameObjectMap;
 
 class GameObjectManager
 {

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <unordered_map>
+#include <map>
 #include "tinyxml2/tinyxml2.h"
 #include "GameDefine.h"
 
@@ -153,13 +153,13 @@ private:
 	bool loadRes();
 
 private:
-	std::unordered_map<int, MapConf*> m_mapConf;
-	std::unordered_map<BulletType, BulletConf*> m_bulletConf;
-	std::unordered_map<std::string, SpecialEffectConf*> m_specialEffectConf;
-	std::unordered_map<SoldierType, SoldierConf*> m_playerSoldierConf;
-	std::unordered_map<SoldierType, SoldierConf*> m_npcSoldierConf;
-	std::unordered_map<BuildingType, BuildingConf*> m_playerBuildingConf;
-	std::unordered_map<BuildingType, BuildingConf*> m_npcBuildingConf;
+	std::map<int, MapConf*> m_mapConf;
+	std::map<BulletType, BulletConf*> m_bulletConf;
+	std::map<std::string, SpecialEffectConf*> m_specialEffectConf;
+	std::map<SoldierType, SoldierConf*> m_playerSoldierConf;
+	std::map<SoldierType, SoldierConf*> m_npcSoldierConf;
+	std::map<BuildingType, BuildingConf*> m_playerBuildingConf;
+	std::map<BuildingType, BuildingConf*> m_npcBuildingConf;
 	CooldownConf m_coolDownConf;
 	BuildingSoundEffectData m_buildingSound;
 	SoldierSoundEffectData m_soldierSound;

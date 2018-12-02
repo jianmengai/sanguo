@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <unordered_map>
+#include <map>
 #include "ui/UILoadingBar.h"
 #include "GameObject.h"
 
@@ -21,7 +21,7 @@ public:
 
 private:
 	bool init(ForceType forceType, const BuildingType type, const cocos2d::Vec2& position);
-	cocos2d::Sprite* Building::createBuildingStatusSprite(const BuildingType type, BuildingStatus buildingStatus, int opacity = 255);
+	cocos2d::Sprite* createBuildingStatusSprite(const BuildingType type, BuildingStatus buildingStatus, int opacity = 255);
 	void initBuildingStatusSprites(const BuildingType type);
 	void initBottomGridSprites(const BuildingType type);
 	void initData(const BuildingType type);
@@ -41,7 +41,7 @@ private:
 
 private:
 	BuildingStatus m_buildingStatus = BuildingStatus::Invalid;
-	std::unordered_map<BuildingStatus, cocos2d::Sprite*> m_buildingStatusSpriteMap;
+	std::map<BuildingStatus, cocos2d::Sprite*> m_buildingStatusSpriteMap;
 	cocos2d::Vec2 m_bottomGridsPlaneCenterPositionInLocalSpace;
 	std::vector<cocos2d::Sprite*> m_bottomGridSpritesList;
 	BuildingType m_buildingType = BuildingType::Invalid;

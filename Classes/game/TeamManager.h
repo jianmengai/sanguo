@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <unordered_map>
+#include <map>
 #include "GameObject.h"
 
 class TeamManager
@@ -18,5 +18,5 @@ public:
 
 	void notifyTeamMemberEnemy(int teamId, GameObject* enemy);
 private:
-	std::unordered_map<int, std::vector<GameObject*> > m_teams;
+	std::map<int, std::vector<GameObject*> > m_teams;
 };

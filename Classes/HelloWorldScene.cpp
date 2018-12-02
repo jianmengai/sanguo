@@ -25,9 +25,6 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 
-#include "WarFogLayer.h"
-#include "ui/UILoadingBar.h"
-
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -79,7 +76,7 @@ bool HelloWorld::init()
     }
 
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, nullptr);
+    auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
@@ -105,9 +102,6 @@ bool HelloWorld::init()
     }
 
     // add "HelloWorld" splash screen"
-	auto bg = Sprite::create("logo.png");
-	bg->setAnchorPoint(Vec2(0, 0));
-	this->addChild(bg);
     auto sprite = Sprite::create("HelloWorld.png");
     if (sprite == nullptr)
     {
@@ -117,49 +111,10 @@ bool HelloWorld::init()
     {
         // position the sprite on the center of the screen
         sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-		//sprite->setPosition(Vec2(0, 0));
-		sprite->setAnchorPoint(Vec2(0, 0));
-		//sprite->setAnchorPoint(Vec2(1, 1));
-		sprite->setRotation(45);
-		//sprite->setScale(1.5);
+
         // add the sprite as a child to this layer
         this->addChild(sprite, 0);
-
-		/*
-		auto mapContentSize = cocos2d::Size(25, 25);
-		auto warFog = WarFogLayer::create(mapContentSize.width, mapContentSize.height);
-		if (nullptr == warFog)
-		{
-			return false;
-		}
-		*/
-		////warFog->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
-		//warFog->setTileSize(cocos2d::Size(158, 120));
-		////warFog->setScale(0.3f);
-		//this->addChild(warFog);
-		//warFog->inView(12, 12);
-
     }
-
-	cocos2d::ui::LoadingBar* hpBar = nullptr;
-	hpBar = cocos2d::ui::LoadingBar::create("AIHPBar.png");
-	
-	hpBar->setAnchorPoint(cocos2d::Vec2::ZERO);
-	hpBar->setPercent(100.0f);
-
-	auto hpBarBackground = Sprite::create("HPBarBackground.png");
-	hpBarBackground->setCascadeOpacityEnabled(true);
-	hpBarBackground->setScaleY(0.5f);
-	hpBarBackground->addChild(hpBar);
-	hpBarBackground->setVisible(true);
-
-	auto contentSize = sprite->getContentSize();
-	hpBarBackground->setPosition(cocos2d::Vec2(contentSize.width / 2.0, contentSize.height + 10));
-	
-
-	sprite->addChild(hpBarBackground);
-
-
     return true;
 }
 

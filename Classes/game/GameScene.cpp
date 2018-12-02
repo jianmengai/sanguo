@@ -38,18 +38,20 @@ bool GameScene::init()
 	auto mapSize = MapManager::getInstance()->getMapSize();
 	auto tileSize = MapManager::getInstance()->getTileSize();
 	
-	if (!WarFogLayer::getInstance()->init(this, mapSize.width, mapSize.height))
+/*	if (!WarFogLayer::getInstance()->init(this, mapSize.width, mapSize.height))
 	{
 		return false;
 	}
-
+	*/
+	cocos2d::log("start init gameui");
 	m_gameUI = GameUILayer::create();
 	if (nullptr == m_gameUI)
 	{
 		return false;
 	}
 	this->addChild(m_gameUI);
-
+	
+	cocos2d::log("start set callback");
 	auto dispatcher = cocos2d::Director::getInstance()->getEventDispatcher();
 	m_touchOneByOneListener = cocos2d::EventListenerTouchOneByOne::create();
 	m_touchOneByOneListener->setSwallowTouches(true);
@@ -59,6 +61,8 @@ bool GameScene::init()
 	dispatcher->addEventListenerWithSceneGraphPriority(m_touchOneByOneListener, this);
 
 	scheduleUpdate();
+
+	cocos2d::log("gamescene init done");
 
 	return true;
 }
@@ -116,7 +120,7 @@ void GameScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 	m_preTouchPos = curPosition;
 	//cocos2d::log("GameScene::onTouchMoved, x:%0.1f, y:%0.1f", deltaPos.x, deltaPos.y);
 	MapManager::getInstance()->setPosition(deltaPos, true);
-	WarFogLayer::getInstance()->setPosition(deltaPos);
+	//WarFogLayer::getInstance()->setPosition(deltaPos);
 	
 }
 

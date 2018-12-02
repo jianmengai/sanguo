@@ -5,7 +5,6 @@
 #include "SoundManager.h"
 #include "GameConfig.h"
 #include "GameBattle.h"
-#include "FixUI.h"
 #include "WarFogLayer.h"
 #include "GameBattle.h"
 
@@ -33,10 +32,12 @@ bool GameUILayer::init()
 	this->addChild(m_gameUI);
 	m_gameStartTime = time(nullptr);
 
-
-	initMiniMap();
+	cocos2d::log("start init minimap");
+	//initMiniMap();
+	cocos2d::log("start init createbutton");
 	initCreateButton();
 
+	cocos2d::log("start set gameui callback");
 	auto dispatcher = cocos2d::Director::getInstance()->getEventDispatcher();
 	auto touchOneByOneListener = cocos2d::EventListenerTouchOneByOne::create();
 	//touchOneByOneListener->setSwallowTouches(true);
@@ -46,6 +47,8 @@ bool GameUILayer::init()
 	dispatcher->addEventListenerWithSceneGraphPriority(touchOneByOneListener, this);
 
 	scheduleUpdate();
+
+	cocos2d::log("gameui init done.");
 
 	return true;
 }
@@ -57,17 +60,24 @@ bool GameUILayer::initMiniMap()
 	{
 		return false;
 	}
+	cocos2d::log("get minimap img");
 	m_miniMapImgView = gameMainPanel->getChildByName<cocos2d::ui::ImageView*>("Image_MiniMap");
+	cocos2d::log("create drawnode");
 	m_miniMapDrawNode = cocos2d::DrawNode::create();
 	m_miniMapImgView->addChild(m_miniMapDrawNode);
+	cocos2d::log("add touch listen");
 	m_miniMapImgView->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onMinimapTouched, this));
+	cocos2d::log("minimap init done...");
+	cocos2d::log("minimap done");
 }
 
 bool GameUILayer::initCreateButton()
 {
+	cocos2d::log("start init create button");
 	auto gameMainPanel = m_gameUI->getChildByName("Panel_Creating");
 	auto createBuildingPanel = gameMainPanel->getChildByName("Panel_CreateBuilding");
 	auto createSoldierPanel = gameMainPanel->getChildByName("Panel_CreateSoldier");
+	cocos2d::log("get button done");
 	//Ö÷³Ç
 	auto createMainTown = createBuildingPanel->getChildByName<cocos2d::ui::Button*>("Button_Town");
 	createMainTown->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onCreateObject, this));
@@ -136,6 +146,7 @@ void GameUILayer::update(float dt)
 
 void GameUILayer::updateMiniMap()
 {
+	/*
 	m_miniMapDrawNode->clear();
 	auto mapPosition = MapManager::getInstance()->getPosition();
 	auto mapScale = MapManager::getInstance()->getMapScale();
@@ -191,6 +202,7 @@ void GameUILayer::updateMiniMap()
 	m_miniMapDrawNode->drawRect(minimapScreenBoxPosition,
 		minimapScreenBoxPosition + minimapScreenBoxSize,
 		cocos2d::Color4F(1.0f, 1.0f, 1.0f, 1.0f));
+*/
 }
 
 void GameUILayer::updateGameTime()
