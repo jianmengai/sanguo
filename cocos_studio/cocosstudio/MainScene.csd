@@ -4,9 +4,9 @@
     <Content>
       <Animation Duration="0" Speed="1.0000" />
       <ObjectData Name="Scene" ctype="GameNodeObjectData">
-        <Size X="1920.0000" Y="1080.0000" />
+        <Size X="960.0000" Y="600.0000" />
         <Children>
-          <AbstractNodeData Name="Panel_Creating" ActionTag="1875091067" Tag="2" IconVisible="False" LeftMargin="787.9999" RightMargin="-27.9999" TopMargin="32.0015" BottomMargin="367.9985" TouchEnable="True" BackColorAlpha="102" ColorAngle="90.0000" ctype="PanelObjectData">
+          <AbstractNodeData Name="Panel_Creating" ActionTag="1875091067" Tag="2" IconVisible="False" LeftMargin="787.9999" RightMargin="-187.9999" TopMargin="-87.9985" BottomMargin="367.9985" TouchEnable="True" BackColorAlpha="102" ColorAngle="90.0000" ctype="PanelObjectData">
             <Size X="200.0000" Y="200.0000" />
             <Children>
               <AbstractNodeData Name="Panel_CreateBuilding" ActionTag="-1185875655" Tag="3" IconVisible="False" LeftMargin="2.0220" RightMargin="-2.0220" TopMargin="-101.8911" BottomMargin="101.8911" TouchEnable="True" BackColorAlpha="74" ComboBoxIndex="1" ColorAngle="90.0000" ctype="PanelObjectData">
@@ -186,7 +186,7 @@
             <Position X="887.9999" Y="467.9985" />
             <Scale ScaleX="0.7100" ScaleY="1.3100" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.9250" Y="0.7800" />
+            <PrePosition X="1.1100" Y="0.9750" />
             <PreSize X="0.0000" Y="0.0000" />
             <SingleColor A="255" R="150" G="200" B="255" />
             <FirstColor A="255" R="150" G="200" B="255" />

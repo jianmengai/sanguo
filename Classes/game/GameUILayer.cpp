@@ -33,7 +33,7 @@ bool GameUILayer::init()
 	m_gameStartTime = time(nullptr);
 
 	cocos2d::log("start init minimap");
-	//initMiniMap();
+	initMiniMap();
 	cocos2d::log("start init createbutton");
 	initCreateButton();
 
@@ -60,6 +60,7 @@ bool GameUILayer::initMiniMap()
 	{
 		return false;
 	}
+	
 	cocos2d::log("get minimap img");
 	m_miniMapImgView = gameMainPanel->getChildByName<cocos2d::ui::ImageView*>("Image_MiniMap");
 	cocos2d::log("create drawnode");
@@ -69,6 +70,13 @@ bool GameUILayer::initMiniMap()
 	m_miniMapImgView->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onMinimapTouched, this));
 	cocos2d::log("minimap init done...");
 	cocos2d::log("minimap done");
+	
+	return true;
+}
+
+bool GameUILayer::initTest()
+{
+	return false;
 }
 
 bool GameUILayer::initCreateButton()
@@ -146,7 +154,7 @@ void GameUILayer::update(float dt)
 
 void GameUILayer::updateMiniMap()
 {
-	/*
+	
 	m_miniMapDrawNode->clear();
 	auto mapPosition = MapManager::getInstance()->getPosition();
 	auto mapScale = MapManager::getInstance()->getMapScale();
@@ -202,7 +210,7 @@ void GameUILayer::updateMiniMap()
 	m_miniMapDrawNode->drawRect(minimapScreenBoxPosition,
 		minimapScreenBoxPosition + minimapScreenBoxSize,
 		cocos2d::Color4F(1.0f, 1.0f, 1.0f, 1.0f));
-*/
+	
 }
 
 void GameUILayer::updateGameTime()

@@ -26,6 +26,8 @@ private:
 	bool init() override;
 	bool initMiniMap();
 
+	bool initTest();
+
 	//初始化建造、生成、升级等按钮
 	bool initCreateButton();
 
