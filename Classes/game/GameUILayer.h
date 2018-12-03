@@ -15,7 +15,7 @@ public:
 	//CC_SYNTHESIZE_READONLY(MsgDisplay*, _msgDisplay, MsgDisplay);
 
 	void onMinimapTouched(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
-
+	void onMediumMapTouched(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
 	void update(float dt);
 
 	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
@@ -26,10 +26,12 @@ private:
 	bool init() override;
 	bool initMiniMap();
 
-	bool initTest();
+	bool initMediumMap();
 
 	//初始化建造、生成、升级等按钮
 	bool initCreateButton();
+
+	bool initTeamButton();
 
 	void updateMiniMap();
 	void updateGameTime();
@@ -48,6 +50,6 @@ private:
 	cocos2d::Vec2 m_touchPos;
 
 	//路径设置地图
-	cocos2d::ui::ImageView* m_middleMapImgView = nullptr;
-	cocos2d::DrawNode* m_middleMapDrawNode = nullptr;
+	cocos2d::ui::ImageView* m_mediumMapImgView = nullptr;
+	cocos2d::DrawNode* m_mediumMapDrawNode = nullptr;
 };

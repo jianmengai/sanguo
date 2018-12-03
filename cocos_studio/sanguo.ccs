@@ -27,6 +27,7 @@
           <Image Name="BalloonButtonNormal.png" />
           <Image Name="BalloonButtonDown.png" />
           <Image Name="BalloonButtonDisable.png" />
+          <Image Name="MediumMap.png" />
         </Folder>
       </RootFolder>
     </Group>
