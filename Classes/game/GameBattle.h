@@ -18,6 +18,8 @@ public:
 	void touchProcess(const cocos2d::Vec2& position);
 	void playerMoveTo(const cocos2d::Vec2& postiion);
 	int getPlayerTechPoint();
+
+	void setPath(int teamNo, std::vector<cocos2d::Vec2>& pathList);
 private:
 	//设置基地位置
 	void initBasePosition();

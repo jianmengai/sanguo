@@ -193,7 +193,7 @@
             <EndColor A="255" R="255" G="255" B="255" />
             <ColorVector ScaleY="1.0000" />
           </AbstractNodeData>
-          <AbstractNodeData Name="Image_MediumMap" ActionTag="1050159296" Tag="17" VisibleForFrame="False" IconVisible="False" LeftMargin="3.0000" RightMargin="325.0000" TopMargin="117.0000" BottomMargin="3.0000" Scale9Width="632" Scale9Height="480" ctype="ImageViewObjectData">
+          <AbstractNodeData Name="Image_MediumMap" ActionTag="1050159296" Tag="17" IconVisible="False" LeftMargin="3.0000" RightMargin="325.0000" TopMargin="117.0000" BottomMargin="3.0000" TouchEnable="True" Scale9Width="632" Scale9Height="480" ctype="ImageViewObjectData">
             <Size X="632.0000" Y="480.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <Position X="319.0000" Y="243.0000" />
@@ -281,7 +281,7 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Button_PathOk" ActionTag="-1686715333" Tag="26" IconVisible="False" LeftMargin="75.5848" RightMargin="78.4152" TopMargin="128.7678" BottomMargin="35.2322" TouchEnable="True" FontSize="12" ButtonText="确定设置" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="Button_PathOk" ActionTag="-1686715333" Tag="26" IconVisible="False" LeftMargin="75.5858" RightMargin="78.4142" TopMargin="128.7690" BottomMargin="35.2310" TouchEnable="True" FontSize="12" ButtonText="确定设置" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="46.0000" Y="36.0000" />
                 <AnchorPoint ScaleX="0.5770" ScaleY="0.5731" />
                 <Position X="102.1278" Y="55.8626" />
@@ -296,7 +296,7 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Button_PathCancel" ActionTag="659509840" Tag="27" IconVisible="False" LeftMargin="77.0012" RightMargin="76.9988" TopMargin="163.6639" BottomMargin="0.3361" TouchEnable="True" FontSize="12" ButtonText="取消设置" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="Button_PathCancel" ActionTag="659509840" Tag="27" IconVisible="False" LeftMargin="77.0022" RightMargin="76.9978" TopMargin="163.6651" BottomMargin="0.3349" TouchEnable="True" FontSize="12" ButtonText="取消设置" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="46.0000" Y="36.0000" />
                 <AnchorPoint ScaleX="0.5770" ScaleY="0.5731" />
                 <Position X="103.5442" Y="20.9665" />

@@ -41,6 +41,10 @@ private:
 	bool createBuilding(BuildingType type);
 	bool createSoldier(SoldierType type);
 	void onCreateObject(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
+
+	void onPathSwitch(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
+	void onPathOk(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
+	void onPathCancel(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
 private:
 	cocos2d::Node* m_gameUI = nullptr;
 	cocos2d::ui::ImageView* m_miniMapImgView = nullptr;
@@ -52,4 +56,8 @@ private:
 	//¬∑æ∂…Ë÷√µÿÕº
 	cocos2d::ui::ImageView* m_mediumMapImgView = nullptr;
 	cocos2d::DrawNode* m_mediumMapDrawNode = nullptr;
+
+	bool m_pathSwitch = false;
+	int m_currentTeam = 0;
+	std::list<cocos2d::Vec2> m_pathList;
 };
