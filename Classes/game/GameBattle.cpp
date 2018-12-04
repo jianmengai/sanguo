@@ -82,8 +82,13 @@ int GameBattle::getPlayerTechPoint()
 	return m_player->getTechPoint();
 }
 
-void GameBattle::setPath(int teamNo, std::vector<cocos2d::Vec2>& pathList)
+void GameBattle::setPath(int teamNo, std::list<cocos2d::Vec2>& pathList)
 {
+}
+
+int GameBattle::getTeamId(TeamNo teamNo)
+{
+	return m_player->getTeamId(teamNo);
 }
 
 void GameBattle::touchProcess(const cocos2d::Vec2& position)

@@ -27,6 +27,11 @@
 
 #include "cocos2d.h"
 
+
+#include "ui/UIListView.h"
+#include "ui/UIButton.h"
+
+
 class HelloWorld : public cocos2d::Scene
 {
 public:
@@ -39,6 +44,8 @@ public:
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
+
+	void selectedItemEvent(cocos2d::Ref* sender, cocos2d::ui::ListView::EventType type);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

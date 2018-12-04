@@ -32,6 +32,8 @@ public:
 
 	void selectTeam(TeamNo teamNo);
 
+	int getTeamId(TeamNo teamNo);
+
 protected:
 	//队伍中发现攻击目标，通知给队伍所有成员
 	//void notifyTeamMemberTarget();

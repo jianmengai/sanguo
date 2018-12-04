@@ -193,16 +193,6 @@
             <EndColor A="255" R="255" G="255" B="255" />
             <ColorVector ScaleY="1.0000" />
           </AbstractNodeData>
-          <AbstractNodeData Name="Image_MediumMap" ActionTag="1050159296" Tag="17" IconVisible="False" LeftMargin="3.0000" RightMargin="325.0000" TopMargin="117.0000" BottomMargin="3.0000" TouchEnable="True" Scale9Width="632" Scale9Height="480" ctype="ImageViewObjectData">
-            <Size X="632.0000" Y="480.0000" />
-            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <Position X="319.0000" Y="243.0000" />
-            <Scale ScaleX="1.0000" ScaleY="1.0000" />
-            <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.3323" Y="0.4050" />
-            <PreSize X="0.6583" Y="0.8000" />
-            <FileData Type="Normal" Path="res/MediumMap.png" Plist="" />
-          </AbstractNodeData>
           <AbstractNodeData Name="Panel_Team" ActionTag="598217519" Tag="18" IconVisible="False" LeftMargin="818.9988" RightMargin="-58.9988" TopMargin="313.0009" BottomMargin="86.9991" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" ctype="PanelObjectData">
             <Size X="200.0000" Y="200.0000" />
             <Children>
@@ -221,7 +211,7 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Button_Two" ActionTag="-1261313546" Tag="20" IconVisible="False" LeftMargin="108.9050" RightMargin="45.0950" TopMargin="9.0302" BottomMargin="154.9698" TouchEnable="True" FontSize="14" ButtonText="队伍2" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="Button_TeamTwo" ActionTag="-1261313546" Tag="20" IconVisible="False" LeftMargin="108.9050" RightMargin="45.0950" TopMargin="9.0302" BottomMargin="154.9698" TouchEnable="True" FontSize="14" ButtonText="队伍2" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="46.0000" Y="36.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                 <Position X="131.9050" Y="172.9698" />
@@ -236,7 +226,7 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Button_Three" ActionTag="1876415121" Tag="21" IconVisible="False" LeftMargin="24.6389" RightMargin="129.3611" TopMargin="46.6808" BottomMargin="117.3192" TouchEnable="True" FontSize="14" ButtonText="队伍3" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="Button_TeamThree" ActionTag="1876415121" Tag="21" IconVisible="False" LeftMargin="24.6389" RightMargin="129.3611" TopMargin="46.6808" BottomMargin="117.3192" TouchEnable="True" FontSize="14" ButtonText="队伍3" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="46.0000" Y="36.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                 <Position X="47.6389" Y="135.3192" />
@@ -251,7 +241,7 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Button_Four" ActionTag="-360759040" Tag="22" IconVisible="False" LeftMargin="109.7396" RightMargin="44.2604" TopMargin="47.4750" BottomMargin="116.5250" TouchEnable="True" FontSize="14" ButtonText="队伍4" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="Button_TeamFour" ActionTag="-360759040" Tag="22" IconVisible="False" LeftMargin="109.7396" RightMargin="44.2604" TopMargin="47.4750" BottomMargin="116.5250" TouchEnable="True" FontSize="14" ButtonText="队伍4" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="46.0000" Y="36.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                 <Position X="132.7396" Y="134.5250" />
@@ -266,13 +256,13 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Button_PathSwitch" ActionTag="296351135" Tag="24" IconVisible="False" LeftMargin="71.4395" RightMargin="82.5605" TopMargin="89.2243" BottomMargin="74.7757" TouchEnable="True" FontSize="12" ButtonText="设置路径" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="Button_PathSwitch" ActionTag="296351135" Tag="24" IconVisible="False" LeftMargin="33.1420" RightMargin="120.8580" TopMargin="142.9209" BottomMargin="21.0791" TouchEnable="True" FontSize="12" ButtonText="设置路径" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="46.0000" Y="36.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="94.4395" Y="92.7757" />
+                <Position X="56.1420" Y="39.0791" />
                 <Scale ScaleX="1.3700" ScaleY="0.8101" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.4722" Y="0.4639" />
+                <PrePosition X="0.2807" Y="0.1954" />
                 <PreSize X="0.0000" Y="0.0000" />
                 <TextColor A="255" R="65" G="65" B="70" />
                 <DisabledFileData Type="Default" Path="Default/Button_Disable.png" Plist="" />
@@ -281,28 +271,13 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Button_PathOk" ActionTag="-1686715333" Tag="26" IconVisible="False" LeftMargin="75.5858" RightMargin="78.4142" TopMargin="128.7690" BottomMargin="35.2310" TouchEnable="True" FontSize="12" ButtonText="确定设置" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="Button_TeamMemSelect" ActionTag="-1709013755" Tag="29" IconVisible="False" LeftMargin="34.5627" RightMargin="119.4373" TopMargin="95.4502" BottomMargin="68.5498" TouchEnable="True" FontSize="12" ButtonText="编队设置" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="46.0000" Y="36.0000" />
-                <AnchorPoint ScaleX="0.5770" ScaleY="0.5731" />
-                <Position X="102.1278" Y="55.8626" />
-                <Scale ScaleX="1.3700" ScaleY="0.7776" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="57.5627" Y="86.5498" />
+                <Scale ScaleX="1.3700" ScaleY="0.8101" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.5106" Y="0.2793" />
-                <PreSize X="0.0000" Y="0.0000" />
-                <TextColor A="255" R="65" G="65" B="70" />
-                <DisabledFileData Type="Default" Path="Default/Button_Disable.png" Plist="" />
-                <PressedFileData Type="Default" Path="Default/Button_Press.png" Plist="" />
-                <NormalFileData Type="Default" Path="Default/Button_Normal.png" Plist="" />
-                <OutlineColor A="255" R="255" G="0" B="0" />
-                <ShadowColor A="255" R="110" G="110" B="110" />
-              </AbstractNodeData>
-              <AbstractNodeData Name="Button_PathCancel" ActionTag="659509840" Tag="27" IconVisible="False" LeftMargin="77.0022" RightMargin="76.9978" TopMargin="163.6651" BottomMargin="0.3349" TouchEnable="True" FontSize="12" ButtonText="取消设置" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
-                <Size X="46.0000" Y="36.0000" />
-                <AnchorPoint ScaleX="0.5770" ScaleY="0.5731" />
-                <Position X="103.5442" Y="20.9665" />
-                <Scale ScaleX="1.3700" ScaleY="0.7776" />
-                <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.5177" Y="0.1048" />
+                <PrePosition X="0.2878" Y="0.4327" />
                 <PreSize X="0.0000" Y="0.0000" />
                 <TextColor A="255" R="65" G="65" B="70" />
                 <DisabledFileData Type="Default" Path="Default/Button_Disable.png" Plist="" />
@@ -317,6 +292,104 @@
             <Scale ScaleX="0.7050" ScaleY="1.2850" />
             <CColor A="255" R="255" G="255" B="255" />
             <PrePosition X="0.8531" Y="0.1450" />
+            <PreSize X="0.0000" Y="0.0000" />
+            <SingleColor A="255" R="150" G="200" B="255" />
+            <FirstColor A="255" R="150" G="200" B="255" />
+            <EndColor A="255" R="255" G="255" B="255" />
+            <ColorVector ScaleY="1.0000" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="Panel_PathSetting" ActionTag="-91871384" CallBackType="Touch" Tag="41" IconVisible="False" LeftMargin="103.5708" RightMargin="224.4292" TopMargin="32.9805" BottomMargin="17.0196" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="762" Scale9Height="518" ctype="PanelObjectData">
+            <Size X="632.0000" Y="550.0000" />
+            <Children>
+              <AbstractNodeData Name="Image_MediumMap" ActionTag="1357451427" Tag="42" IconVisible="False" LeftMargin="0.3554" RightMargin="-0.3555" TopMargin="3.1343" BottomMargin="66.8658" TouchEnable="True" Scale9Width="632" Scale9Height="480" ctype="ImageViewObjectData">
+                <Size X="632.0000" Y="480.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="316.3554" Y="306.8658" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.5006" Y="0.5579" />
+                <PreSize X="1.0000" Y="0.8727" />
+                <FileData Type="Normal" Path="res/MediumMap.png" Plist="" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="Button_PathOk" ActionTag="-1451205804" Tag="43" IconVisible="False" LeftMargin="171.0318" RightMargin="414.9682" TopMargin="502.4734" BottomMargin="11.5266" TouchEnable="True" FontSize="14" ButtonText="确定" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+                <Size X="46.0000" Y="36.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="194.0318" Y="29.5266" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.3070" Y="0.0537" />
+                <PreSize X="0.0000" Y="0.0000" />
+                <TextColor A="255" R="65" G="65" B="70" />
+                <DisabledFileData Type="Default" Path="Default/Button_Disable.png" Plist="" />
+                <PressedFileData Type="Default" Path="Default/Button_Press.png" Plist="" />
+                <NormalFileData Type="Default" Path="Default/Button_Normal.png" Plist="" />
+                <OutlineColor A="255" R="255" G="0" B="0" />
+                <ShadowColor A="255" R="110" G="110" B="110" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="Button_PathCancel" ActionTag="-922238583" Tag="44" IconVisible="False" LeftMargin="387.2079" RightMargin="198.7921" TopMargin="505.6370" BottomMargin="8.3630" TouchEnable="True" FontSize="14" ButtonText="清除" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+                <Size X="46.0000" Y="36.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="410.2079" Y="26.3630" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.6491" Y="0.0479" />
+                <PreSize X="0.0000" Y="0.0000" />
+                <TextColor A="255" R="65" G="65" B="70" />
+                <DisabledFileData Type="Default" Path="Default/Button_Disable.png" Plist="" />
+                <PressedFileData Type="Default" Path="Default/Button_Press.png" Plist="" />
+                <NormalFileData Type="Default" Path="Default/Button_Normal.png" Plist="" />
+                <OutlineColor A="255" R="255" G="0" B="0" />
+                <ShadowColor A="255" R="110" G="110" B="110" />
+              </AbstractNodeData>
+            </Children>
+            <AnchorPoint />
+            <Position X="103.5708" Y="17.0196" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.1079" Y="0.0284" />
+            <PreSize X="0.6583" Y="0.9167" />
+            <SingleColor A="255" R="150" G="200" B="255" />
+            <FirstColor A="255" R="150" G="200" B="255" />
+            <EndColor A="255" R="255" G="255" B="255" />
+            <ColorVector ScaleY="1.0000" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="Panel_TeamMemSelect" ActionTag="1268360881" Tag="45" IconVisible="False" LeftMargin="175.0309" RightMargin="584.9691" TopMargin="291.3851" BottomMargin="108.6149" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" ctype="PanelObjectData">
+            <Size X="200.0000" Y="200.0000" />
+            <Children>
+              <AbstractNodeData Name="ListView_TeamMemSelect" ActionTag="1057571418" Tag="46" IconVisible="False" LeftMargin="0.4215" RightMargin="-0.4215" TopMargin="-43.6197" BottomMargin="43.6197" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" ScrollDirectionType="0" ItemMargin="10" DirectionType="Vertical" HorizontalType="Align_HorizontalCenter" ctype="ListViewObjectData">
+                <Size X="200.0000" Y="200.0000" />
+                <AnchorPoint />
+                <Position X="0.4215" Y="43.6197" />
+                <Scale ScaleX="1.0000" ScaleY="0.7746" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.0021" Y="0.2181" />
+                <PreSize X="0.0000" Y="0.0000" />
+                <SingleColor A="255" R="150" G="150" B="255" />
+                <FirstColor A="255" R="150" G="150" B="255" />
+                <EndColor A="255" R="255" G="255" B="255" />
+                <ColorVector ScaleY="1.0000" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="Button_TeamMemOk" ActionTag="1473494450" Tag="48" IconVisible="False" LeftMargin="79.8115" RightMargin="74.1885" TopMargin="163.5828" BottomMargin="0.4172" TouchEnable="True" FontSize="14" ButtonText="确定" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+                <Size X="46.0000" Y="36.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="102.8115" Y="18.4172" />
+                <Scale ScaleX="0.4504" ScaleY="0.4615" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.5141" Y="0.0921" />
+                <PreSize X="0.0000" Y="0.0000" />
+                <TextColor A="255" R="65" G="65" B="70" />
+                <DisabledFileData Type="Default" Path="Default/Button_Disable.png" Plist="" />
+                <PressedFileData Type="Default" Path="Default/Button_Press.png" Plist="" />
+                <NormalFileData Type="Default" Path="Default/Button_Normal.png" Plist="" />
+                <OutlineColor A="255" R="255" G="0" B="0" />
+                <ShadowColor A="255" R="110" G="110" B="110" />
+              </AbstractNodeData>
+            </Children>
+            <AnchorPoint />
+            <Position X="175.0309" Y="108.6149" />
+            <Scale ScaleX="2.5027" ScaleY="2.1758" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.1823" Y="0.1810" />
             <PreSize X="0.0000" Y="0.0000" />
             <SingleColor A="255" R="150" G="200" B="255" />
             <FirstColor A="255" R="150" G="200" B="255" />

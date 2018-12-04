@@ -7,6 +7,7 @@
 #include "GameBattle.h"
 #include "WarFogLayer.h"
 #include "GameBattle.h"
+#include "TeamManager.h"
 
 GameUILayer::GameUILayer()
 {
@@ -32,8 +33,10 @@ bool GameUILayer::init()
 	initMiniMap();
 	initCreateButton();
 
-	initMediumMap();
+	initPathSettingMap();
 	initTeamButton();
+
+	initTeamMemSelect();
 
 	auto dispatcher = cocos2d::Director::getInstance()->getEventDispatcher();
 	auto touchOneByOneListener = cocos2d::EventListenerTouchOneByOne::create();
@@ -66,9 +69,10 @@ bool GameUILayer::initMiniMap()
 	return true;
 }
 
-bool GameUILayer::initMediumMap()
+bool GameUILayer::initPathSettingMap()
 {
-	m_mediumMapImgView = m_gameUI->getChildByName<cocos2d::ui::ImageView*>("Image_MediumMap");
+	m_pathSettingPanel = m_gameUI->getChildByName("Panel_PathSetting");
+	m_mediumMapImgView = m_pathSettingPanel->getChildByName<cocos2d::ui::ImageView*>("Image_MediumMap");
 	if (m_mediumMapImgView == nullptr)
 	{
 		return false;
@@ -76,6 +80,14 @@ bool GameUILayer::initMediumMap()
 	m_mediumMapDrawNode = cocos2d::DrawNode::create();
 	m_mediumMapImgView->addChild(m_mediumMapDrawNode);
 	m_mediumMapImgView->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onMediumMapTouched, this));
+
+	auto pathOkButton = m_pathSettingPanel->getChildByName<cocos2d::ui::Button*>("Button_PathOk");
+	pathOkButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onPathOk, this));
+
+	auto pathCancelButton = m_pathSettingPanel->getChildByName<cocos2d::ui::Button*>("Button_PathCancel");
+	pathCancelButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onPathCancel, this));
+
+	m_pathSettingPanel->setVisible(false);
 	return true;
 }
 
@@ -119,36 +131,44 @@ bool GameUILayer::initTeamButton()
 	cocos2d::log("start init team button");
 	auto teamPanel = m_gameUI->getChildByName("Panel_Team");
 	
-	/*
 	auto teamOneButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamOne");
 	teamOneButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
-	m_createCallback[teamOneButton] = CC_CALLBACK_0(GameUILayer::teamOne, this);
-	
+	m_teamCallback[teamOneButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::One);
+
 	auto teamTwoButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamTwo");
 	teamTwoButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
-	m_createCallback[teamTwoButton] = CC_CALLBACK_0(GameUILayer::teamTwo, this);
+	m_teamCallback[teamTwoButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::Two);
 	
 	auto teamThreeButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamThree");
 	teamThreeButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
-	m_createCallback[teamThreeButton] = CC_CALLBACK_0(GameUILayer::teamThree, this);
+	m_teamCallback[teamThreeButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::Three);
+	
 	
 	auto teamFourButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamFour");
-	teamThreeButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
-	m_createCallback[teamThreeButton] = CC_CALLBACK_0(GameUILayer::teamFour, this);
-	*/
+	teamFourButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
+	m_teamCallback[teamFourButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::Four);
+	
+	
 	auto pathSwitchButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_PathSwitch");
 	pathSwitchButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onPathSwitch, this));
-	//m_createCallback[pathSwitchButton] = CC_CALLBACK_0(GameUILayer::createSoldier, this, SoldierType::Cavalry);
 	
-	auto pathOkButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_PathOk");
-	pathOkButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onPathOk, this));
-	//m_createCallback[pathOkButton] = CC_CALLBACK_0(GameUILayer::createSoldier, this, SoldierType::Archer);
-
-	auto pathCancelButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_PathCancel");
-	pathCancelButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onPathCancel, this));
-	//m_createCallback[pathOkButton] = CC_CALLBACK_0(GameUILayer::createSoldier, this, SoldierType::Archer);
+	auto temMemSelectButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamMemSelect");
+	temMemSelectButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeamMemSelect, this));
 	return true;
-	return false;
+}
+
+bool GameUILayer::initTeamMemSelect()
+{
+	m_teamMemSelectPanel = m_gameUI->getChildByName("Panel_TeamMemSelect");
+	m_listView = m_teamMemSelectPanel->getChildByName<cocos2d::ui::ListView*>("ListView_TeamMemSelect");
+
+	m_listView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);
+	m_listView->setClippingEnabled(false);
+
+
+	m_teamMemSelectPanel->setVisible(false);
+	//m_listView->setVisible(false);
+	return true;
 }
 
 void GameUILayer::onMinimapTouched(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType)
@@ -172,7 +192,7 @@ void GameUILayer::onMinimapTouched(cocos2d::Ref* sender, cocos2d::ui::Widget::To
 
 void GameUILayer::onMediumMapTouched(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
-	if (!m_mediumMapImgView->isVisible())
+	if (!m_pathSettingPanel->isVisible())
 	{
 		return;
 	}
@@ -182,13 +202,22 @@ void GameUILayer::onMediumMapTouched(cocos2d::Ref * sender, cocos2d::ui::Widget:
 		color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
 		auto widget = static_cast<cocos2d::ui::Widget*>(sender);
 		auto touchPos = widget->convertToNodeSpace(widget->getTouchEndPosition());
-		m_mediumMapDrawNode->drawSolidRect(touchPos - cocos2d::Vec2(1, 1) , touchPos + cocos2d::Vec2(1,1), color);
+		
 		if (!m_pathList.empty())
 		{
 			//绘制直线
 			m_mediumMapDrawNode->drawLine(m_pathList.back(), touchPos, color);
 		}
-
+		//
+		else
+		{
+			/*if (m_pathStartPos == cocos2d::Vec2::ZERO)
+			{
+				return;
+			}*/
+			m_mediumMapDrawNode->drawLine(m_pathStartPos, touchPos, color);
+		}
+		m_mediumMapDrawNode->drawSolidRect(touchPos - cocos2d::Vec2(1, 1), touchPos + cocos2d::Vec2(1, 1), color);
 		m_pathList.push_back(touchPos);
 	}
 }
@@ -300,21 +329,37 @@ void GameUILayer::onCreateObject(cocos2d::Ref* sender, cocos2d::ui::Widget::Touc
 	}
 }
 
+void GameUILayer::onTeam(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
+{
+	if (touchType == cocos2d::ui::Widget::TouchEventType::ENDED)
+	{
+		auto it = m_teamCallback.find(sender);
+		if (it != m_teamCallback.end())
+		{
+			it->second();
+		}
+	}
+}
+
+//路径设置开关
 void GameUILayer::onPathSwitch(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
 	if (touchType == cocos2d::ui::Widget::TouchEventType::ENDED)
 	{
-		//打开
-		if (m_pathSwitch)
+		if (m_pathSettingPanel->isVisible())
 		{
-			m_mediumMapImgView->setVisible(false);
-			m_pathSwitch = false;
+			m_pathSettingPanel->setVisible(false);
 		}
 		else
 		{
-			m_mediumMapImgView->setVisible(true);
-			m_pathSwitch = true;
+			if (m_teamMemSelectPanel->isVisible())
+			{
+				m_teamMemSelectPanel->setVisible(false);
+			}
+			m_pathSettingPanel->setVisible(true);
+			
 		}
+		
 		m_currentTeam = 0;
 	}
 }
@@ -325,13 +370,73 @@ void GameUILayer::onPathOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEven
 	{
 		//获取绘制的路径
 		std::vector<cocos2d::Vec2> pathList;
-		GameBattle::getInstance()->setPath(m_currentTeam, pathList);
+		GameBattle::getInstance()->setPath(m_currentTeam, m_pathList);
 	}
 }
 
 void GameUILayer::onPathCancel(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
 	//清除
+	m_mediumMapDrawNode->clear();
+	m_pathList.clear();
+}
+
+//编队开关
+void GameUILayer::onTeamMemSelect(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
+{
+	if (touchType == cocos2d::ui::Widget::TouchEventType::ENDED)
+	{
+		if (m_teamMemSelectPanel->isVisible())
+		{
+			m_teamMemSelectPanel->setVisible(false);
+		}
+		else
+		{
+			if (m_pathSettingPanel->isVisible())
+			{
+				m_pathSettingPanel->setVisible(false);
+			}
+			m_teamMemSelectPanel->setVisible(true);
+			showTeamMemList();
+		}
+	}
+}
+
+bool GameUILayer::selectTeam(TeamNo teamNo)
+{
+	m_pathStartPos = cocos2d::Vec2::ZERO;
+	int teamId = GameBattle::getInstance()->getTeamId(teamNo);
+	if (teamId == -1)
+	{
+		return false;
+	}
+	auto teamMembers = TeamManager::getInstance()->getTeamMembers(teamId);
+	
+	for (auto gameObject : teamMembers)
+	{
+		m_pathStartPos += gameObject->getPosition();
+	}
+
+	m_pathStartPos = m_pathStartPos / teamMembers.size();
+
+	return true;
+}
+
+void GameUILayer::showTeamMemList()
+{
+	for (int i = 0; i < 5; ++i)
+	{
+		/*
+		auto layout = cocos2d::ui::Layout::create();
+		auto img = cocos2d::ui::ImageView::create("Archer.png");
+		layout->setContentSize(img->getContentSize());
+		layout->addChild(img);
+		*/
+		auto button = cocos2d::ui::Button::create();
+		m_listView->pushBackCustomItem(button);
+		//m_listView->addChild(layout);
+	}
+	cocos2d::log("set layout ...");
 }
 
 bool GameUILayer::createBuilding(BuildingType type)

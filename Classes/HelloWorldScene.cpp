@@ -25,6 +25,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 
+
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -115,6 +116,26 @@ bool HelloWorld::init()
         // add the sprite as a child to this layer
         this->addChild(sprite, 0);
     }
+
+	auto listView = cocos2d::ui::ListView::create();
+	listView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);
+	listView->setClippingEnabled(false);
+	listView->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+	for (int i = 0; i < 100; ++i)
+	{
+		
+		auto button = cocos2d::ui::Button::create("CloseNormal.png",
+			"CloseSelected.png");
+		
+		listView->pushBackCustomItem(button);
+	}
+
+	listView->addEventListener(CC_CALLBACK_2(HelloWorld::selectedItemEvent, this));
+
+	this->addChild(listView);
+
+	
+
     return true;
 }
 
@@ -134,4 +155,24 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
 
+}
+
+void HelloWorld::selectedItemEvent(Ref * sender, ui::ListView::EventType type)
+{
+	auto listView = static_cast<ui::ListView*>(sender);
+	switch (type)
+	{
+	case ui::ListView::EventType::ON_SELECTED_ITEM_END:
+	{
+		cocos2d::log("select end index:%ld", listView->getCurSelectedIndex());
+	}
+	break;
+	case ui::ListView::EventType::ON_SELECTED_ITEM_START:
+	{
+		cocos2d::log("select start index:%ld", listView->getCurSelectedIndex());
+	}
+	break;
+	default:
+		break;
+	}
 }
