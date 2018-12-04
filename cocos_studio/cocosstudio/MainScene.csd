@@ -298,10 +298,10 @@
             <EndColor A="255" R="255" G="255" B="255" />
             <ColorVector ScaleY="1.0000" />
           </AbstractNodeData>
-          <AbstractNodeData Name="Panel_PathSetting" ActionTag="-91871384" CallBackType="Touch" Tag="41" IconVisible="False" LeftMargin="103.5708" RightMargin="224.4292" TopMargin="32.9805" BottomMargin="17.0196" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="762" Scale9Height="518" ctype="PanelObjectData">
+          <AbstractNodeData Name="Panel_PathSetting" ActionTag="-91871384" CallBackType="Touch" Tag="41" IconVisible="False" LeftMargin="103.5708" RightMargin="224.4292" TopMargin="32.9804" BottomMargin="17.0196" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="762" Scale9Height="518" ctype="PanelObjectData">
             <Size X="632.0000" Y="550.0000" />
             <Children>
-              <AbstractNodeData Name="Image_MediumMap" ActionTag="1357451427" Tag="42" IconVisible="False" LeftMargin="0.3554" RightMargin="-0.3555" TopMargin="3.1343" BottomMargin="66.8658" TouchEnable="True" Scale9Width="632" Scale9Height="480" ctype="ImageViewObjectData">
+              <AbstractNodeData Name="Image_MediumMap" ActionTag="1357451427" Tag="42" IconVisible="False" LeftMargin="0.3554" RightMargin="-0.3554" TopMargin="3.1342" BottomMargin="66.8658" TouchEnable="True" Scale9Width="632" Scale9Height="480" ctype="ImageViewObjectData">
                 <Size X="632.0000" Y="480.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                 <Position X="316.3554" Y="306.8658" />
@@ -356,19 +356,6 @@
           <AbstractNodeData Name="Panel_TeamMemSelect" ActionTag="1268360881" Tag="45" IconVisible="False" LeftMargin="175.0309" RightMargin="584.9691" TopMargin="291.3851" BottomMargin="108.6149" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" ctype="PanelObjectData">
             <Size X="200.0000" Y="200.0000" />
             <Children>
-              <AbstractNodeData Name="ListView_TeamMemSelect" ActionTag="1057571418" Tag="46" IconVisible="False" LeftMargin="0.4215" RightMargin="-0.4215" TopMargin="-43.6197" BottomMargin="43.6197" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" ScrollDirectionType="0" ItemMargin="10" DirectionType="Vertical" HorizontalType="Align_HorizontalCenter" ctype="ListViewObjectData">
-                <Size X="200.0000" Y="200.0000" />
-                <AnchorPoint />
-                <Position X="0.4215" Y="43.6197" />
-                <Scale ScaleX="1.0000" ScaleY="0.7746" />
-                <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.0021" Y="0.2181" />
-                <PreSize X="0.0000" Y="0.0000" />
-                <SingleColor A="255" R="150" G="150" B="255" />
-                <FirstColor A="255" R="150" G="150" B="255" />
-                <EndColor A="255" R="255" G="255" B="255" />
-                <ColorVector ScaleY="1.0000" />
-              </AbstractNodeData>
               <AbstractNodeData Name="Button_TeamMemOk" ActionTag="1473494450" Tag="48" IconVisible="False" LeftMargin="79.8115" RightMargin="74.1885" TopMargin="163.5828" BottomMargin="0.4172" TouchEnable="True" FontSize="14" ButtonText="确定" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="46.0000" Y="36.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
@@ -383,6 +370,148 @@
                 <NormalFileData Type="Default" Path="Default/Button_Normal.png" Plist="" />
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="ScrollView_TeamMemSelect" ActionTag="-2084495377" Tag="32" IconVisible="False" LeftMargin="1.0650" RightMargin="-1.0650" TopMargin="2.2015" BottomMargin="47.7985" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" ScrollDirectionType="Vertical" ctype="ScrollViewObjectData">
+                <Size X="200.0000" Y="150.0000" />
+                <Children>
+                  <AbstractNodeData Name="CheckBox_One" ActionTag="-1973862700" Tag="33" IconVisible="False" LeftMargin="22.6194" RightMargin="137.3806" TopMargin="8.4199" BottomMargin="151.5801" TouchEnable="True" CheckedState="True" ctype="CheckBoxObjectData">
+                    <Size X="40.0000" Y="40.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="42.6194" Y="171.5801" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.2131" Y="0.8579" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <NormalBackFileData Type="Default" Path="Default/CheckBox_Normal.png" Plist="" />
+                    <PressedBackFileData Type="Default" Path="Default/CheckBox_Press.png" Plist="" />
+                    <DisableBackFileData Type="Default" Path="Default/CheckBox_Disable.png" Plist="" />
+                    <NodeNormalFileData Type="Default" Path="Default/CheckBoxNode_Normal.png" Plist="" />
+                    <NodeDisableFileData Type="Default" Path="Default/CheckBoxNode_Disable.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="CheckBox_Two" ActionTag="-1752111119" Tag="34" IconVisible="False" LeftMargin="86.0135" RightMargin="73.9865" TopMargin="9.0318" BottomMargin="150.9682" TouchEnable="True" CheckedState="True" ctype="CheckBoxObjectData">
+                    <Size X="40.0000" Y="40.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="106.0135" Y="170.9682" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.5301" Y="0.8548" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <NormalBackFileData Type="Default" Path="Default/CheckBox_Normal.png" Plist="" />
+                    <PressedBackFileData Type="Default" Path="Default/CheckBox_Press.png" Plist="" />
+                    <DisableBackFileData Type="Default" Path="Default/CheckBox_Disable.png" Plist="" />
+                    <NodeNormalFileData Type="Default" Path="Default/CheckBoxNode_Normal.png" Plist="" />
+                    <NodeDisableFileData Type="Default" Path="Default/CheckBoxNode_Disable.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="CheckBox_Three" ActionTag="1343170027" Tag="35" IconVisible="False" LeftMargin="154.7419" RightMargin="5.2581" TopMargin="10.8681" BottomMargin="149.1319" TouchEnable="True" CheckedState="True" ctype="CheckBoxObjectData">
+                    <Size X="40.0000" Y="40.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="174.7419" Y="169.1319" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.8737" Y="0.8457" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <NormalBackFileData Type="Default" Path="Default/CheckBox_Normal.png" Plist="" />
+                    <PressedBackFileData Type="Default" Path="Default/CheckBox_Press.png" Plist="" />
+                    <DisableBackFileData Type="Default" Path="Default/CheckBox_Disable.png" Plist="" />
+                    <NodeNormalFileData Type="Default" Path="Default/CheckBoxNode_Normal.png" Plist="" />
+                    <NodeDisableFileData Type="Default" Path="Default/CheckBoxNode_Disable.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="CheckBox_Four" ActionTag="-296684155" Tag="36" IconVisible="False" LeftMargin="16.2271" RightMargin="143.7729" TopMargin="59.8923" BottomMargin="100.1077" TouchEnable="True" CheckedState="True" ctype="CheckBoxObjectData">
+                    <Size X="40.0000" Y="40.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="36.2271" Y="120.1077" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.1811" Y="0.6005" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <NormalBackFileData Type="Default" Path="Default/CheckBox_Normal.png" Plist="" />
+                    <PressedBackFileData Type="Default" Path="Default/CheckBox_Press.png" Plist="" />
+                    <DisableBackFileData Type="Default" Path="Default/CheckBox_Disable.png" Plist="" />
+                    <NodeNormalFileData Type="Default" Path="Default/CheckBoxNode_Normal.png" Plist="" />
+                    <NodeDisableFileData Type="Default" Path="Default/CheckBoxNode_Disable.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="CheckBox_Five" ActionTag="-723610858" Tag="37" IconVisible="False" LeftMargin="82.2879" RightMargin="77.7121" TopMargin="59.8923" BottomMargin="100.1077" TouchEnable="True" CheckedState="True" ctype="CheckBoxObjectData">
+                    <Size X="40.0000" Y="40.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="102.2879" Y="120.1077" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.5114" Y="0.6005" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <NormalBackFileData Type="Default" Path="Default/CheckBox_Normal.png" Plist="" />
+                    <PressedBackFileData Type="Default" Path="Default/CheckBox_Press.png" Plist="" />
+                    <DisableBackFileData Type="Default" Path="Default/CheckBox_Disable.png" Plist="" />
+                    <NodeNormalFileData Type="Default" Path="Default/CheckBoxNode_Normal.png" Plist="" />
+                    <NodeDisableFileData Type="Default" Path="Default/CheckBoxNode_Disable.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="CheckBox_Six" ActionTag="1584031217" Tag="38" IconVisible="False" LeftMargin="148.3488" RightMargin="11.6512" TopMargin="59.8923" BottomMargin="100.1077" TouchEnable="True" CheckedState="True" ctype="CheckBoxObjectData">
+                    <Size X="40.0000" Y="40.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="168.3488" Y="120.1077" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.8417" Y="0.6005" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <NormalBackFileData Type="Default" Path="Default/CheckBox_Normal.png" Plist="" />
+                    <PressedBackFileData Type="Default" Path="Default/CheckBox_Press.png" Plist="" />
+                    <DisableBackFileData Type="Default" Path="Default/CheckBox_Disable.png" Plist="" />
+                    <NodeNormalFileData Type="Default" Path="Default/CheckBoxNode_Normal.png" Plist="" />
+                    <NodeDisableFileData Type="Default" Path="Default/CheckBoxNode_Disable.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="CheckBox_Four_0" ActionTag="-1909079798" Tag="39" IconVisible="False" LeftMargin="18.0916" RightMargin="141.9084" TopMargin="119.0280" BottomMargin="40.9720" TouchEnable="True" CheckedState="True" ctype="CheckBoxObjectData">
+                    <Size X="40.0000" Y="40.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="38.0916" Y="60.9720" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.1905" Y="0.3049" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <NormalBackFileData Type="Default" Path="Default/CheckBox_Normal.png" Plist="" />
+                    <PressedBackFileData Type="Default" Path="Default/CheckBox_Press.png" Plist="" />
+                    <DisableBackFileData Type="Default" Path="Default/CheckBox_Disable.png" Plist="" />
+                    <NodeNormalFileData Type="Default" Path="Default/CheckBoxNode_Normal.png" Plist="" />
+                    <NodeDisableFileData Type="Default" Path="Default/CheckBoxNode_Disable.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="CheckBox_Five_0" ActionTag="-1669980722" Tag="40" IconVisible="False" LeftMargin="81.4876" RightMargin="78.5124" TopMargin="119.0281" BottomMargin="40.9719" TouchEnable="True" CheckedState="True" ctype="CheckBoxObjectData">
+                    <Size X="40.0000" Y="40.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="101.4876" Y="60.9719" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.5074" Y="0.3049" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <NormalBackFileData Type="Default" Path="Default/CheckBox_Normal.png" Plist="" />
+                    <PressedBackFileData Type="Default" Path="Default/CheckBox_Press.png" Plist="" />
+                    <DisableBackFileData Type="Default" Path="Default/CheckBox_Disable.png" Plist="" />
+                    <NodeNormalFileData Type="Default" Path="Default/CheckBoxNode_Normal.png" Plist="" />
+                    <NodeDisableFileData Type="Default" Path="Default/CheckBoxNode_Disable.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="CheckBox_Six_0" ActionTag="-2120838222" Tag="41" IconVisible="False" LeftMargin="151.2775" RightMargin="8.7225" TopMargin="114.1256" BottomMargin="45.8744" TouchEnable="True" CheckedState="True" ctype="CheckBoxObjectData">
+                    <Size X="40.0000" Y="40.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="171.2775" Y="65.8744" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.8564" Y="0.3294" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <NormalBackFileData Type="Default" Path="Default/CheckBox_Normal.png" Plist="" />
+                    <PressedBackFileData Type="Default" Path="Default/CheckBox_Press.png" Plist="" />
+                    <DisableBackFileData Type="Default" Path="Default/CheckBox_Disable.png" Plist="" />
+                    <NodeNormalFileData Type="Default" Path="Default/CheckBoxNode_Normal.png" Plist="" />
+                    <NodeDisableFileData Type="Default" Path="Default/CheckBoxNode_Disable.png" Plist="" />
+                  </AbstractNodeData>
+                </Children>
+                <AnchorPoint />
+                <Position X="1.0650" Y="47.7985" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.0053" Y="0.2390" />
+                <PreSize X="1.0000" Y="0.7500" />
+                <SingleColor A="255" R="255" G="150" B="100" />
+                <FirstColor A="255" R="255" G="150" B="100" />
+                <EndColor A="255" R="255" G="255" B="255" />
+                <ColorVector ScaleY="1.0000" />
+                <InnerNodeSize Width="200" Height="200" />
               </AbstractNodeData>
             </Children>
             <AnchorPoint />

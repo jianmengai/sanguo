@@ -26,7 +26,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-
+#include "extensions/cocos-ext.h"
 
 #include "ui/UIListView.h"
 #include "ui/UIButton.h"

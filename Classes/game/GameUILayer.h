@@ -3,7 +3,7 @@
 #include "ui/UIImageView.h"
 #include "ui/UIText.h"
 #include "ui/UIButton.h"
-#include "ui/UIListView.h"
+#include "ui/UIScrollView.h"
 //#include "MsgDisplay.h"
 #include "GameDefine.h"
 
@@ -75,7 +75,7 @@ private:
 
 
 	//∂”ŒÈ±‡º≠
-	cocos2d::ui::ListView* m_listView = nullptr;
+	cocos2d::ui::ScrollView* m_scrollView = nullptr;
 
 	cocos2d::Node* m_pathSettingPanel = nullptr;
 	cocos2d::Node* m_teamMemSelectPanel = nullptr;

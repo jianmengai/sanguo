@@ -160,10 +160,10 @@ bool GameUILayer::initTeamButton()
 bool GameUILayer::initTeamMemSelect()
 {
 	m_teamMemSelectPanel = m_gameUI->getChildByName("Panel_TeamMemSelect");
-	m_listView = m_teamMemSelectPanel->getChildByName<cocos2d::ui::ListView*>("ListView_TeamMemSelect");
+	m_scrollView = m_teamMemSelectPanel->getChildByName<cocos2d::ui::ScrollView*>("ScrollView_TeamMemSelect");
 
-	m_listView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);
-	m_listView->setClippingEnabled(false);
+	m_scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);
+	m_scrollView->setClippingEnabled(false);
 
 
 	m_teamMemSelectPanel->setVisible(false);
@@ -433,7 +433,7 @@ void GameUILayer::showTeamMemList()
 		layout->addChild(img);
 		*/
 		auto button = cocos2d::ui::Button::create();
-		m_listView->pushBackCustomItem(button);
+		//m_listView->pushBackCustomItem(button);
 		//m_listView->addChild(layout);
 	}
 	cocos2d::log("set layout ...");
