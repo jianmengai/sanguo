@@ -161,13 +161,24 @@ bool GameUILayer::initTeamMemSelect()
 {
 	m_teamMemSelectPanel = m_gameUI->getChildByName("Panel_TeamMemSelect");
 	m_scrollView = m_teamMemSelectPanel->getChildByName<cocos2d::ui::ScrollView*>("ScrollView_TeamMemSelect");
-
 	m_scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);
 	m_scrollView->setClippingEnabled(false);
 
+	auto size = m_scrollView->getChildrenCount();
+	for (auto i = 0; i < size; ++i)
+	{
+		char szBuffer[16] = {'\0'};
+		snprintf(szBuffer, sizeof(szBuffer), "CheckBox_%d", i);
+		auto checkBox = dynamic_cast<cocos2d::ui::CheckBox*>(m_scrollView->getChildByName(szBuffer));
+		checkBox->addEventListener(CC_CALLBACK_2(GameUILayer::onCheckBoxSelect, this));
+		m_checkBoxIndex[checkBox] = i;
+		m_teamMemCheckBox.push_back(checkBox);
+	}
+	
+	auto teamMemOkButton = m_teamMemSelectPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamMemOk");
+	teamMemOkButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeamMemOk, this));
 
 	m_teamMemSelectPanel->setVisible(false);
-	//m_listView->setVisible(false);
 	return true;
 }
 
@@ -400,6 +411,34 @@ void GameUILayer::onTeamMemSelect(cocos2d::Ref * sender, cocos2d::ui::Widget::To
 			showTeamMemList();
 		}
 	}
+}
+
+void GameUILayer::onCheckBoxSelect(cocos2d::Ref * sender, cocos2d::ui::CheckBox::EventType eventType)
+{
+	auto it = m_checkBoxIndex.find(sender);
+	if (it == m_checkBoxIndex.end())
+	{
+		return;
+	}
+	switch (eventType)
+	{
+	case cocos2d::ui::CheckBox::EventType::SELECTED:
+	{
+
+	}
+	break;
+	case cocos2d::ui::CheckBox::EventType::UNSELECTED:
+	{
+
+	}
+	break;
+	default:
+		break;
+	}
+}
+
+void GameUILayer::onTeamMemOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
+{
 }
 
 bool GameUILayer::selectTeam(TeamNo teamNo)

@@ -4,7 +4,7 @@
 #include "ui/UIText.h"
 #include "ui/UIButton.h"
 #include "ui/UIScrollView.h"
-//#include "MsgDisplay.h"
+#include "ui/UICheckBox.h"
 #include "GameDefine.h"
 
 class GameUILayer : public cocos2d::Node
@@ -51,7 +51,8 @@ private:
 	void onPathOk(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
 	void onPathCancel(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
 	void onTeamMemSelect(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
-
+	void onCheckBoxSelect(cocos2d::Ref* sender, cocos2d::ui::CheckBox::EventType eventType);
+	void onTeamMemOk(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
 
 	bool selectTeam(TeamNo teamNo);
 
@@ -66,17 +67,17 @@ private:
 
 	std::map<cocos2d::Ref*, std::function<bool()> > m_teamCallback;
 	//路径设置地图
+	cocos2d::Node* m_pathSettingPanel = nullptr;
 	cocos2d::ui::ImageView* m_mediumMapImgView = nullptr;
 	cocos2d::DrawNode* m_mediumMapDrawNode = nullptr;
 
-	int m_currentTeam = 0;
+	int m_currentTeam = 0;  //当前选中的队伍
 	std::list<cocos2d::Vec2> m_pathList;
 	cocos2d::Vec2 m_pathStartPos;
 
-
 	//队伍编辑
-	cocos2d::ui::ScrollView* m_scrollView = nullptr;
-
-	cocos2d::Node* m_pathSettingPanel = nullptr;
 	cocos2d::Node* m_teamMemSelectPanel = nullptr;
+	cocos2d::ui::ScrollView* m_scrollView = nullptr;
+	std::vector<cocos2d::ui::CheckBox*> m_teamMemCheckBox;
+	std::map<cocos2d::Ref*, int> m_checkBoxIndex;
 };
