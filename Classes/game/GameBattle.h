@@ -22,6 +22,8 @@ public:
 	void setPath(int teamNo, std::list<cocos2d::Vec2>& pathList);
 
 	int getTeamId(TeamNo teamNo);
+
+	SOLDIER_MAP getPlayerSoldiers();
 private:
 	//设置基地位置
 	void initBasePosition();

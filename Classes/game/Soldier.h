@@ -27,6 +27,8 @@ public:
 	bool isReadyToRemove();
 
 	void setPath(std::list<cocos2d::Vec2>& path);
+
+	SoldierType getSoldierType();
 private:
 	bool init(ForceType forceType, SoldierType type, const cocos2d::Vec2& position, FaceDirection direction);
 	bool initAnimate(SoldierType type);
@@ -92,4 +94,6 @@ private:
 
 	//Ô¤ÉèÂ·Ïß
 	std::list<cocos2d::Vec2> m_preparePathList;
+
+	SoldierType m_soldierType = SoldierType::Invalid;
 };

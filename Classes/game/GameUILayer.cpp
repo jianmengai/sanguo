@@ -420,16 +420,18 @@ void GameUILayer::onCheckBoxSelect(cocos2d::Ref * sender, cocos2d::ui::CheckBox:
 	{
 		return;
 	}
+	int index = it->second;
+	auto checkBox = m_teamMemCheckBox[index];
 	switch (eventType)
 	{
 	case cocos2d::ui::CheckBox::EventType::SELECTED:
 	{
-
+		checkBox->setSelectedState(true);
 	}
 	break;
 	case cocos2d::ui::CheckBox::EventType::UNSELECTED:
 	{
-
+		checkBox->setSelectedState(false);
 	}
 	break;
 	default:
@@ -439,6 +441,7 @@ void GameUILayer::onCheckBoxSelect(cocos2d::Ref * sender, cocos2d::ui::CheckBox:
 
 void GameUILayer::onTeamMemOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
+	//m_teamMemSelectPanel->setVisible(false);
 }
 
 bool GameUILayer::selectTeam(TeamNo teamNo)
@@ -463,19 +466,83 @@ bool GameUILayer::selectTeam(TeamNo teamNo)
 
 void GameUILayer::showTeamMemList()
 {
-	for (int i = 0; i < 5; ++i)
+	auto teamMem = TeamManager::getInstance()->getTeamMembers(m_currentTeam);
+	//已经在队伍中的在前面，不在队伍中的按照类型排在后面
+	std::vector<Soldier*> sortedSoldiers;
+	for (auto soldier : teamMem)
 	{
-		/*
-		auto layout = cocos2d::ui::Layout::create();
-		auto img = cocos2d::ui::ImageView::create("Archer.png");
-		layout->setContentSize(img->getContentSize());
-		layout->addChild(img);
-		*/
-		auto button = cocos2d::ui::Button::create();
-		//m_listView->pushBackCustomItem(button);
-		//m_listView->addChild(layout);
+		sortedSoldiers.push_back(dynamic_cast<Soldier*>(soldier));
 	}
-	cocos2d::log("set layout ...");
+	auto allSoldiers = GameBattle::getInstance()->getPlayerSoldiers();
+	for (auto soldiers : allSoldiers)
+	{
+		for (auto soldier : soldiers.second)
+		{
+			bool inTeam = false;
+			for (auto s : teamMem)
+			{
+				if (s->getId() == soldier->getId())
+				{
+					inTeam = true;
+					break;
+				}
+			}
+			if (!inTeam)
+			{
+				sortedSoldiers.push_back(soldier);
+			}
+		}
+	}
+	int index = 0;
+	int teamMemSize = teamMem.size();
+	int checkBoxSize = m_teamMemCheckBox.size();
+	for (auto soldier : sortedSoldiers)
+	{
+		if (index >= checkBoxSize)
+		{
+			break;
+		}
+		auto checkBox = m_teamMemCheckBox[index];
+		if (index < teamMemSize)
+		{
+			checkBox->setSelectedState(true);
+		}
+		else
+		{
+			checkBox->setSelectedState(false);
+		}
+		std::string soldierImg;
+		switch (soldier->getSoldierType())
+		{
+		case SoldierType::Archer:
+		{
+			soldierImg = "Archer.png";
+		}
+		break;
+		case SoldierType::Cavalry:
+		{
+			soldierImg = "Enchanter.png";
+		}
+		break;
+		case SoldierType::Infantry:
+		{
+			soldierImg = "Barbarian.png";
+		}
+		break;
+		default:
+			break;
+		}
+		if (!soldierImg.empty())
+		{
+			checkBox->loadTextureBackGround(soldierImg);
+		}
+		++index;
+	}
+	for (int i = index; i < checkBoxSize; ++i)
+	{
+		auto checkBox = m_teamMemCheckBox[i];
+		checkBox->setVisible(false);
+	}
 }
 
 bool GameUILayer::createBuilding(BuildingType type)

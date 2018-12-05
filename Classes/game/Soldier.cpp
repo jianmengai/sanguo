@@ -140,6 +140,8 @@ bool Soldier::initData(SoldierType type)
 	m_bulletType = soldierConf->bulletType;
 	m_damageType = soldierConf->damageType;
 
+	m_soldierType = type;
+
 	return true;
 }
 
@@ -480,6 +482,11 @@ bool Soldier::isReadyToRemove()
 void Soldier::setPath(std::list<cocos2d::Vec2>& path)
 {
 	m_preparePathList = path;
+}
+
+SoldierType Soldier::getSoldierType()
+{
+	return m_soldierType;
 }
 
 void Soldier::onPrepareToRemove()

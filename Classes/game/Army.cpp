@@ -296,6 +296,11 @@ int Army::getTeamId(TeamNo teamNo)
 	return it->second;
 }
 
+SOLDIER_MAP Army::getAllSoldiers()
+{
+	return m_soldiers;
+}
+
 void Army::npcAutoCreating()
 {
 

@@ -34,6 +34,8 @@ public:
 
 	int getTeamId(TeamNo teamNo);
 
+	SOLDIER_MAP getAllSoldiers();
+
 protected:
 	//队伍中发现攻击目标，通知给队伍所有成员
 	//void notifyTeamMemberTarget();

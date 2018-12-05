@@ -91,6 +91,11 @@ int GameBattle::getTeamId(TeamNo teamNo)
 	return m_player->getTeamId(teamNo);
 }
 
+SOLDIER_MAP GameBattle::getPlayerSoldiers()
+{
+	return m_player->getAllSoldiers();
+}
+
 void GameBattle::touchProcess(const cocos2d::Vec2& position)
 {
 	auto mapPos = MapManager::getInstance()->toMapPos(position);
