@@ -591,7 +591,7 @@ void Soldier::findAndFight(float deltaTime)
 		{
 			object = searchNearbyEnemy();
 		}
-		if (object != m_attackTarget)
+		if ((object != m_attackTarget) && (object != nullptr))
 		{
 			m_attackTarget = object;
 			setEnemyId(object->getId());

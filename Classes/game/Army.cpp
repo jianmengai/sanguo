@@ -298,6 +298,21 @@ int Army::getTeamId(TeamNo teamNo)
 
 SOLDIER_MAP Army::getAllSoldiers()
 {
+	for (auto& soldierIt : m_soldiers)
+	{
+		for (auto it = soldierIt.second.begin(); it != soldierIt.second.end();)
+		{
+			auto soldier = *it;
+			if ((soldier == nullptr) || soldier->isReadyToRemove())
+			{
+				it = soldierIt.second.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
 	return m_soldiers;
 }
 
@@ -312,7 +327,13 @@ void Army::npcAutoCreating()
 	{
 		createBuilding(BuildingType::Barrack, m_basePosition.barrackPosition, true);
 	}
-	if (m_teams.count(TeamNo::One) == 0)
+	int teamOneCount = 0;
+	auto it = m_teams.find(TeamNo::One);
+	if ((it != m_teams.end()))
+	{
+		teamOneCount = TeamManager::getInstance()->getTeamMembers(it->second).size();
+	}
+	if (teamOneCount == 0)
 	{
 		auto archorSoldier = createSoldier(SoldierType::Archer);
 		if (archorSoldier != nullptr)
@@ -450,7 +471,19 @@ void Army::update(float dt)
 	//士兵非战斗状态非满HP自动回复生命值
 	for (auto& soldierIt : m_soldiers)
 	{
-
+		for (auto it = soldierIt.second.begin(); it != soldierIt.second.end();)
+		{
+			Soldier* soldier = *it;
+			if ((soldier == nullptr) || (soldier->isReadyToRemove()))
+			{
+				it = soldierIt.second.erase(it);
+			}
+			else
+			{
+				//是否战斗中
+				++it;
+			}
+		}
 	}
 
 	updateTechPoint(dt);

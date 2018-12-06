@@ -162,7 +162,7 @@ bool GameUILayer::initTeamMemSelect()
 	m_teamMemSelectPanel = m_gameUI->getChildByName("Panel_TeamMemSelect");
 	m_scrollView = m_teamMemSelectPanel->getChildByName<cocos2d::ui::ScrollView*>("ScrollView_TeamMemSelect");
 	m_scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);
-	m_scrollView->setClippingEnabled(false);
+	//m_scrollView->setClippingEnabled(false);
 
 	auto size = m_scrollView->getChildrenCount();
 	for (auto i = 0; i < size; ++i)
@@ -426,12 +426,14 @@ void GameUILayer::onCheckBoxSelect(cocos2d::Ref * sender, cocos2d::ui::CheckBox:
 	{
 	case cocos2d::ui::CheckBox::EventType::SELECTED:
 	{
-		checkBox->setSelectedState(true);
-	}
+		checkBox->setSelected(true);
+		cocos2d::log("checkBox:%d selected", index);
+	} 
 	break;
 	case cocos2d::ui::CheckBox::EventType::UNSELECTED:
 	{
-		checkBox->setSelectedState(false);
+		checkBox->setSelected(false);
+		cocos2d::log("checkBox:%d unselected", index);
 	}
 	break;
 	default:
@@ -441,7 +443,7 @@ void GameUILayer::onCheckBoxSelect(cocos2d::Ref * sender, cocos2d::ui::CheckBox:
 
 void GameUILayer::onTeamMemOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
-	//m_teamMemSelectPanel->setVisible(false);
+	m_teamMemSelectPanel->setVisible(false);
 }
 
 bool GameUILayer::selectTeam(TeamNo teamNo)
@@ -505,11 +507,11 @@ void GameUILayer::showTeamMemList()
 		auto checkBox = m_teamMemCheckBox[index];
 		if (index < teamMemSize)
 		{
-			checkBox->setSelectedState(true);
+			checkBox->setSelected(true);
 		}
 		else
 		{
-			checkBox->setSelectedState(false);
+			checkBox->setSelected(false);
 		}
 		std::string soldierImg;
 		switch (soldier->getSoldierType())
@@ -535,12 +537,17 @@ void GameUILayer::showTeamMemList()
 		if (!soldierImg.empty())
 		{
 			checkBox->loadTextureBackGround(soldierImg);
+			checkBox->loadTextureFrontCross("CheckBox_Selected.png");
+			//checkBox->loadTextureBackGroundDisabled("CheckBox_Disable.png");
+		
 		}
 		++index;
+		checkBox->setVisible(true);
 	}
 	for (int i = index; i < checkBoxSize; ++i)
 	{
 		auto checkBox = m_teamMemCheckBox[i];
+		//checkBox->loadTextureBackGround("Archer.png");
 		checkBox->setVisible(false);
 	}
 }
