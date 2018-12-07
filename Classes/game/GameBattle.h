@@ -19,11 +19,13 @@ public:
 	void playerMoveTo(const cocos2d::Vec2& postiion);
 	int getPlayerTechPoint();
 
-	void setPath(int teamNo, std::list<cocos2d::Vec2>& pathList);
+	void setPath(TeamNo teamNo, std::list<cocos2d::Vec2>& pathList);
 
 	int getTeamId(TeamNo teamNo);
 
 	SOLDIER_MAP getPlayerSoldiers();
+
+	void setPlayerTeam(TeamNo teamNo, std::vector<int>& teamMem);
 private:
 	//设置基地位置
 	void initBasePosition();

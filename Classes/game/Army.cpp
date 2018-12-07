@@ -291,7 +291,7 @@ int Army::getTeamId(TeamNo teamNo)
 	auto it = m_teams.find(teamNo);
 	if (it == m_teams.end())
 	{
-		return -1;
+		return 0;
 	}
 	return it->second;
 }
@@ -442,6 +442,17 @@ void Army::updateSelectAndTeam()
 			m_selectedSodiers.erase(it);
 		}
 	}
+
+}
+
+void Army::resetTeam(TeamNo teamNo)
+{
+	auto teamId = getTeamId(teamNo);
+	if (teamId == 0)
+	{
+		return;
+	}
+	TeamManager::getInstance()->clearTeam(teamId);
 
 }
 

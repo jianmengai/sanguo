@@ -34,6 +34,11 @@ public:
 
 	int getTeamId(TeamNo teamNo);
 
+	//清空队伍
+	void resetTeam(TeamNo teamNo);
+	//添加成员到队伍中
+	void addToTeam(TeamNo teamNo, GameObject* object);
+
 	SOLDIER_MAP getAllSoldiers();
 
 protected:
@@ -47,7 +52,6 @@ private:
 
 	void updateSelectAndTeam();
 
-	void addToTeam(TeamNo teamNo, GameObject* object);
 private:
 	int m_techPoint = 1000;
 	SOLDIER_MAP m_soldiers;

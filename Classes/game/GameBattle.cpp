@@ -3,6 +3,7 @@
 #include "GameObjectManager.h"
 #include "GameConfig.h"
 #include "WarfogLayer.h"
+#include "TeamManager.h"
 
 GameBattle* GameBattle::getInstance()
 {
@@ -82,7 +83,7 @@ int GameBattle::getPlayerTechPoint()
 	return m_player->getTechPoint();
 }
 
-void GameBattle::setPath(int teamNo, std::list<cocos2d::Vec2>& pathList)
+void GameBattle::setPath(TeamNo teamNo, std::list<cocos2d::Vec2>& pathList)
 {
 }
 
@@ -94,6 +95,19 @@ int GameBattle::getTeamId(TeamNo teamNo)
 SOLDIER_MAP GameBattle::getPlayerSoldiers()
 {
 	return m_player->getAllSoldiers();
+}
+
+void GameBattle::setPlayerTeam(TeamNo teamNo, std::vector<int>& teamMem)
+{
+	m_player->resetTeam(teamNo);
+	for (auto gameObjectId : teamMem)
+	{
+		auto gameObject = GameObjectManager::getInstance()->getGameObjectById(gameObjectId);
+		if ((gameObject != nullptr) && gameObject->isReadyToRemove())
+		{
+			m_player->addToTeam(teamNo, gameObject);
+		}
+	}
 }
 
 void GameBattle::touchProcess(const cocos2d::Vec2& position)

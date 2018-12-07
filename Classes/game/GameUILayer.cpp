@@ -134,19 +134,23 @@ bool GameUILayer::initTeamButton()
 	auto teamOneButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamOne");
 	teamOneButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
 	m_teamCallback[teamOneButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::One);
+	m_teamButtons.push_back(teamOneButton);
 
 	auto teamTwoButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamTwo");
 	teamTwoButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
 	m_teamCallback[teamTwoButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::Two);
+	m_teamButtons.push_back(teamTwoButton);
 	
 	auto teamThreeButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamThree");
 	teamThreeButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
 	m_teamCallback[teamThreeButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::Three);
+	m_teamButtons.push_back(teamThreeButton);
 	
 	
 	auto teamFourButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamFour");
 	teamFourButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
 	m_teamCallback[teamFourButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::Four);
+	m_teamButtons.push_back(teamFourButton);
 	
 	
 	auto pathSwitchButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_PathSwitch");
@@ -172,7 +176,9 @@ bool GameUILayer::initTeamMemSelect()
 		auto checkBox = dynamic_cast<cocos2d::ui::CheckBox*>(m_scrollView->getChildByName(szBuffer));
 		checkBox->addEventListener(CC_CALLBACK_2(GameUILayer::onCheckBoxSelect, this));
 		m_checkBoxIndex[checkBox] = i;
-		m_teamMemCheckBox.push_back(checkBox);
+		CheckBoxValue checkBoxValue;
+		checkBoxValue.checkBox = checkBox;
+		m_teamMemCheckBox.push_back(checkBoxValue);
 	}
 	
 	auto teamMemOkButton = m_teamMemSelectPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamMemOk");
@@ -342,6 +348,18 @@ void GameUILayer::onCreateObject(cocos2d::Ref* sender, cocos2d::ui::Widget::Touc
 
 void GameUILayer::onTeam(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
+	for (auto bt : m_teamButtons)
+	{
+		cocos2d::ui::Button* button = dynamic_cast<cocos2d::ui::Button*>(bt);
+		if (bt == sender)
+		{
+			button->setHighlighted(true);
+		}
+		else
+		{
+			button->setHighlighted(false);
+		}
+	}
 	if (touchType == cocos2d::ui::Widget::TouchEventType::ENDED)
 	{
 		auto it = m_teamCallback.find(sender);
@@ -371,17 +389,16 @@ void GameUILayer::onPathSwitch(cocos2d::Ref * sender, cocos2d::ui::Widget::Touch
 			
 		}
 		
-		m_currentTeam = 0;
 	}
 }
 
 void GameUILayer::onPathOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
-	if (m_currentTeam != 0)
+	if (m_currentTeamNo != TeamNo::Invalid)
 	{
 		//获取绘制的路径
 		std::vector<cocos2d::Vec2> pathList;
-		GameBattle::getInstance()->setPath(m_currentTeam, m_pathList);
+		GameBattle::getInstance()->setPath(m_currentTeamNo, m_pathList);
 	}
 }
 
@@ -421,7 +438,7 @@ void GameUILayer::onCheckBoxSelect(cocos2d::Ref * sender, cocos2d::ui::CheckBox:
 		return;
 	}
 	int index = it->second;
-	auto checkBox = m_teamMemCheckBox[index];
+	auto checkBox = m_teamMemCheckBox[index].checkBox;
 	switch (eventType)
 	{
 	case cocos2d::ui::CheckBox::EventType::SELECTED:
@@ -443,7 +460,19 @@ void GameUILayer::onCheckBoxSelect(cocos2d::Ref * sender, cocos2d::ui::CheckBox:
 
 void GameUILayer::onTeamMemOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
+	std::vector<int> teamMem;
 	m_teamMemSelectPanel->setVisible(false);
+	for (auto checkBoxValue : m_teamMemCheckBox)
+	{
+		if (checkBoxValue.checkBox->isSelected())
+		{
+			teamMem.push_back(checkBoxValue.gameObjectId);
+		}
+		//重置
+		checkBoxValue.gameObjectId = 0;
+	}
+
+	GameBattle::getInstance()->setPlayerTeam(m_currentTeamNo, teamMem);
 }
 
 bool GameUILayer::selectTeam(TeamNo teamNo)
@@ -463,12 +492,15 @@ bool GameUILayer::selectTeam(TeamNo teamNo)
 
 	m_pathStartPos = m_pathStartPos / teamMembers.size();
 
+	m_currentTeamNo = teamNo;
+
 	return true;
 }
 
 void GameUILayer::showTeamMemList()
 {
-	auto teamMem = TeamManager::getInstance()->getTeamMembers(m_currentTeam);
+	auto teamId = GameBattle::getInstance()->getTeamId(m_currentTeamNo);
+	auto teamMem = TeamManager::getInstance()->getTeamMembers(teamId);
 	//已经在队伍中的在前面，不在队伍中的按照类型排在后面
 	std::vector<Soldier*> sortedSoldiers;
 	for (auto soldier : teamMem)
@@ -504,7 +536,7 @@ void GameUILayer::showTeamMemList()
 		{
 			break;
 		}
-		auto checkBox = m_teamMemCheckBox[index];
+		auto checkBox = m_teamMemCheckBox[index].checkBox;
 		if (index < teamMemSize)
 		{
 			checkBox->setSelected(true);
@@ -538,17 +570,16 @@ void GameUILayer::showTeamMemList()
 		{
 			checkBox->loadTextureBackGround(soldierImg);
 			checkBox->loadTextureFrontCross("CheckBox_Selected.png");
-			//checkBox->loadTextureBackGroundDisabled("CheckBox_Disable.png");
-		
+			m_teamMemCheckBox[index].gameObjectId = soldier->getId();
 		}
 		++index;
 		checkBox->setVisible(true);
 	}
 	for (int i = index; i < checkBoxSize; ++i)
 	{
-		auto checkBox = m_teamMemCheckBox[i];
-		//checkBox->loadTextureBackGround("Archer.png");
+		auto checkBox = m_teamMemCheckBox[i].checkBox;
 		checkBox->setVisible(false);
+	
 	}
 }
 

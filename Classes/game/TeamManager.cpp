@@ -8,7 +8,7 @@ TeamManager* TeamManager::getInstance()
 
 int TeamManager::getUniqTeamId()
 {
-	static int teamId = 0;
+	static int teamId = 100;
 	return ++teamId;
 }
 
