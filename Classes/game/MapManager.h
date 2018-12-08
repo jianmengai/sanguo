@@ -83,8 +83,8 @@ public:
 	cocos2d::Size& getMapSize();
 	cocos2d::Size& getContentSize();
 
-	//随机基地坐标
-	std::vector<BasePosition>& getBasePosition();
+	//NPC基地坐标
+	BasePosition& getBasePosition();
 private:
 	bool initBasePosition();
 
@@ -110,5 +110,5 @@ private:
 	cocos2d::Vec2 m_tileMapOriginCoor;   //tilemap格子原点(0,0)在openGL坐标系中的坐标位置
 
 
-	std::vector<BasePosition> m_basePositions;
+	BasePosition m_basePositions;
 };

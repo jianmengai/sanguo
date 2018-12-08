@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="158" tileheight="120" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="158" tileheight="120" infinite="0" nextlayerid="6" nextobjectid="12">
  <tileset firstgid="1" name="grass" tilewidth="158" tileheight="120" tilecount="1" columns="1">
   <image source="263.0.png" width="158" height="120"/>
  </tileset>
@@ -16,12 +16,33 @@
  </layer>
  <layer id="2" name="gameObjectLayer" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJzt11sOgCAMBVGC+9+za+jLTuudhF/0qAG555y7ZExPDlZysJKD1d8c9H3M4iAnBys5WE1wWNbTjLmqkiM2V/Y5TY7YXNlnZoIjo25HVp2OzLoc2dH3j45nWPGtTHdY1wOiw7M20xzefZLkiPyzyOGbqyo5WMnBSg5WctivUz2+cBCSg9Vmx9NxI8E2v4+JbXNsGC/siQLc
+   eJzt19ENgCAMAFHC/kM7Q6GlB94l/NY8Y0DmGGM+sm5PBysdrHSw+puDfo5FHOR0sNLB6gZHZD/NmFWVjr1Z2fc0HXuzsu/MBEdG3Y6sOh2ZdTmyo58fHe+w4lu53RHdD4iOlb2Z5lg9J0mOnX8WHWuzqtLBSgcrHax0xJ9TvU44COlgpYOVDlavOV5YH+EBAtk=
   </data>
  </layer>
- <layer id="3" name="块层 3" width="50" height="50">
-  <data encoding="base64" compression="zlib">
-   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAAADg3wAnEAAB
-  </data>
- </layer>
+ <objectgroup id="5" name="resourceLayer">
+  <object id="2" name="playerMainTown" x="426" y="5466">
+   <point/>
+  </object>
+  <object id="3" name="npcMainTown" x="5451.72" y="536.278">
+   <point/>
+  </object>
+  <object id="4" name="npcBarrack" x="5454.68" y="1265.32">
+   <point/>
+  </object>
+  <object id="6" name="npcArchor1" x="5464.28" y="1979.72">
+   <point/>
+  </object>
+  <object id="7" name="npcArchor2" x="4613.52" y="1250.48">
+   <point/>
+  </object>
+  <object id="8" name="npcArchor3" x="4613.52" y="530.481">
+   <point/>
+  </object>
+  <object id="9" name="npcArchor4" x="4268.28" y="783.722">
+   <point/>
+  </object>
+  <object id="10" name="npcArchor5" x="4624.76" y="1623.24">
+   <point/>
+  </object>
+ </objectgroup>
 </map>

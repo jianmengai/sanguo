@@ -51,6 +51,8 @@ bool Soldier::init(ForceType forceType, SoldierType type, const cocos2d::Vec2& p
 	initHpBar();
 	
 	m_uniqId = GameUtils::getLastestUniqId();
+
+	toStand();
 	
 	scheduleUpdate();
 	
@@ -222,7 +224,7 @@ void Soldier::onDieAnimationEnd()
 
 void Soldier::moveTo(const cocos2d::Vec2& pos)
 {
-	if (m_soldierStatus == GameObjectStatus::Die)
+	if (m_objectStatus == GameObjectStatus::Die)
 	{
 		return;
 	}
@@ -383,7 +385,7 @@ void Soldier::toDie()
 {
 	clearMoveToRowCol();
 	//SoundManager::getInstance()->playNpcEffect(_templateName, NpcSoundEffectType::Death);
-	m_soldierStatus = GameObjectStatus::Die;
+	m_objectStatus = GameObjectStatus::Die;
     stopAllActions();
 	cocos2d::log("run die action...");
     runAction(m_dieAnimate);
@@ -476,12 +478,22 @@ bool Soldier::isEnemyDiappear(GameObject * enemy)
 
 bool Soldier::isReadyToRemove()
 {
-	return m_soldierStatus == GameObjectStatus::Die;
+	return m_objectStatus == GameObjectStatus::Die;
 }
 
 void Soldier::setPath(std::list<cocos2d::Vec2>& path)
 {
 	m_preparePathList = path;
+}
+
+void Soldier::setTeamNo(TeamNo teamNo)
+{
+	m_teamNo = teamNo;
+}
+
+TeamNo Soldier::getTeamNo()
+{
+	return m_teamNo;
 }
 
 SoldierType Soldier::getSoldierType()

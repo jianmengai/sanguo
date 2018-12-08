@@ -81,6 +81,7 @@ private:
 	std::list<cocos2d::Vec2> m_pathList;
 	cocos2d::Vec2 m_pathStartPos;
 	std::vector<cocos2d::Ref*> m_teamButtons;
+	float m_scale = 1.0;
 
 	//∂”ŒÈ±‡º≠
 	cocos2d::Node* m_teamMemSelectPanel = nullptr;

@@ -87,6 +87,15 @@ bool GameUILayer::initPathSettingMap()
 	auto pathCancelButton = m_pathSettingPanel->getChildByName<cocos2d::ui::Button*>("Button_PathCancel");
 	pathCancelButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onPathCancel, this));
 
+	auto width = m_mediumMapImgView->getContentSize().width;
+	auto height = m_mediumMapImgView->getContentSize().height;
+
+	auto mapContentSize = MapManager::getInstance()->getContentSize();
+	float scalX = width / mapContentSize.width;
+	float scalY = height / mapContentSize.height;
+	m_scale = std::min(scalX, scalY);
+
+
 	m_pathSettingPanel->setVisible(false);
 	return true;
 }
@@ -166,7 +175,6 @@ bool GameUILayer::initTeamMemSelect()
 	m_teamMemSelectPanel = m_gameUI->getChildByName("Panel_TeamMemSelect");
 	m_scrollView = m_teamMemSelectPanel->getChildByName<cocos2d::ui::ScrollView*>("ScrollView_TeamMemSelect");
 	m_scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);
-	//m_scrollView->setClippingEnabled(false);
 
 	auto size = m_scrollView->getChildrenCount();
 	for (auto i = 0; i < size; ++i)
@@ -386,6 +394,11 @@ void GameUILayer::onPathSwitch(cocos2d::Ref * sender, cocos2d::ui::Widget::Touch
 				m_teamMemSelectPanel->setVisible(false);
 			}
 			m_pathSettingPanel->setVisible(true);
+			if (m_pathStartPos != cocos2d::Vec2::ZERO)
+			{
+				cocos2d::Color4F color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
+				m_mediumMapDrawNode->drawSolidRect(m_pathStartPos - cocos2d::Vec2(1, 1), m_pathStartPos + cocos2d::Vec2(1, 1), color);
+			}
 			
 		}
 		
@@ -397,8 +410,15 @@ void GameUILayer::onPathOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEven
 	if (m_currentTeamNo != TeamNo::Invalid)
 	{
 		//获取绘制的路径
-		std::vector<cocos2d::Vec2> pathList;
-		GameBattle::getInstance()->setPath(m_currentTeamNo, m_pathList);
+		std::list<cocos2d::Vec2> pathList;
+		for (auto pos : m_pathList)
+		{
+			cocos2d::Vec2 mapPos = pos / m_scale;
+			pathList.push_back(mapPos);
+		}
+		GameBattle::getInstance()->setPlayerTeamPath(m_currentTeamNo, pathList);
+		m_pathList.clear();
+		m_mediumMapDrawNode->clear();
 	}
 }
 
@@ -460,25 +480,44 @@ void GameUILayer::onCheckBoxSelect(cocos2d::Ref * sender, cocos2d::ui::CheckBox:
 
 void GameUILayer::onTeamMemOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
-	std::vector<int> teamMem;
 	m_teamMemSelectPanel->setVisible(false);
+	if (m_currentTeamNo == TeamNo::Invalid)
+	{
+		return;
+	}
+
+	std::vector<int> teamMem;
 	for (auto checkBoxValue : m_teamMemCheckBox)
 	{
+		if (checkBoxValue.gameObjectId == 0)
+		{
+			continue;
+		}
 		if (checkBoxValue.checkBox->isSelected())
 		{
 			teamMem.push_back(checkBoxValue.gameObjectId);
 		}
+		//没被选中的恢复无队列状态
+		else
+		{
+			auto gameObject = GameObjectManager::getInstance()->getGameObjectById(checkBoxValue.gameObjectId);
+			Soldier* soldier = dynamic_cast<Soldier*>(gameObject);
+			soldier->setTeamNo(TeamNo::Invalid);
+		}
+
 		//重置
 		checkBoxValue.gameObjectId = 0;
 	}
 
 	GameBattle::getInstance()->setPlayerTeam(m_currentTeamNo, teamMem);
+
+	selectTeam(m_currentTeamNo);
 }
 
 bool GameUILayer::selectTeam(TeamNo teamNo)
 {
 	m_pathStartPos = cocos2d::Vec2::ZERO;
-	int teamId = GameBattle::getInstance()->getTeamId(teamNo);
+	int teamId = GameBattle::getInstance()->getPlayerTeamId(teamNo);
 	if (teamId == -1)
 	{
 		return false;
@@ -492,14 +531,18 @@ bool GameUILayer::selectTeam(TeamNo teamNo)
 
 	m_pathStartPos = m_pathStartPos / teamMembers.size();
 
+	m_pathStartPos = m_pathStartPos * m_scale;
+
 	m_currentTeamNo = teamNo;
+
+	GameBattle::getInstance()->selectPlayerTeam(teamNo);
 
 	return true;
 }
 
 void GameUILayer::showTeamMemList()
 {
-	auto teamId = GameBattle::getInstance()->getTeamId(m_currentTeamNo);
+	auto teamId = GameBattle::getInstance()->getPlayerTeamId(m_currentTeamNo);
 	auto teamMem = TeamManager::getInstance()->getTeamMembers(teamId);
 	//已经在队伍中的在前面，不在队伍中的按照类型排在后面
 	std::vector<Soldier*> sortedSoldiers;
@@ -520,6 +563,12 @@ void GameUILayer::showTeamMemList()
 					inTeam = true;
 					break;
 				}
+			}
+			auto teamNo = soldier->getTeamNo();
+			//已经在其他编组里面了
+			if ((teamNo != TeamNo::Invalid) && (teamNo != m_currentTeamNo))
+			{
+				continue;
 			}
 			if (!inTeam)
 			{

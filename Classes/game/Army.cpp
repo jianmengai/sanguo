@@ -268,6 +268,9 @@ int Army::getTechPoint()
 
 void Army::selectTeam(TeamNo teamNo)
 {
+	//不管队列是否存在，清空当前选中的目标
+	m_selectedSodiers.clear();
+
 	auto it = m_teams.find(teamNo);
 	if (it == m_teams.end())
 	{
@@ -277,13 +280,12 @@ void Army::selectTeam(TeamNo teamNo)
 	auto members = TeamManager::getInstance()->getTeamMembers(teamId);
 	if (!members.empty())
 	{
-		m_selectedSodiers.clear();
+		
 		for (auto member : members)
 		{
 			m_selectedSodiers.push_back(dynamic_cast<Soldier*>(member));
 		}
 	}
-	
 }
 
 int Army::getTeamId(TeamNo teamNo)
@@ -294,6 +296,17 @@ int Army::getTeamId(TeamNo teamNo)
 		return 0;
 	}
 	return it->second;
+}
+
+void Army::setTeamPath(TeamNo teamNo, std::list<cocos2d::Vec2>& path)
+{
+	auto teamId = getTeamId(teamNo);
+	auto& teamMem = TeamManager::getInstance()->getTeamMembers(teamId);
+	for (auto gameObject : teamMem)
+	{
+		Soldier* soldier = dynamic_cast<Soldier*>(gameObject);
+		soldier->setPath(path);
+	}
 }
 
 SOLDIER_MAP Army::getAllSoldiers()
@@ -427,19 +440,23 @@ void Army::updateTechPoint(float dt)
 
 void Army::updateSelectAndTeam()
 {
-	for (auto it = m_selectedSodiers.begin(); it != m_selectedSodiers.end(); ++it)
+	for (auto it = m_selectedSodiers.begin(); it != m_selectedSodiers.end();)
 	{
 		Soldier* soldier = *it;
 		if (soldier != nullptr)
 		{
 			if (soldier->isReadyToRemove())
 			{
-				m_selectedSodiers.erase(it);
+				it = m_selectedSodiers.erase(it);
+			}
+			else
+			{
+				++it;
 			}
 		}
 		else
 		{
-			m_selectedSodiers.erase(it);
+			it = m_selectedSodiers.erase(it);
 		}
 	}
 
@@ -471,6 +488,8 @@ void Army::addToTeam(TeamNo teamNo, GameObject * object)
 	}
 	
 	TeamManager::getInstance()->addTeam(teamId, object);
+	Soldier* soldier = dynamic_cast<Soldier*>(object);
+	soldier->setTeamNo(teamNo);
 }
 
 void Army::update(float dt)

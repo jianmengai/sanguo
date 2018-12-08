@@ -29,7 +29,7 @@ bool GameScene::init()
 	sprite->setAnchorPoint(cocos2d::Vec2(0.0f, 0.0f));
 	this->addChild(sprite, 0);
 	cocos2d::log("loading map...");
-	std::string tileMap = "map/my45.tmx";
+	std::string tileMap = "map/map.tmx";
 	if (!MapManager::getInstance()->init(this, tileMap))
 	{
 		return false;

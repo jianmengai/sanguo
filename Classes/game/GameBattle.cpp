@@ -70,6 +70,8 @@ void GameBattle::update(float dt)
 	}
 	GameObjectManager::getInstance()->removeAllReadyToRemoveGameObjects();
 
+	TeamManager::getInstance()->update(dt);
+
 	updateVisible();
 }
 
@@ -83,11 +85,17 @@ int GameBattle::getPlayerTechPoint()
 	return m_player->getTechPoint();
 }
 
-void GameBattle::setPath(TeamNo teamNo, std::list<cocos2d::Vec2>& pathList)
+void GameBattle::setPlayerTeamPath(TeamNo teamNo, std::list<cocos2d::Vec2>& pathList)
 {
+	m_player->setTeamPath(teamNo, pathList);
 }
 
-int GameBattle::getTeamId(TeamNo teamNo)
+void GameBattle::selectPlayerTeam(TeamNo teamNo)
+{
+	m_player->selectTeam(teamNo);
+}
+
+int GameBattle::getPlayerTeamId(TeamNo teamNo)
 {
 	return m_player->getTeamId(teamNo);
 }
@@ -103,7 +111,7 @@ void GameBattle::setPlayerTeam(TeamNo teamNo, std::vector<int>& teamMem)
 	for (auto gameObjectId : teamMem)
 	{
 		auto gameObject = GameObjectManager::getInstance()->getGameObjectById(gameObjectId);
-		if ((gameObject != nullptr) && gameObject->isReadyToRemove())
+		if ((gameObject != nullptr) && (!gameObject->isReadyToRemove()))
 		{
 			m_player->addToTeam(teamNo, gameObject);
 		}

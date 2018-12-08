@@ -19,9 +19,11 @@ public:
 	void playerMoveTo(const cocos2d::Vec2& postiion);
 	int getPlayerTechPoint();
 
-	void setPath(TeamNo teamNo, std::list<cocos2d::Vec2>& pathList);
+	void setPlayerTeamPath(TeamNo teamNo, std::list<cocos2d::Vec2>& pathList);
 
-	int getTeamId(TeamNo teamNo);
+	void selectPlayerTeam(TeamNo teamNo);
+
+	int getPlayerTeamId(TeamNo teamNo);
 
 	SOLDIER_MAP getPlayerSoldiers();
 

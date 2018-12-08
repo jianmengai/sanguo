@@ -154,7 +154,7 @@ float MapManager::getMapScale()
 	return m_mapScale;
 }
 
-std::vector<BasePosition>& MapManager::getBasePosition()
+BasePosition& MapManager::getBasePosition()
 {
 	// TODO: 在此处插入 return 语句
 	return m_basePositions;

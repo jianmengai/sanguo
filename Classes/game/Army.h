@@ -39,6 +39,9 @@ public:
 	//添加成员到队伍中
 	void addToTeam(TeamNo teamNo, GameObject* object);
 
+	//设置队伍行进路劲
+	void setTeamPath(TeamNo teamNo, std::list<cocos2d::Vec2>& path);
+	
 	SOLDIER_MAP getAllSoldiers();
 
 protected:

@@ -28,6 +28,10 @@ public:
 
 	void setPath(std::list<cocos2d::Vec2>& path);
 
+	void setTeamNo(TeamNo teamNo);
+
+	TeamNo getTeamNo();
+
 	SoldierType getSoldierType();
 private:
 	bool init(ForceType forceType, SoldierType type, const cocos2d::Vec2& position, FaceDirection direction);
@@ -80,7 +84,7 @@ private:
 
 	std::list<TileNode*> m_pathList;
 	int m_teamId = 0;
-	GameObjectStatus m_soldierStatus;
+	//GameObjectStatus m_soldierStatus = GameObjectStatus::Invalid;
 
 	float m_moveSpeed = 50;
 	float m_curSpeed = 50;
@@ -96,4 +100,6 @@ private:
 	std::list<cocos2d::Vec2> m_preparePathList;
 
 	SoldierType m_soldierType = SoldierType::Invalid;
+
+	TeamNo m_teamNo = TeamNo::Invalid;
 };

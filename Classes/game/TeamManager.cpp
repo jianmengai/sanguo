@@ -64,6 +64,7 @@ void TeamManager::clearTeam()
 
 std::vector<GameObject*>& TeamManager::getTeamMembers(int teamId)
 {
+	removeDiedObject();
 	return m_teams[teamId];
 }
 
@@ -83,6 +84,29 @@ void TeamManager::notifyTeamMemberEnemy(int teamId, GameObject * enemy)
 		if (object != nullptr)
 		{
 			//设置新的攻击对象
+		}
+	}
+}
+
+void TeamManager::update(float dt)
+{
+	removeDiedObject();
+}
+
+void TeamManager::removeDiedObject()
+{
+	for (auto team : m_teams)
+	{
+		for (auto it = team.second.begin(); it != team.second.end();)
+		{
+			if (((*it) == nullptr) || (*it)->isReadyToRemove())
+			{
+				it = team.second.erase(it);
+			}
+			else
+			{
+				++it;
+			}
 		}
 	}
 }
