@@ -9,6 +9,11 @@ void GameObject::showHpBar(bool show)
 	hpBarBackground->setVisible(false);
 }
 
+bool GameObject::canBeAttacked()
+{
+	return m_canBeAttacked;
+}
+
 GameObject::GameObject()
 {
 

@@ -81,9 +81,6 @@ private:
 	void updatePreparePath();
 	bool canMoveToPos(cocos2d::Vec2& pos);
 	void movePath();
-
-	
-
 private:
 	cocos2d::Size m_dieAnimationFrameSize;
 

@@ -40,6 +40,8 @@ public:
 
 	void showHpBar(bool show);
 
+	bool canBeAttacked();
+
 protected:
 	GameObject();
 	bool init() override;
@@ -79,4 +81,5 @@ protected:
 	cocos2d::ui::LoadingBar* m_hpBar = nullptr;
 
 	bool m_showHpBar = true;
+	bool m_canBeAttacked = true;
 };

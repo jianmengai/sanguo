@@ -213,8 +213,8 @@ void Soldier::onAttackAnimationEnd()
 			enemy->reduceHP(getAttackPower());
 		}
 	}
-
-	//SoundManager::getInstance()->playNpcEffect(_templateName, NpcSoundEffectType::Attack);
+	
+	SoundManager::getInstance()->playNpcEffect(m_soldierType, NpcSoundEffectType::Attack);
 }
 
 void Soldier::onDieAnimationEnd()
@@ -385,7 +385,7 @@ void Soldier::toAttack()
 void Soldier::toDie()
 {
 	clearMoveToRowCol();
-	//SoundManager::getInstance()->playNpcEffect(_templateName, NpcSoundEffectType::Death);
+	SoundManager::getInstance()->playNpcEffect(m_soldierType, NpcSoundEffectType::Death);
 	m_objectStatus = GameObjectStatus::Die;
     stopAllActions();
 	cocos2d::log("run die action...");
@@ -434,7 +434,8 @@ const cocos2d::Vec2& Soldier::getPosition() const
 		auto selfPos = GameObject::getPosition();
 		auto parentPos = parent->getPosition();
 		auto worldPos = convertToWorldSpace(selfPos);
-		static auto pos = parent->getPosition() + cocos2d::Vec2(0, 100);
+		static auto pos = cocos2d::Vec2::ZERO;
+		pos = parent->getPosition() + cocos2d::Vec2(0, 100);
 		return pos;
 	}
 	else
@@ -597,6 +598,10 @@ SoldierType Soldier::getSoldierType()
 void Soldier::inDefenceTower(bool in)
 {
 	m_inDefenceTower = in;
+	if (m_inDefenceTower)
+	{
+		m_canBeAttacked = false;
+	}
 }
 
 
@@ -740,7 +745,7 @@ GameObject* Soldier::searchEnemy()
 	for (auto& gameObjectIt : gameObjects)
 	{
 		auto gameObject = gameObjectIt.second;
-		if ((gameObject == nullptr) || (m_forceType == gameObject->getForceType()) || gameObject->isReadyToRemove())
+		if ((gameObject == nullptr) || (m_forceType == gameObject->getForceType()) || gameObject->isReadyToRemove() || (!gameObject->canBeAttacked()))
 		{
 			continue;
 		}
@@ -812,7 +817,7 @@ GameObject* Soldier::searchNearbyEnemy()
 	for (auto& gameObjectIt : gameObjects)
 	{
 		auto gameObject = gameObjectIt.second;
-		if ((gameObject == nullptr) || (m_forceType == gameObject->getForceType()) || gameObject->isReadyToRemove())
+		if ((gameObject == nullptr) || (m_forceType == gameObject->getForceType()) || gameObject->isReadyToRemove() || (!gameObject->canBeAttacked()))
 		{
 			continue;
 		}

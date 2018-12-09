@@ -140,7 +140,7 @@ public:
 	BuildingConf* getBuildingConf(ForceType forceType, const BuildingType type);
 	CooldownConf* getCooldownConf();
 	BuildingSoundEffectData* getBuildingSoundEffectConf();
-	SoldierSoundEffectData* getSoldierSoundEffectConf();
+	SoldierSoundEffectData* getSoldierSoundEffectConf(const SoldierType type);
 
 private:
 	bool parseMapConf(const tinyxml2::XMLElement* node);
@@ -162,5 +162,5 @@ private:
 	std::map<BuildingType, BuildingConf*> m_npcBuildingConf;
 	CooldownConf m_coolDownConf;
 	BuildingSoundEffectData m_buildingSound;
-	SoldierSoundEffectData m_soldierSound;
+	std::map<SoldierType,SoldierSoundEffectData*> m_soldierSounds;
 };

@@ -14,7 +14,7 @@ void SoundManager::playUIEffect(UIEffectType type)
 }
 
 
-void SoundManager::playBuildingEffect(BuildingSoundEffectType type)
+int SoundManager::playBuildingEffect(BuildingSoundEffectType type, bool loop)
 {
 	if (m_buildingSoundEffectData == nullptr)
 	{
@@ -22,23 +22,62 @@ void SoundManager::playBuildingEffect(BuildingSoundEffectType type)
 	}
 	if (m_buildingSoundEffectData == nullptr)
 	{
-		return;
+		return 0;
 	}
 	if (type == BuildingSoundEffectType::Construct)
 	{
 		
 		if (canPlay(m_buildingSoundEffectData->constructName))
 		{
-			cocos2d::experimental::AudioEngine::play2d(m_buildingSoundEffectData->constructName, false, m_effectVolume);
+			return cocos2d::experimental::AudioEngine::play2d(m_buildingSoundEffectData->constructName, loop, m_effectVolume);
 		}
 	}
 	else
 	{
 		if (canPlay(m_buildingSoundEffectData->destroyedName))
 		{
-			cocos2d::experimental::AudioEngine::play2d(m_buildingSoundEffectData->destroyedName, false, m_effectVolume);
+			return cocos2d::experimental::AudioEngine::play2d(m_buildingSoundEffectData->destroyedName, loop, m_effectVolume);
 		}
 	}
+}
+
+void SoundManager::playNpcEffect(SoldierType soldierType, NpcSoundEffectType type)
+{
+	m_soldierSoundEffectData = GameConfig::getInstance()->getSoldierSoundEffectConf(soldierType);
+	if (m_soldierSoundEffectData == nullptr)
+	{
+		return;
+	}
+	std::string effectName;
+	switch (type)
+	{
+	case NpcSoundEffectType::Attack:
+	{
+		effectName = m_soldierSoundEffectData->attackName;
+	}
+	break;
+	case NpcSoundEffectType::Death:
+	{
+		effectName = m_soldierSoundEffectData->deathName;
+	}
+	break;
+	case NpcSoundEffectType::Move:
+	{
+		effectName = m_soldierSoundEffectData->moveName;
+	}
+	break;
+	default:
+		break;
+	}
+	if ((!effectName.empty()) && canPlay(effectName))
+	{
+		cocos2d::experimental::AudioEngine::play2d(effectName, false, m_effectVolume);
+	}
+}
+
+void SoundManager::stop(int audioId)
+{
+	cocos2d::experimental::AudioEngine::stop(audioId);
 }
 
 

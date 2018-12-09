@@ -51,4 +51,6 @@ private:
 	float m_buildingTimeBySecond = 0;
 	float m_passTimeBySecondInBeingBuiltStatus = 0;
 	Soldier* m_archer = nullptr;
+
+	int m_buildingSoundId = 0;
 };

@@ -300,6 +300,7 @@ void Building::onConstructionComplete()
 	}
 	cocos2d::log("construct done...");
 	updateStatus(BuildingStatus::Working);
+	SoundManager::getInstance()->stop(m_buildingSoundId);
 }
 
 void Building::updateStatus(BuildingStatus buildingStatus)
@@ -323,7 +324,7 @@ void Building::updateStatus(BuildingStatus buildingStatus)
 			{
 				if (m_forceType == ForceType::Player)
 				{
-					//SoundManager::getInstance()->playBuildingEffect(BuildingSoundEffectType::Construct);
+					m_buildingSoundId = SoundManager::getInstance()->playBuildingEffect(BuildingSoundEffectType::Construct, true);
 				}
 
 				if (m_bottonGridPos.empty())

@@ -8,7 +8,9 @@
 	</Bullet>
 	<SoundEffect>
 		<Detail type="building" constructFileName="building_construct_07.ogg" destroyFileName="building_destroyed_01.ogg"/>
-		<Detail type="soldier" atkFileName="arrow_hit_07.ogg" moveFileName="archer_move.ogg" selectFileName="archer_select.ogg" dieFileName="archer_death_05.ogg"/>
+		<Detail type="soldier" soldierType="1" atkFileName="barbarian_hit.ogg" moveFileName="" selectFileName="" dieFileName="barbarian_death.ogg"/>
+		<Detail type="soldier" soldierType="2" atkFileName="arrow_hit.ogg" moveFileName="" selectFileName="" dieFileName="archer_death.ogg"/>
+		<Detail type="soldier" soldierType="3" atkFileName="mage_attack.ogg" moveFileName="" selectFileName="" dieFileName="barbarian_death.ogg"/>
 	</SoundEffect>
 	<SpecialEffect></SpecialEffect>
 	<CooldownTime>

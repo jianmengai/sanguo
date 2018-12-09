@@ -366,10 +366,18 @@ bool GameConfig::parseSoundEffectConf(const tinyxml2::XMLElement * node)
 		}
 		else if (type == "soldier")
 		{
-			m_soldierSound.attackName = GameUtils::escapeString(brotherNode->Attribute("atkFileName"));
-			m_soldierSound.moveName = GameUtils::escapeString(brotherNode->Attribute("moveFileName"));
-			m_soldierSound.selectName = GameUtils::escapeString(brotherNode->Attribute("selectFileName"));
-			m_soldierSound.deathName = GameUtils::escapeString(brotherNode->Attribute("dieFileName"));
+			SoldierType soldierType = SoldierType::Invalid;
+			SoldierSoundEffectData* soldierEffectData = new (std::nothrow)SoldierSoundEffectData;
+			if (soldierEffectData == nullptr)
+			{
+				continue;
+			}
+			soldierType = static_cast<SoldierType>(atoi(brotherNode->Attribute("soldierType")));
+			soldierEffectData->attackName = GameUtils::escapeString(brotherNode->Attribute("atkFileName"));
+			soldierEffectData->moveName = GameUtils::escapeString(brotherNode->Attribute("moveFileName"));
+			soldierEffectData->selectName = GameUtils::escapeString(brotherNode->Attribute("selectFileName"));
+			soldierEffectData->deathName = GameUtils::escapeString(brotherNode->Attribute("dieFileName"));
+			m_soldierSounds[soldierType] = soldierEffectData;
 		}
 		brotherNode = brotherNode->NextSiblingElement();
 	}
@@ -463,7 +471,12 @@ BuildingSoundEffectData * GameConfig::getBuildingSoundEffectConf()
 	return &m_buildingSound;
 }
 
-SoldierSoundEffectData * GameConfig::getSoldierSoundEffectConf()
+SoldierSoundEffectData * GameConfig::getSoldierSoundEffectConf(SoldierType type)
 {
-	return &m_soldierSound;
+	auto it = m_soldierSounds.find(type);
+	if (it == m_soldierSounds.end())
+	{
+		return nullptr;
+	}
+	return m_soldierSounds[type];
 }
