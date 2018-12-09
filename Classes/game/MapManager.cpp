@@ -66,7 +66,7 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 
 	AutoFindPath::initTileNodeTable(m_tileNodeTable);
 	
-	drawTileTable();
+	//drawTileTable();
 
 	m_mapContentSize = m_tiledMap->getContentSize();
 	m_clientWinSize = cocos2d::Director::getInstance()->getWinSize();
@@ -98,47 +98,45 @@ bool MapManager::initBasePosition()
 	{
 		return false;
 	}
-	for (int i = 1; i <= 10; ++i)
-	{
-		std::stringstream ss;
-		ss << "basePoint" << i;
-		std::string baseName = ss.str();
-		ss.str("");
-		ss << "barrackPoint" << i;
-		std::string barrackName = ss.str();
-		auto baseNameValueMap = resourceLayer->getObject(baseName);
-		if (baseNameValueMap.empty())
-		{
-			break;
-		}
-		auto barrackValueMap = resourceLayer->getObject(barrackName);
-		
-		BasePosition basePosition;
-		basePosition.basePosition = getObjectPosition(baseNameValueMap, baseName);
-		basePosition.barrackPosition = getObjectPosition(barrackValueMap, barrackName);
-		for (int j = 1; j <= 10; ++j)
-		{
-			int temp = i * 10;
-			int index = temp + j;
-			ss.str("");
-			ss << "archorTowerPoint" << index;
-			std::string archorTowerName = ss.str();
-			auto archorTowerValueMap = resourceLayer->getObject(archorTowerName);
-			if (archorTowerValueMap.empty())
-			{
-				break;
-			}
-			auto archorTowerPostion = getObjectPosition(archorTowerValueMap, archorTowerName);
-			basePosition.archorTowerPositions.push_back(archorTowerPostion);
-		}
-		
-		m_basePositions.push_back(basePosition);
-	}
-
-	if (m_basePositions.empty())
+	
+	std::stringstream ss;
+	ss << "npcMainTown";
+	std::string baseName = ss.str();
+	ss.str("");
+	ss << "npcBarrack";
+	std::string barrackName = ss.str();
+	auto baseNameValueMap = resourceLayer->getObject(baseName);
+	if (baseNameValueMap.empty())
 	{
 		return false;
 	}
+	auto barrackValueMap = resourceLayer->getObject(barrackName);
+		
+	BasePosition basePosition;
+	basePosition.basePosition = getObjectPosition(baseNameValueMap, baseName);
+	basePosition.barrackPosition = getObjectPosition(barrackValueMap, barrackName);
+	for (int i = 1; i <= 5; ++i)
+	{
+		ss.str("");
+		ss << "npcArchor" << i;
+		std::string archorTowerName = ss.str();
+		auto archorTowerValueMap = resourceLayer->getObject(archorTowerName);
+		if (archorTowerValueMap.empty())
+		{
+			break;
+		}
+		auto archorTowerPostion = getObjectPosition(archorTowerValueMap, archorTowerName);
+		basePosition.archorTowerPositions.push_back(archorTowerPostion);
+	}
+		
+	m_basePositions = basePosition;
+
+	ss.str("");
+	ss << "playerMainTown";
+	std::string playerInitPositionName = ss.str();
+	auto playerInitPosValueMap = resourceLayer->getObject(playerInitPositionName);
+	m_playerInitPosition = getObjectPosition(playerInitPosValueMap, playerInitPositionName);
+	
 
 	return true;
 }
@@ -158,6 +156,12 @@ BasePosition& MapManager::getBasePosition()
 {
 	// TODO: 在此处插入 return 语句
 	return m_basePositions;
+}
+
+cocos2d::Vec2 & MapManager::getPlayerInitPosition()
+{
+	// TODO: 在此处插入 return 语句
+	return m_playerInitPosition;
 }
 
 void MapManager::initTileNodeTable()

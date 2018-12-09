@@ -10,7 +10,7 @@ public:
 	static TeamManager* getInstance();
 	int getUniqTeamId();
 	void addTeam(int teamId, GameObject* gameObject);
-	void removeFromTeam(int teamId, GameObject* gameObject);
+	void removeFromTeam(GameObject* gameObject);
 	void clearTeam(int teamId);
 	void clearTeam();
 
@@ -19,7 +19,6 @@ public:
 	void notifyTeamMemberEnemy(int teamId, GameObject* enemy);
 
 	void update(float dt);
-
 private:
 	void removeDiedObject();
 private:

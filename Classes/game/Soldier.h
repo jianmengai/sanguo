@@ -1,6 +1,8 @@
 #pragma once
 #include <list>
+#include "ui/UIText.h"
 #include "GameObject.h"
+
 
 struct TileNode;
 
@@ -33,6 +35,14 @@ public:
 	TeamNo getTeamNo();
 
 	SoldierType getSoldierType();
+
+	void inDefenceTower(bool in);
+
+	virtual const cocos2d::Vec2& getPosition() const;
+
+	void setAttackDistance(float distance);
+	void setAttackPower(int power);
+
 private:
 	bool init(ForceType forceType, SoldierType type, const cocos2d::Vec2& position, FaceDirection direction);
 	bool initAnimate(SoldierType type);
@@ -47,7 +57,7 @@ private:
 	
 	void onPrepareToRemove();
 	void initHpBar();
-
+	void initTeamText();
 	//寻路时，如果终点格子被占用，则选取格子周边的未被占用的格子
 	TileNode* adjustEndNode(TileNode* endNode);
 	
@@ -71,6 +81,8 @@ private:
 	void updatePreparePath();
 	bool canMoveToPos(cocos2d::Vec2& pos);
 	void movePath();
+
+	
 
 private:
 	cocos2d::Size m_dieAnimationFrameSize;
@@ -102,4 +114,7 @@ private:
 	SoldierType m_soldierType = SoldierType::Invalid;
 
 	TeamNo m_teamNo = TeamNo::Invalid;
+	cocos2d::ui::Text* m_teamText = nullptr;
+
+	bool m_inDefenceTower = false;
 };

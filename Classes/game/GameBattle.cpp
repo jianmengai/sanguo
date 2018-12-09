@@ -157,25 +157,16 @@ void GameBattle::touchProcess(const cocos2d::Vec2& position)
 
 void GameBattle::initBasePosition()
 {
-	BasePosition playerBase;
-	BasePosition npcBase;
-	auto& basePositions = MapManager::getInstance()->getBasePosition();
-	do
-	{
-		auto index1 = rand() % basePositions.size();
-		auto index2 = rand() % basePositions.size();
-		if (index1 != index2)
-		{
-			playerBase = basePositions.at(index1);
-			npcBase = basePositions.at(index2);
-			break;
-		}
-	} while (true);
+	//BasePosition playerBase;
+	//BasePosition npcBase;
+	auto& basePosition = MapManager::getInstance()->getBasePosition();
+	auto& playerPos = MapManager::getInstance()->getPlayerInitPosition();
+	
 	//地图切到玩家视野
-	MapManager::getInstance()->setPosition(playerBase.basePosition);
+	MapManager::getInstance()->setPosition(playerPos);
 	//WarFogLayer::getInstance()->setFogPosition(playerBase.basePosition);
-	m_player->setBasePosition(playerBase);
-	m_npc->setBasePosition(npcBase);
+	//m_player->setBasePosition(playerBase);
+	m_npc->setBasePosition(basePosition);
 }
 
 void GameBattle::npcAttack()

@@ -4,6 +4,7 @@
 #include "GameUtils.h"
 #include "GameObjectManager.h"
 #include "SoundManager.h"
+#include "Soldier.h"
 
 
 Building* Building::create(ForceType forceType, BuildingType type, const cocos2d::Vec2& position)
@@ -174,6 +175,8 @@ void Building::initData(const BuildingType type)
 	}
 	m_curHp = m_maxHp = buildingConf->maxHP;
 	m_buildingTimeBySecond = buildingConf->buildingTimeBySecond;
+	m_attackPower = buildingConf->attackPower;
+	m_attackDistance = buildingConf->attackRange;
 }
 
 bool Building::isReadyToRemove()
@@ -212,7 +215,7 @@ void Building::initHpBar()
 	auto hpContentSize = hpBarBackground->getContentSize();
 	auto scaleX = contentSize.width / hpContentSize.width;
 	hpBarBackground->setScaleX(scaleX);
-	hpBarBackground->setPosition(cocos2d::Vec2(contentSize.width / 2.0, contentSize.height));
+	hpBarBackground->setPosition(cocos2d::Vec2(contentSize.width / 2.0, contentSize.height + 20));
 }
 
 const cocos2d::Size& Building::getContentSize()
@@ -342,6 +345,32 @@ void Building::updateStatus(BuildingStatus buildingStatus)
 			break;
 			case BuildingStatus::Working:
 			{
+				//如果是防御塔，则需要加一个弓箭手
+				if (m_buildingType == BuildingType::DefenceTower)
+				{
+					FaceDirection faceDirection = FaceDirection::Invalid;
+					if (m_forceType == ForceType::AI)
+					{
+						faceDirection = FaceDirection::FaceToWest;
+					}
+					else
+					{
+						faceDirection = FaceDirection::FaceToEast;
+					}
+					auto& contentSize = getContentSize();
+					cocos2d::Vec2 position = cocos2d::Vec2(contentSize.width/2, contentSize.height - 50);
+					m_archer = Soldier::create(m_forceType, SoldierType::Archer, position, faceDirection);
+					if (m_archer != nullptr)
+					{
+						m_archer->setScale(1.0);
+						m_archer->inDefenceTower(true);
+						m_archer->showHpBar(false);
+						m_archer->setAttackDistance(m_attackDistance);
+						m_archer->setAttackPower(m_attackPower);
+						addChild(m_archer);
+						GameObjectManager::getInstance()->addGameObject(m_archer);
+					}
+				}
 				/*_defenceNpc = createDefenceNpc(_templateName);
 
 				if (_bottomGridInMapPositionList.empty())
@@ -365,7 +394,11 @@ void Building::updateStatus(BuildingStatus buildingStatus)
 				}*/
 
 				//GameWorldCallBackFunctionsManager::getInstance()->_createSpecialEffect(_destroySpecialEffectTemplateName, getPosition(), false);
-
+				if (m_archer != nullptr)
+				{
+					m_archer->setVisible(false);
+					GameObjectManager::getInstance()->addReadyToRemoveGameObject(m_archer->getId());
+				}
 				auto onReadyToRemove = cocos2d::CallFunc::create(CC_CALLBACK_0(Building::addToRemoveQueue, this));
 				auto sequenceAction = cocos2d::Sequence::create(cocos2d::DelayTime::create(BUILDING_DELAY_REMOVE_TIME), onReadyToRemove, nullptr);
 				runAction(sequenceAction);

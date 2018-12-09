@@ -37,6 +37,9 @@ public:
 	{
 		cocos2d::Sprite::setVisible(isVisible);
 	}
+
+	void showHpBar(bool show);
+
 protected:
 	GameObject();
 	bool init() override;
@@ -60,7 +63,7 @@ protected:
 	GameObjectStatus m_objectStatus = GameObjectStatus::Invalid;
 	//int m_type;
 	int m_attackPower = 0;
-	int m_maxAttackPower = 0;
+	//int m_maxAttackPower = 0;
 	float m_alertDistance = 1200; //警戒距离，距离内会被发现
 	float m_attackDistance = 500; //攻击距离，距离内直接攻击
 	BulletType m_bulletType = BulletType::Invalid;
@@ -74,4 +77,6 @@ protected:
 	GameObject* m_attackTarget = nullptr;  //待攻击的目标，这里手工指定的或者预先选定的攻击目标
 
 	cocos2d::ui::LoadingBar* m_hpBar = nullptr;
+
+	bool m_showHpBar = true;
 };

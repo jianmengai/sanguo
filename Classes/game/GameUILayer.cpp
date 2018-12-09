@@ -502,7 +502,11 @@ void GameUILayer::onTeamMemOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchE
 		{
 			auto gameObject = GameObjectManager::getInstance()->getGameObjectById(checkBoxValue.gameObjectId);
 			Soldier* soldier = dynamic_cast<Soldier*>(gameObject);
-			soldier->setTeamNo(TeamNo::Invalid);
+			if (soldier != nullptr)
+			{
+				soldier->setTeamNo(TeamNo::Invalid);
+			}
+			
 		}
 
 		//ÖØÖÃ

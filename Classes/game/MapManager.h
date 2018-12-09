@@ -85,6 +85,8 @@ public:
 
 	//NPC»ùµØ×ø±ê
 	BasePosition& getBasePosition();
+
+	cocos2d::Vec2& getPlayerInitPosition();
 private:
 	bool initBasePosition();
 
@@ -111,4 +113,5 @@ private:
 
 
 	BasePosition m_basePositions;
+	cocos2d::Vec2 m_playerInitPosition;
 };

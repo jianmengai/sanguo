@@ -22,7 +22,7 @@
 		</Soldier>
 		<Building>
 			<Detail type="1" name="Barrack(兵营)" prepareTexture="BaseCamp1.png" beingTexture="BeingBuiltStatusBig.png" workingTexture="BaseCamp1.png" destroyTexture="InDestroyStatusBig.png"  shadowTexture="BuildingShadowBig.png" destroySpecialEffect="BuildingBomb" maxHp="200" atkPower="" maxAtkRadius="" maxCount="1" buildingTime="10"/>
-			<Detail type="2" name="DefenceTower(防御塔)" prepareTexture="ArcherTower1.png" beingTexture="BeingBuiltStatusMiddle.png" workingTexture="ArcherTower1.png" destroyTexture="InDestroyStatusMiddle.png" shadowTexture="BuildingShadowMiddle.png" destroySpecialEffect="BuildingBomb" maxHp="200" atkPower="" maxAtkRadius="" maxCount="0" buildingTime="10"/>
+			<Detail type="2" name="DefenceTower(防御塔)" prepareTexture="ArcherTower1.png" beingTexture="BeingBuiltStatusMiddle.png" workingTexture="ArcherTower1.png" destroyTexture="InDestroyStatusMiddle.png" shadowTexture="BuildingShadowMiddle.png" destroySpecialEffect="BuildingBomb" maxHp="200" atkPower="20" maxAtkRadius="700" maxCount="0" buildingTime="10"/>
 			<Detail type="3" name="MainTown(主城)" prepareTexture="BaseCamp2.png" beingTexture="BeingBuiltStatusBig.png" workingTexture="BaseCamp2.png" destroyTexture="InDestroyStatusBig.png"  shadowTexture="BuildingShadowBig.png" destroySpecialEffect="BuildingBomb" maxHp="200" atkPower="" maxAtkRadius="" maxCount="1" buildingTime="10"/>
 		</Building>
 
@@ -35,7 +35,7 @@
 		</Soldier>
 		<Building>
 			<Detail type="1" name="Barrack(兵营)" prepareTexture="BaseCamp1.png" beingTexture="BeingBuiltStatusBig.png" workingTexture="BaseCamp1.png" destroyTexture="InDestroyStatusBig.png"  shadowTexture="BuildingShadowBig.png" destroySpecialEffect="BuildingBomb" maxHp="200" atkPower="" maxAtkRadius="" maxCount="1" buildingTime="10"/>
-			<Detail type="2" name="DefenceTower(防御塔)" prepareTexture="ArcherTower1.png" beingTexture="BeingBuiltStatusMiddle.png" workingTexture="ArcherTower1.png" destroyTexture="InDestroyStatusMiddle.png" shadowTexture="BuildingShadowMiddle.png" destroySpecialEffect="BuildingBomb" maxHp="200" atkPower="" maxAtkRadius="" maxCount="0" buildingTime="10"/>
+			<Detail type="2" name="DefenceTower(防御塔)" prepareTexture="ArcherTower1.png" beingTexture="BeingBuiltStatusMiddle.png" workingTexture="ArcherTower1.png" destroyTexture="InDestroyStatusMiddle.png" shadowTexture="BuildingShadowMiddle.png" destroySpecialEffect="BuildingBomb" maxHp="200" atkPower="20" maxAtkRadius="700" maxCount="0" buildingTime="10"/>
 			<Detail type="3" name="MainTown(主城)" prepareTexture="BaseCamp2.png" beingTexture="BeingBuiltStatusBig.png" workingTexture="BaseCamp2.png" destroyTexture="InDestroyStatusBig.png"  shadowTexture="BuildingShadowBig.png" destroySpecialEffect="BuildingBomb" maxHp="200" atkPower="" maxAtkRadius="" maxCount="1" buildingTime="10"/>
 		</Building>
 	</Player>

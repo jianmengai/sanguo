@@ -2,6 +2,13 @@
 
 
 
+void GameObject::showHpBar(bool show)
+{
+	m_showHpBar = show;
+	auto hpBarBackground = m_hpBar->getParent();
+	hpBarBackground->setVisible(false);
+}
+
 GameObject::GameObject()
 {
 
@@ -56,6 +63,10 @@ float GameObject::getAoeDamageRadius()
 
 void GameObject::showHpBar()
 {
+	if (!m_showHpBar)
+	{
+		return;
+	}
 	auto hpBarBackground = m_hpBar->getParent();
 	hpBarBackground->setVisible(true);
 }

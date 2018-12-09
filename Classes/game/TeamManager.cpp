@@ -22,24 +22,20 @@ void TeamManager::addTeam(int teamId, GameObject * gameObject)
 	gameObjects.push_back(gameObject);
 }
 
-void TeamManager::removeFromTeam(int teamId, GameObject * gameObject)
+void TeamManager::removeFromTeam(GameObject * gameObject)
 {
-	if ((teamId <= 0) || (gameObject == nullptr))
+	for (auto& pairs : m_teams)
 	{
-		return;
-	}
-	auto it = m_teams.find(teamId);
-	if (it == m_teams.end())
-	{
-		return;
-	}
-	std::vector<GameObject*>& gameObjects = it->second;
-	for (auto it = gameObjects.begin(); it != gameObjects.end(); ++it)
-	{
-		if ((*it) == gameObject)
+		for (auto it = pairs.second.begin(); it != pairs.second.end();)
 		{
-			gameObjects.erase(it);
-			break;
+			if ((*it) == gameObject)
+			{
+				it = pairs.second.erase(it);
+			}
+			else
+			{
+				++it;
+			}
 		}
 	}
 }

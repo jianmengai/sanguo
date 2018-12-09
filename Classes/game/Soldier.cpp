@@ -8,6 +8,7 @@
 #include "GameUtils.h"
 #include "AutoFindPath.h"
 #include "building.h"
+#include "TeamManager.h"
 
 Soldier* Soldier::create(ForceType forceType, SoldierType type, const cocos2d::Vec2& position, FaceDirection direction)
 {
@@ -39,7 +40,6 @@ bool Soldier::init(ForceType forceType, SoldierType type, const cocos2d::Vec2& p
 	{
 		return false;
 	}
-	
 	if (!initData(type))
 	{
 		return false;
@@ -49,7 +49,8 @@ bool Soldier::init(ForceType forceType, SoldierType type, const cocos2d::Vec2& p
 	this->setPosition(position);
 	
 	initHpBar();
-	
+	initTeamText();
+
 	m_uniqId = GameUtils::getLastestUniqId();
 
 	toStand();
@@ -425,6 +426,33 @@ void Soldier::movePath()
 	
 }
 
+const cocos2d::Vec2& Soldier::getPosition() const
+{
+	if (m_inDefenceTower)
+	{
+		auto parent = getParent();
+		auto selfPos = GameObject::getPosition();
+		auto parentPos = parent->getPosition();
+		auto worldPos = convertToWorldSpace(selfPos);
+		static auto pos = parent->getPosition() + cocos2d::Vec2(0, 100);
+		return pos;
+	}
+	else
+	{
+		return GameObject::getPosition();
+	}
+}
+
+void Soldier::setAttackDistance(float distance)
+{
+	m_attackDistance = distance;
+}
+
+void Soldier::setAttackPower(int power)
+{
+	m_attackPower = power;
+}
+
 FaceDirection Soldier::getFaceDirection(const cocos2d::Vec2& moveToPos)
 {
 	FaceDirection faceToDirection = FaceDirection::Invalid;
@@ -489,6 +517,71 @@ void Soldier::setPath(std::list<cocos2d::Vec2>& path)
 void Soldier::setTeamNo(TeamNo teamNo)
 {
 	m_teamNo = teamNo;
+	if (m_teamNo == TeamNo::Invalid)
+	{
+		TeamManager::getInstance()->removeFromTeam(this);
+		m_teamText->setVisible(false);
+	}
+	if (m_forceType == ForceType::AI)
+	{
+		return;
+	}
+	std::string teamName;
+	switch (m_teamNo)
+	{
+	case TeamNo::One:
+	{
+		teamName = "1";
+	}
+	break;
+	case TeamNo::Two:
+	{
+		teamName = "2";
+	}
+	break;
+	case TeamNo::Three:
+	{
+		teamName = "3";
+	}
+	break;
+	case TeamNo::Four:
+	{
+		teamName = "4";
+	}
+	break;
+	case TeamNo::Five:
+	{
+		teamName = "5";
+	}
+	break;
+	case TeamNo::Six:
+	{
+		teamName = "6";
+	}
+	break;
+	case TeamNo::Seven:
+	{
+		teamName = "7";
+	}
+	break;
+	case TeamNo::Eight:
+	{
+		teamName = "8";
+	}
+	break;
+	case TeamNo::Nine:
+	{
+		teamName = "9";
+	}
+	break;
+	default:
+		break;
+	}
+	if (!teamName.empty())
+	{
+		m_teamText->setVisible(true);
+		m_teamText->setString(teamName);
+	}
 }
 
 TeamNo Soldier::getTeamNo()
@@ -500,6 +593,12 @@ SoldierType Soldier::getSoldierType()
 {
 	return m_soldierType;
 }
+
+void Soldier::inDefenceTower(bool in)
+{
+	m_inDefenceTower = in;
+}
+
 
 void Soldier::onPrepareToRemove()
 {
@@ -526,11 +625,27 @@ void Soldier::initHpBar()
 	hpBarBackground->setScale(0.5f);
 	hpBarBackground->addChild(m_hpBar);
 	hpBarBackground->setVisible(true);
-
-	addChild(hpBarBackground);
-
 	auto contentSize = getContentSize();
+	if (contentSize.height == 150)
+	{
+		contentSize.height = 120;
+	}
 	hpBarBackground->setPosition(cocos2d::Vec2(contentSize.width / 2.0, contentSize.height + 10));
+	addChild(hpBarBackground);
+}
+
+void Soldier::initTeamText()
+{
+	m_teamText = cocos2d::ui::Text::create();
+	m_teamText->setVisible(false);
+	auto contentSize = getContentSize();
+	if (contentSize.height == 150)
+	{
+		contentSize.height = 120;
+	}
+	m_teamText->setPosition(cocos2d::Vec2(contentSize.width / 2.0, contentSize.height + 30));
+	m_teamText->setFontSize(30);
+	addChild(m_teamText);
 }
 
 TileNode * Soldier::adjustEndNode(TileNode * endNode)
@@ -577,7 +692,7 @@ void Soldier::findAndFight(float deltaTime)
 			
 		}
 		//ÔÚ¾¯½ä·¶Î§ÄÚ£¬²»ÔÚ¹¥»÷·¶Î§ÄÚ
-		else
+		else if(!m_inDefenceTower)
 		{
 			//cocos2d::log(">>>> in alert range, move to enemy:%d", enemy->getId());
 			if (!m_moveToEnemy)
@@ -639,7 +754,7 @@ GameObject* Soldier::searchEnemy()
 		{
 			for (auto object : pairs.second)
 			{
-				cocos2d::log("in alert range, distance:%0.1f, alert:%0.1f, id:%d", pairs.first, m_alertDistance, object->getId());
+				//cocos2d::log("in alert range, distance:%0.1f, alert:%0.1f, id:%d", pairs.first, m_alertDistance, object->getId());
 				nearbyObject = object;
 				break;
 			}
@@ -655,7 +770,7 @@ GameObject* Soldier::searchEnemy()
 			{
 				if (object->getGameObjectType() == GameObjectType::Building)
 				{
-					cocos2d::log("nearby building, distance:%0.1f, alert:%0.1f, id:%d", pairs.first, m_alertDistance, object->getId());
+					//cocos2d::log("nearby building, distance:%0.1f, alert:%0.1f, id:%d", pairs.first, m_alertDistance, object->getId());
 					nearbyObject = object;
 					break;
 				}
@@ -673,7 +788,7 @@ GameObject* Soldier::searchEnemy()
 		{
 			for (auto object : pairs.second)
 			{
-				cocos2d::log("nearby soldier, distance:%0.1f, alert:%0.1f, id:%d", pairs.first, m_alertDistance, object->getId());
+				//cocos2d::log("nearby soldier, distance:%0.1f, alert:%0.1f, id:%d", pairs.first, m_alertDistance, object->getId());
 
 				nearbyObject = object;
 				break;

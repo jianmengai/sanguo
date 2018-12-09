@@ -5,6 +5,7 @@
 #include "GameObject.h"
 
 
+class Soldier;
 
 class Building : public GameObject
 {
@@ -49,4 +50,5 @@ private:
 	cocos2d::ui::LoadingBar* m_beingBuildProgressBar = nullptr;
 	float m_buildingTimeBySecond = 0;
 	float m_passTimeBySecondInBeingBuiltStatus = 0;
+	Soldier* m_archer = nullptr;
 };
