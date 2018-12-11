@@ -5,6 +5,7 @@
 #include "WarFogLayer.h"
 #include "GameConfig.h"
 #include "TeamManager.h"
+#include "GameUtils.h"
 Army::Army()
 {
 
@@ -52,18 +53,18 @@ Soldier* Army::createSoldier(SoldierType type)
 			direction = FaceDirection::FaceToSouthWest;
 			//寻找*中可用位置	
 			/*
-			
-			     **##
-			     **##
+
+				 **##
+				 **##
 				 ****
 				 ****
 			*/
 			for (int row = posToTileNode.x + 2; row <= static_cast<int>(mapSize.height); --row)
 			{
-				for (int col = posToTileNode.y; col >=0; --col)
+				for (int col = posToTileNode.y; col >= 0; --col)
 				{
 					cocos2d::log("try tile:[%d, %d]", row, col);
-					if (MapManager::getInstance()->checkOccupy(row, col))
+					if (MapManager::getInstance()->checkOccupy(row, col, OccupyType::Soldier))
 					{
 						found = true;
 						tileRow = row;
@@ -83,19 +84,18 @@ Soldier* Army::createSoldier(SoldierType type)
 			direction = FaceDirection::FaceToNorthWest;
 			//在上方寻找
 			/*
+				*****
+				*****
+				***##
+				***##
 
-				*****
-				*****
-				***##
-				***##
-			
 			*/
 			for (int row = posToTileNode.x - 2; row >= 0; --row)
 			{
 				for (int col = posToTileNode.y; col >= 0; --col)
 				{
 					cocos2d::log("try tile:[%d, %d]", row, col);
-					if (MapManager::getInstance()->checkOccupy(row, col))
+					if (MapManager::getInstance()->checkOccupy(row, col, OccupyType::Soldier))
 					{
 						found = true;
 						tileRow = row;
@@ -119,18 +119,18 @@ Soldier* Army::createSoldier(SoldierType type)
 			direction = FaceDirection::FaceToSouthEast;
 			//在下方
 			/*
-				
+
 				##**
 				##**
 				****
 				****
 			*/
-			for (int row = posToTileNode.x + 2; row <= static_cast<int>(mapSize.height); ++row)
+			for (int row = posToTileNode.x - 6; row <= static_cast<int>(mapSize.height); ++row)
 			{
-				for (int col = posToTileNode.y; col <= static_cast<int>(mapSize.width); ++col)
+				for (int col = posToTileNode.y + 3; col <= posToTileNode.y + 7/*static_cast<int>(mapSize.width)*/; ++col)
 				{
 					cocos2d::log("try tile:[%d, %d]", row, col);
-					if (MapManager::getInstance()->checkOccupy(row, col))
+					if (MapManager::getInstance()->checkOccupy(row, col, OccupyType::Soldier))
 					{
 						found = true;
 						tileRow = row;
@@ -150,12 +150,11 @@ Soldier* Army::createSoldier(SoldierType type)
 			direction = FaceDirection::FaceToNorthEast;
 			//在上方
 			/*
-				
-				****
-				****
-				##**
-				##**
 
+				****
+				****
+				##**
+				##**
 			*/
 
 			for (int row = posToTileNode.x - 2; row >= 0; --row)
@@ -163,7 +162,7 @@ Soldier* Army::createSoldier(SoldierType type)
 				for (int col = posToTileNode.y; col <= static_cast<int>(mapSize.width); ++col)
 				{
 					cocos2d::log("try tile:[%d, %d]", row, col);
-					if (MapManager::getInstance()->checkOccupy(row, col))
+					if (MapManager::getInstance()->checkOccupy(row, col, OccupyType::Soldier))
 					{
 						found = true;
 						tileRow = row;
@@ -184,7 +183,6 @@ Soldier* Army::createSoldier(SoldierType type)
 		return nullptr;
 		cocos2d::log("no place to create soldier!");
 	}
-	
 	Soldier* soldier = Soldier::create(m_forceType, type, newPos, direction);
 	if (nullptr == soldier)
 	{
@@ -195,8 +193,7 @@ Soldier* Army::createSoldier(SoldierType type)
 	m_soldiers[type].push_back(soldier);
 	MapManager::getInstance()->addChildToGameObjectLayer(soldier);
 	GameObjectManager::getInstance()->addGameObject(soldier);
-	//MapManager::getInstance()->setOccupy(newPos, soldier->getContentSize());
-	//WarFogLayer::getInstance()->inView(tileRow, tileCol);
+	MapManager::getInstance()->setOccupy(tileRow, tileCol, OccupyType::Soldier);
 	return soldier;
 }
 
@@ -222,7 +219,7 @@ Building* Army::createBuilding(BuildingType type, const cocos2d::Vec2& position,
 		return nullptr;
 	}
 	const auto& contentSize = building->getContentSize();
-	if (!MapManager::getInstance()->checkOccupy(newPos, contentSize))
+	if (!MapManager::getInstance()->checkOccupy(newPos, contentSize, OccupyType::InValidBuilding))
 	{
 		CC_SAFE_DELETE(building);
 		cocos2d::log("can not building here...");
@@ -300,13 +297,22 @@ int Army::getTeamId(TeamNo teamNo)
 
 void Army::setTeamPath(TeamNo teamNo, std::list<cocos2d::Vec2>& path)
 {
-	auto teamId = getTeamId(teamNo);
+	//auto teamId = getTeamId(teamNo);
+	m_teamPath[teamNo] = path;
+	/*
 	auto& teamMem = TeamManager::getInstance()->getTeamMembers(teamId);
 	for (auto gameObject : teamMem)
 	{
 		Soldier* soldier = dynamic_cast<Soldier*>(gameObject);
 		soldier->setPath(path);
 	}
+	*/
+}
+
+std::list<cocos2d::Vec2>& Army::getTeamPath(TeamNo teamNo)
+{
+	return m_teamPath[teamNo];
+
 }
 
 SOLDIER_MAP Army::getAllSoldiers()
@@ -462,6 +468,93 @@ void Army::updateSelectAndTeam()
 
 }
 
+void Army::updateTeamPath()
+{
+
+	for (auto pairs : m_teamPath)
+	{
+		auto teamNo = pairs.first;
+		auto& path = pairs.second;
+		if (path.empty())
+		{
+			continue;
+		}
+		auto pathPos = path.front();
+		auto& lastPos = m_teamLastPos[teamNo];
+		if (pathPos == lastPos)
+		{
+			continue;
+		}
+		//获取编队成员的状态以及坐标
+		auto teamId = getTeamId(teamNo);
+		auto& teamMem = TeamManager::getInstance()->getTeamMembers(teamId);
+		bool shouldMove = true;
+		for(auto mem : teamMem)
+		{
+			auto status = mem->getGameObjectStatus();
+			auto objectPos = mem->getPosition();
+			auto distance = GameUtils::computeDistanceBetween(pathPos, objectPos);
+			if (status != GameObjectStatus::Stand)
+			{
+				shouldMove = false;
+				break;
+			}
+		}
+		if (shouldMove)
+		{
+			std::vector<Soldier*> soldiers;
+			for (auto mem : teamMem)
+			{
+				soldiers.push_back(dynamic_cast<Soldier*>(mem));
+			}
+			m_teamLastPos[teamNo] = pathPos;
+			soldiersMoveTo(soldiers, pathPos);
+		}
+	}
+}
+
+TileNode * Army::getLastNode(TileNode * node, int index)
+{
+		if (node == nullptr)
+		{
+			return nullptr;
+		}
+		TileNode* lastNode = node;
+		int y = node->columnIndex;
+		int x = node->rowIndex;
+		auto size = MapManager::getInstance()->getMapSize();
+		int maxX = size.height;
+		int maxY = size.width;
+		for (int i = index; i < 100; ++i)
+		{
+			for (int curX = x - i; curX <= x + i; ++curX)
+			{
+				for (int curY = y - i; curY <= y + i; ++curY)
+				{
+					if ((curX == x) && (curY == y))
+					{
+						continue;
+					}
+					if ((curX < 0) || (curX >= maxX))
+					{
+						continue;
+					}
+					if ((curY < 0) || (curY >= maxY))
+					{
+						continue;
+					}
+					if (MapManager::getInstance()->checkOccupy(curX, curY, OccupyType::Soldier))
+					{
+						lastNode = MapManager::getInstance()->getTileNode(curX, curY);
+						return lastNode;
+					}
+				}
+			}
+		}
+		return lastNode;
+
+}
+
 void Army::resetTeam(TeamNo teamNo)
 {
 	auto teamId = getTeamId(teamNo);
@@ -518,6 +611,7 @@ void Army::update(float dt)
 
 	updateTechPoint(dt);
 	updateSelectAndTeam();
+	updateTeamPath();
 }
 
 void Army::addSelected(GameObject* gameObject)
@@ -548,25 +642,21 @@ void Army::attackTarget(GameObject* gameObject)
 	//}
 	//if (m_attackTarget != gameObject)
 	{
-		if (soldiersMoveTo(gameObject->getPosition()))
+		if (soldiersMoveTo(m_selectedSodiers, gameObject->getPosition()))
 		{
 			m_attackTarget = gameObject;
 		}
 	}
 }
 
-bool Army::soldiersMoveTo(const cocos2d::Vec2& mapPos)
+bool Army::soldiersMoveTo(const std::vector<Soldier*>& soldiers, const cocos2d::Vec2& mapPos)
 {
-	if (m_selectedSodiers.empty())
+	if (soldiers.empty())
 	{
-		selectTeam(TeamNo::One);
-		if (m_selectedSodiers.empty())
-		{
-			return false;
-		}
+		return false;
 	}
 	float teamSpeed = FLT_MAX;
-	for (auto sodier : m_selectedSodiers)
+	for (auto sodier : soldiers)
 	{
 		if (teamSpeed > sodier->getMoveSpeed())
 		{
@@ -574,31 +664,34 @@ bool Army::soldiersMoveTo(const cocos2d::Vec2& mapPos)
 		}
 	}
 
-	//auto mapPos = MapManager::getInstance()->toMapPos(position);
-	auto endTileNode = MapManager::getInstance()->getTileNode(mapPos);
-	int row = endTileNode->rowIndex;
-	int col = endTileNode->columnIndex;
 	auto moveToPos = mapPos;
 	auto mapSize = MapManager::getInstance()->getMapSize();
-	for (auto soldier : m_selectedSodiers)
+
+	auto tileNode = MapManager::getInstance()->getTileNode(mapPos);
+	int index = 0;
+	for (auto soldier : soldiers)
 	{
 		soldier->setTeamSpeed(teamSpeed);
-		soldier->moveTo(moveToPos);
-		if (row - 1 >= 0)
+		if (index == 0)
 		{
-			TileNode* tileNode = MapManager::getInstance()->getTileNode(row -1, col);
-			moveToPos = tileNode->position;
-			row = row - 1;
-			continue;
+			soldier->moveTo(mapPos);
 		}
-		if (col - 1 >= 0)
+		else
 		{
-			TileNode* tileNode = MapManager::getInstance()->getTileNode(row, col -1);
-			col = col - 1;
-			moveToPos = tileNode->position;
-			continue;
+			auto newNode = getLastNode(tileNode, index);
+			if (newNode != nullptr)
+			{
+				soldier->moveTo(newNode->position);
+			}
+
 		}
+		++index;
 	}
 
 	return true;
+}
+
+bool Army::soldiersMoveTo(const cocos2d::Vec2 & position)
+{
+	return soldiersMoveTo(m_selectedSodiers, position);
 }

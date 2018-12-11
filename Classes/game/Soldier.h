@@ -79,8 +79,14 @@ private:
 	void clearMoveToRowCol();
 
 	void updatePreparePath();
-	bool canMoveToPos(cocos2d::Vec2& pos);
 	void movePath();
+	void updateMove();
+
+	//终点处寻找未被占用的格子
+	TileNode* getLastNode(TileNode* node);
+
+
+
 private:
 	cocos2d::Size m_dieAnimationFrameSize;
 

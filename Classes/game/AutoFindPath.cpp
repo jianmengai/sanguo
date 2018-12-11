@@ -91,7 +91,7 @@ std::list<TileNode*> AutoFindPath::computeTileNodePathListBetween(TileNode* star
 
 bool AutoFindPath::canVisit(TileNode* node)
 {
-	if (node->occupy == 1)
+	if ((node->occupy == OccupyType::InValid) || (node->occupy == OccupyType::Building))
 	{
 		return false;
 	}

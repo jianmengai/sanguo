@@ -66,7 +66,7 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 
 	AutoFindPath::initTileNodeTable(m_tileNodeTable);
 	
-	//drawTileTable();
+	drawTileTable();
 
 	m_mapContentSize = m_tiledMap->getContentSize();
 	m_clientWinSize = cocos2d::Director::getInstance()->getWinSize();
@@ -83,12 +83,19 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 void MapManager::update(float dt)
 {
 	static int count = 0;
-	if (count >= 120)
+	static int count2 = 0;
+	//if (count >= 120)
 	{
-		//drawTileTable();
+		drawTileTable();
 		count = 0;
 	}
+	//if (count2 >= 30)
+	{
+		updateOccupy();
+		count2 = 0;
+	}
 	++count;
+	++count2;
 }
 
 bool MapManager::initBasePosition()
@@ -218,7 +225,7 @@ void MapManager::initTileNodeTable()
 			m_tileNodeTable[rowIndex][columnIndex]->gid = gameObjectLayer->getTileGIDAt(cocos2d::Vec2(columnIndex, rowIndex));
 			if (m_tileNodeTable[rowIndex][columnIndex]->gid != 0)
 			{
-				m_tileNodeTable[rowIndex][columnIndex]->occupy = 1;
+				m_tileNodeTable[rowIndex][columnIndex]->occupy = OccupyType::InValid;
 			}
 			/*cocos2d::Vec2 positionInTileMap;
 			positionInTileMap.x = (((float)columnIndex - (float)rowIndex) / 2.0f + mapSize.width / 2.0f) * tileSize.width;
@@ -241,6 +248,7 @@ void MapManager::initTileNodeTable()
 
 void MapManager::drawTileTable()
 {
+	m_drawNode->clear();
 	cocos2d::Color4F color = cocos2d::Color4F(164.0f / 255.0f, 72.0f / 255.0f, 192.0f / 255.0f, 1.0f);
 	auto totalHeight = m_tileSize.height * m_mapSize.height;
 	for (int rowIndex = 0; rowIndex < (int)m_mapSize.height; rowIndex++)
@@ -267,7 +275,7 @@ void MapManager::drawTileTable()
 			points[2].y = curPoint.y;
 			points[3].x = curPoint.x;
 			points[3].y = curPoint.y - m_tileSize.height / 2.0;
-			if (m_tileNodeTable[rowIndex][columnIndex]->occupy == 1)
+			if (m_tileNodeTable[rowIndex][columnIndex]->occupy != OccupyType::Valid)
 			{
 				m_drawNode->drawSolidPoly(points, 4, color);
 			}
@@ -404,7 +412,7 @@ cocos2d::Vec2 MapManager::tileRowColToPos(const int row, const int col)
 	return m_tileNodeTable[row][col]->position;
 }
 
-void MapManager::setOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& contentSize)
+void MapManager::setOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& contentSize, OccupyType type)
 {
 	auto rowCol = toTileRowCol(pos);
 	if ((rowCol.x >= m_mapSize.height) || (rowCol.y >= m_mapSize.width))
@@ -441,12 +449,25 @@ void MapManager::setOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& conten
 		for (int j = startCol; j <= endCol; ++j)
 		{
 			cocos2d::log("map row:%d, col:%d, set row:%d, col:%d, set occupy", (int)rowCol.x, (int)rowCol.y, i, j);
-			m_tileNodeTable[i][j]->occupy = 1;
+			m_tileNodeTable[i][j]->occupy = type;
 		}
 	}
 }
 
-bool MapManager::checkOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& contentSize)
+void MapManager::setOccupy(const int row, const int col, OccupyType type)
+{
+	if (row >= m_mapSize.height || col >= m_mapSize.width)
+	{
+		return;
+	}
+	if (row < 0 || col < 0)
+	{
+		return;
+	}
+	m_tileNodeTable[row][col]->occupy = type;
+}
+
+bool MapManager::checkOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& contentSize, OccupyType type)
 {
 	auto rowCol = toTileRowCol(pos);
 	if ((rowCol.x >= m_mapSize.height) || (rowCol.y >= m_mapSize.width))
@@ -474,7 +495,15 @@ bool MapManager::checkOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& cont
 	{
 		for (int j = startCol; j <= endCol; ++j)
 		{
-			if (m_tileNodeTable[i][j]->occupy == 1)
+			if (type == OccupyType::InValidBuilding)
+			{
+				if ((m_tileNodeTable[i][j]->occupy == OccupyType::InValid) ||
+					(m_tileNodeTable[i][j]->occupy == OccupyType::Building))
+				{
+					return false;
+				}
+			}
+			else if (m_tileNodeTable[i][j]->occupy == type)
 			{
 				cocos2d::log("row:%d, col:%d occupied", i, j);
 				return false;
@@ -485,7 +514,7 @@ bool MapManager::checkOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& cont
 	return true;
 }
 
-bool MapManager::checkOccupy(const int row, const int col)
+bool MapManager::checkOccupy(const int row, const int col, OccupyType type)
 {
 	if (row >= m_mapSize.height || col >= m_mapSize.width)
 	{
@@ -495,7 +524,7 @@ bool MapManager::checkOccupy(const int row, const int col)
 	{
 		return false;
 	}
-	return m_tileNodeTable[row][col]->occupy != 1;
+	return m_tileNodeTable[row][col]->occupy != type;
 }
 
 TileNode* MapManager::getTileNode(const cocos2d::Vec2& pos)
@@ -531,4 +560,27 @@ cocos2d::Vec2 & MapManager::getObjectPosition(cocos2d::ValueMap& valueMap, std::
 	int columnIndex = x / m_tileSize.height;
 	int rowIndex = (m_mapSize.height * m_tileSize.height - y) / m_tileSize.height;
 	return getTileNode(rowIndex, columnIndex)->position;
+}
+
+void MapManager::updateOccupy()
+{
+
+	for (int row = 0; row < m_mapSize.height; ++row)
+	{
+		for (int col = 0; col < m_mapSize.width; ++col)
+		{
+			if (m_tileNodeTable[row][col]->occupy == OccupyType::Soldier)
+			{
+				m_tileNodeTable[row][col]->occupy = OccupyType::Valid;
+			}
+		}
+	}
+	auto allSoldiers = GameObjectManager::getInstance()->getGameObjectMap();
+	for (auto& pairs : allSoldiers)
+	{
+		auto object = pairs.second;
+		auto pos = object->getPosition();
+		auto tilePos = toTileRowCol(pos);
+		m_tileNodeTable[tilePos.x][tilePos.y]->occupy = OccupyType::Soldier;
+	}
 }

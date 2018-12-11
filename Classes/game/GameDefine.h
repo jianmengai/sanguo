@@ -144,6 +144,14 @@ enum class TeamNo
 	Nine
 };
 
+enum class OccupyType
+{
+	Valid,      //可用
+	InValid,    //地形占用
+	Building,   //建筑占用
+	Soldier,    //士兵占用
+	InValidBuilding
+};
 
 
 struct BasePosition

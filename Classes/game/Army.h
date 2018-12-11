@@ -17,8 +17,8 @@ public:
 	void update(float dt);
 	Soldier* createSoldier(SoldierType type);
 	Building* createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos = false);
+	bool soldiersMoveTo(const std::vector<Soldier*>& soldiers, const cocos2d::Vec2& position);
 	bool soldiersMoveTo(const cocos2d::Vec2& position);
-
 	void addSelected(GameObject* gameObject);
 	void clearSelected();
 
@@ -41,6 +41,8 @@ public:
 
 	//设置队伍行进路劲
 	void setTeamPath(TeamNo teamNo, std::list<cocos2d::Vec2>& path);
+
+	std::list<cocos2d::Vec2>& getTeamPath(TeamNo teamNo);
 	
 	SOLDIER_MAP getAllSoldiers();
 
@@ -55,6 +57,10 @@ private:
 
 	void updateSelectAndTeam();
 
+	void updateTeamPath();
+
+	TileNode* getLastNode(TileNode* node, int index);
+
 private:
 	int m_techPoint = 1000;
 	SOLDIER_MAP m_soldiers;
@@ -66,4 +72,7 @@ private:
 	BasePosition m_basePosition;
 
 	std::map<TeamNo, int> m_teams;  //key:team number, value:team id
+
+	std::map<TeamNo, std::list<cocos2d::Vec2> > m_teamPath;
+	std::map<TeamNo, cocos2d::Vec2> m_teamLastPos;
 };

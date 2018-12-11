@@ -277,6 +277,7 @@ void Soldier::update(float deltaTime)
 		findAndFight(deltaTime);
 	}
 	movePath();
+	updateMove();
 }
 
 
@@ -322,6 +323,10 @@ void Soldier::toMove()
 	}
 	TileNode* curNode = m_pathList.front();
 	m_pathList.pop_front();
+	if (m_pathList.empty())
+	{
+		curNode = getLastNode(curNode);
+	}
 	//cocos2d::log("-->[%d, %d]==>[%0.1f, %0.1f]", curNode->rowIndex, curNode->columnIndex, curNode->position.x, curNode->position.y);
 	FaceDirection faceDirection = getFaceDirection(curNode->position);
 	//cocos2d::log("face direction:%d", faceDirection);
@@ -404,11 +409,6 @@ void Soldier::updatePreparePath()
 
 }
 
-bool Soldier::canMoveToPos(cocos2d::Vec2 & pos)
-{
-	auto tileRowCol = MapManager::getInstance()->toTileRowCol(pos);
-	return MapManager::getInstance()->checkOccupy(tileRowCol.x, tileRowCol.y);
-}
 
 void Soldier::movePath()
 {
@@ -424,6 +424,60 @@ void Soldier::movePath()
 		m_preparePathList.pop_front();
 	}
 	
+}
+
+void Soldier::updateMove()
+{
+	if (!m_pathList.empty() && (m_objectStatus == GameObjectStatus::Stand))
+	{
+		toMove();
+	}
+}
+
+TileNode * Soldier::getLastNode(TileNode * node)
+{
+	if (node == nullptr)
+	{
+		return nullptr;
+	}
+	//非移动单位占用
+	if (node->occupy != OccupyType::Soldier)
+	{
+		return node;
+	}
+	TileNode* lastNode = node;
+	int y = node->columnIndex;
+	int x = node->rowIndex;
+	auto size = MapManager::getInstance()->getMapSize();
+	int maxX = size.height;
+	int maxY = size.width;
+	for (int i = 1; i < 100; ++i)
+	{
+		for (int curX = x - i; curX <= x + i; ++curX)
+		{
+			for (int curY = y - i; curY <= y + i; ++curY)
+			{
+				if ((curX == x) && (curY == y))
+				{
+					continue;
+				}
+				if ((curX < 0) || (curX >= maxX))
+				{
+					continue;
+				}
+				if ((curY < 0) || (curY >= maxY))
+				{
+					continue;
+				}
+				if (MapManager::getInstance()->checkOccupy(curX, curY, OccupyType::Soldier))
+				{
+					lastNode = MapManager::getInstance()->getTileNode(curX, curY);
+					return lastNode;
+				}
+			}
+		}
+	}
+	return lastNode;
 }
 
 const cocos2d::Vec2& Soldier::getPosition() const

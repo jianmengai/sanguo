@@ -27,7 +27,7 @@ struct TileNode
 
 	bool isVisit = false;
 
-	int occupy = 0; // 是否占用
+	OccupyType occupy = OccupyType::Valid;
 
 	TileNode* parent = nullptr;
 };
@@ -64,13 +64,14 @@ public:
 	cocos2d::Vec2 tileRowColToPos(const int row, const int col);
 
 	//设置障碍物
-	void setOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& contentSize);
+	void setOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& contentSize, OccupyType type);
+
+	void setOccupy(const int row, const int col, OccupyType type);
+	//true:可用   false:不可用
+	bool checkOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& contentSize, OccupyType type);
 
 	//true:可用   false:不可用
-	bool checkOccupy(const cocos2d::Vec2& pos, const cocos2d::Size& contentSize);
-
-	//true:可用   false:不可用
-	bool checkOccupy(const int row, const int col);
+	bool checkOccupy(const int row, const int col, OccupyType type);
 
 	/*地图缩放比例*/
 	void setMapScale(float scale);
@@ -79,8 +80,11 @@ public:
 	//gameObject层添
 	void addChildToGameObjectLayer(cocos2d::Sprite* unit, int zOrder = 1);
 
+	//获取瓦片的大小
 	const cocos2d::Size& getTileSize();
+	//获取地图瓦片的数量
 	cocos2d::Size& getMapSize();
+	//获取地图大小
 	cocos2d::Size& getContentSize();
 
 	//NPC基地坐标
@@ -97,6 +101,8 @@ private:
 	void updateTileNodeTable();
 
 	cocos2d::Vec2& getObjectPosition(cocos2d::ValueMap& valueMap, std::string& name);
+
+	void updateOccupy();
 private:
 	float m_mapScale;
 	cocos2d::experimental::TMXTiledMap* m_tiledMap;
