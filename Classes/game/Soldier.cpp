@@ -480,6 +480,8 @@ TileNode * Soldier::getLastNode(TileNode * node)
 	return lastNode;
 }
 
+
+
 const cocos2d::Vec2& Soldier::getPosition() const
 {
 	if (m_inDefenceTower)

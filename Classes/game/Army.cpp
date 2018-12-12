@@ -471,7 +471,7 @@ void Army::updateSelectAndTeam()
 void Army::updateTeamPath()
 {
 
-	for (auto pairs : m_teamPath)
+	for (auto& pairs : m_teamPath)
 	{
 		auto teamNo = pairs.first;
 		auto& path = pairs.second;
@@ -480,20 +480,18 @@ void Army::updateTeamPath()
 			continue;
 		}
 		auto pathPos = path.front();
-		auto& lastPos = m_teamLastPos[teamNo];
-		if (pathPos == lastPos)
-		{
-			continue;
-		}
+		auto lastPos = m_teamLastPos[teamNo];
 		//获取编队成员的状态以及坐标
 		auto teamId = getTeamId(teamNo);
 		auto& teamMem = TeamManager::getInstance()->getTeamMembers(teamId);
 		bool shouldMove = true;
+		float avgDistance = 0;
 		for(auto mem : teamMem)
 		{
 			auto status = mem->getGameObjectStatus();
 			auto objectPos = mem->getPosition();
 			auto distance = GameUtils::computeDistanceBetween(pathPos, objectPos);
+			avgDistance += distance;
 			if (status != GameObjectStatus::Stand)
 			{
 				shouldMove = false;
@@ -507,8 +505,21 @@ void Army::updateTeamPath()
 			{
 				soldiers.push_back(dynamic_cast<Soldier*>(mem));
 			}
+			
+			if (path.empty())
+			{
+				return;
+			}
+			pathPos = path.front();
+
 			m_teamLastPos[teamNo] = pathPos;
 			soldiersMoveTo(soldiers, pathPos);
+		}
+
+		avgDistance = avgDistance / teamMem.size();
+		if ((avgDistance < 100) && (pathPos == lastPos))
+		{
+			path.pop_front();
 		}
 	}
 }
@@ -553,6 +564,50 @@ TileNode * Army::getLastNode(TileNode * node, int index)
 		}
 		return lastNode;
 
+}
+
+void Army::getArroundNode(TileNode * node, int count, std::vector<TileNode*>& arrounds)
+{
+	if (node == nullptr)
+	{
+		return;
+	}
+	TileNode* lastNode = node;
+	int y = node->columnIndex;
+	int x = node->rowIndex;
+	auto size = MapManager::getInstance()->getMapSize();
+	int maxX = size.height;
+	int maxY = size.width;
+	for (int i = 1; i < 100; ++i)
+	{
+		for (int curX = x - i; curX <= x + i; ++curX)
+		{
+			for (int curY = y - i; curY <= y + i; ++curY)
+			{
+				if ((curX == x) && (curY == y))
+				{
+					continue;
+				}
+				if ((curX < 0) || (curX >= maxX))
+				{
+					continue;
+				}
+				if ((curY < 0) || (curY >= maxY))
+				{
+					continue;
+				}
+				if (MapManager::getInstance()->checkOccupy(curX, curY, OccupyType::Soldier))
+				{
+					lastNode = MapManager::getInstance()->getTileNode(curX, curY);
+					arrounds.push_back(lastNode);
+					if (arrounds.size() == count)
+					{
+						return;
+					}
+				}
+			}
+		}
+	}
 }
 
 void Army::resetTeam(TeamNo teamNo)
@@ -669,25 +724,32 @@ bool Army::soldiersMoveTo(const std::vector<Soldier*>& soldiers, const cocos2d::
 
 	auto tileNode = MapManager::getInstance()->getTileNode(mapPos);
 	int index = 0;
-	for (auto soldier : soldiers)
+	int count = soldiers.size() - 1;
+	if (count < 0)
 	{
-		soldier->setTeamSpeed(teamSpeed);
-		if (index == 0)
-		{
-			soldier->moveTo(mapPos);
-		}
-		else
-		{
-			auto newNode = getLastNode(tileNode, index);
-			if (newNode != nullptr)
-			{
-				soldier->moveTo(newNode->position);
-			}
-
-		}
-		++index;
+		return  false;
 	}
-
+	if (count == 0)
+	{
+		soldiers[0]->moveTo(mapPos);
+	}
+	else
+	{
+		std::vector<TileNode*> arrounds;
+		getArroundNode(tileNode, count, arrounds);
+		arrounds.push_back(tileNode);
+		if (arrounds.size() != soldiers.size())
+		{
+			return false;
+		}
+		int index = 0;
+		for (auto soldier : soldiers)
+		{
+			soldier->setTeamSpeed(teamSpeed);
+			soldier->moveTo(arrounds[index]->position);
+			++index;
+		}
+	}
 	return true;
 }
 

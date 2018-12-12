@@ -407,6 +407,10 @@ void GameUILayer::onPathSwitch(cocos2d::Ref * sender, cocos2d::ui::Widget::Touch
 
 void GameUILayer::onPathOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
+	if (touchType != cocos2d::ui::Widget::TouchEventType::ENDED)
+	{
+		return;
+	}
 	if (m_currentTeamNo != TeamNo::Invalid)
 	{
 		//获取绘制的路径
