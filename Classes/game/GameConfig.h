@@ -69,7 +69,7 @@ typedef struct soldierConf_st
 	std::string blueSelectedTipsTextureName;
 	std::string redSelectedTipsTextureName;
 
-	int technologyPointForEnemy = 0;
+	int technologyPoint = 0;
 
 	bool isAir = false;
 	bool canAirAttack = false;
@@ -100,7 +100,7 @@ typedef struct buildingConf_st
 	std::string blueSelectedTipsTextureName;
 	std::string redSelectedTipsTextureName;
 
-	int technologyPointForEnemy = 0;
+	int technologyPoint = 0;
 
 	bool canDestroy = true;
 

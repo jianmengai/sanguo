@@ -172,6 +172,10 @@ bool GameConfig::parseBulletConf(const tinyxml2::XMLElement* node)
 		{
 			bulletType = BulletType::Arrow;
 		}
+		else if (type == "Magic")
+		{
+			bulletType = BulletType::Magic;
+		}
 		BulletConf* bulletConf = new (std::nothrow)BulletConf;
 		bulletConf->fileName = GameUtils::escapeString(brotherNode->Attribute("bulletFileName"));
 		bulletConf->specialEffect = GameUtils::escapeString(brotherNode->Attribute("specialEffectName"));
@@ -267,6 +271,7 @@ bool GameConfig::parseSoldierConf(const tinyxml2::XMLElement* node)
 			soldierConf->standAnimateDelayPerUnit = atof(brotherNode->Attribute("standAnimatePerUnit"));
 			soldierConf->moveAnimateDelayPerUnit = atof(brotherNode->Attribute("moveAnimatePerUnit"));
 			soldierConf->dieAnimateDelayPerUnit = atof(brotherNode->Attribute("dieAnimatePerUnit"));
+			soldierConf->technologyPoint = atoi(brotherNode->Attribute("technologyPoint"));
 			if (i == 0)
 			{
 				m_playerSoldierConf[soldierType] = soldierConf;
@@ -329,6 +334,7 @@ bool GameConfig::parseBuildingConf(const tinyxml2::XMLElement* node)
 			buildingConf->attackRange = atof(brotherNode->Attribute("maxAtkRadius"));
 			buildingConf->maxCount = atoi(brotherNode->Attribute("maxCount"));
 			buildingConf->buildingTimeBySecond = atof(brotherNode->Attribute("buildingTime"));
+			buildingConf->technologyPoint = atoi(brotherNode->Attribute("technologyPoint"));
 			if (i == 0)
 			{
 				m_playerBuildingConf[buildingType] = buildingConf;

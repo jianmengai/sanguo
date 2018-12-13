@@ -183,12 +183,21 @@ Soldier* Army::createSoldier(SoldierType type)
 		return nullptr;
 		cocos2d::log("no place to create soldier!");
 	}
+
+	auto soldierConf = GameConfig::getInstance()->getSoldierConf(m_forceType, type);
+	auto cost = soldierConf->technologyPoint;
+	if (m_techPoint < cost)
+	{
+		cocos2d::log("techPoint not enough");
+		return nullptr;
+	}
+
 	Soldier* soldier = Soldier::create(m_forceType, type, newPos, direction);
 	if (nullptr == soldier)
 	{
 		return nullptr;
 	}
-
+	m_techPoint -= cost;
 	cocos2d::log("===>create soldier, pos:[%0.1f, %0.1f]", newPos.x, newPos.y);
 	m_soldiers[type].push_back(soldier);
 	MapManager::getInstance()->addChildToGameObjectLayer(soldier);
@@ -213,6 +222,13 @@ Building* Army::createBuilding(BuildingType type, const cocos2d::Vec2& position,
 		newPos = position;
 	}
 
+	auto buildingConf = GameConfig::getInstance()->getBuildingConf(m_forceType, type);
+	auto cost = buildingConf->technologyPoint;
+	if (m_techPoint < cost)
+	{
+		cocos2d::log("techPoint not enough");
+		return nullptr;
+	}
 	Building* building = Building::create(m_forceType, type, newPos);
 	if (nullptr == building)
 	{
@@ -225,7 +241,7 @@ Building* Army::createBuilding(BuildingType type, const cocos2d::Vec2& position,
 		cocos2d::log("can not building here...");
 		return nullptr;
 	}
-
+	m_techPoint -= cost;
 	cocos2d::log("==> create building, pos:[x=%0.1f, y=%0.1f]\n", newPos.x, newPos.y);
 	m_buildings[type].push_back(building);
 	MapManager::getInstance()->addChildToGameObjectLayer(building);
@@ -439,7 +455,15 @@ void Army::updateTechPoint(float dt)
 	//每秒增加一次
 	if ((now - lastUpdateTime) >= 1)
 	{
-		m_techPoint += 100;
+		if (m_forceType == ForceType::AI)
+		{
+			m_techPoint += 200;
+		}
+		else
+		{
+			m_techPoint += 100;
+		}
+		
 		lastUpdateTime = now;
 	}
 }

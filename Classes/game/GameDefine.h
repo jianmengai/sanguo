@@ -83,6 +83,7 @@ enum class BulletType
 	Invalid = 0,
 
 	Arrow,
+	Magic,
 
 	Total
 };
