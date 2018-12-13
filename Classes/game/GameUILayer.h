@@ -63,6 +63,8 @@ private:
 	bool selectTeam(TeamNo teamNo);
 
 	void showTeamMemList();
+	void drawPath();
+	void updatePathStartPos();
 private:
 	cocos2d::Node* m_gameUI = nullptr;
 	cocos2d::ui::ImageView* m_miniMapImgView = nullptr;

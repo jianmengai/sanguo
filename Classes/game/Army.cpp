@@ -315,14 +315,6 @@ void Army::setTeamPath(TeamNo teamNo, std::list<cocos2d::Vec2>& path)
 {
 	//auto teamId = getTeamId(teamNo);
 	m_teamPath[teamNo] = path;
-	/*
-	auto& teamMem = TeamManager::getInstance()->getTeamMembers(teamId);
-	for (auto gameObject : teamMem)
-	{
-		Soldier* soldier = dynamic_cast<Soldier*>(gameObject);
-		soldier->setPath(path);
-	}
-	*/
 }
 
 std::list<cocos2d::Vec2>& Army::getTeamPath(TeamNo teamNo)
@@ -494,7 +486,6 @@ void Army::updateSelectAndTeam()
 
 void Army::updateTeamPath()
 {
-
 	for (auto& pairs : m_teamPath)
 	{
 		auto teamNo = pairs.first;

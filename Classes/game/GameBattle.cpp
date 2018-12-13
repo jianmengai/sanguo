@@ -118,9 +118,16 @@ void GameBattle::setPlayerTeam(TeamNo teamNo, std::vector<int>& teamMem)
 	}
 }
 
+std::list<cocos2d::Vec2>& GameBattle::getPlayerTeamPath(TeamNo teamNo)
+{
+	return m_player->getTeamPath(teamNo);
+}
+
 void GameBattle::touchProcess(const cocos2d::Vec2& position)
 {
 	auto mapPos = MapManager::getInstance()->toMapPos(position);
+	auto tileRowCol = MapManager::getInstance()->toTileRowCol(mapPos);
+	cocos2d::log("!!!!!!!!!!%0.1f, %0.1f!!!!!!!!!!!!!!!!!", tileRowCol.x, tileRowCol.y);
 	auto& gameObjects = GameObjectManager::getInstance()->getGameObjectMap();
 	GameObject* selectObject = nullptr;
 	ForceType foceType = ForceType::Invalid;

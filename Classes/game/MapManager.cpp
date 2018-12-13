@@ -84,7 +84,7 @@ void MapManager::update(float dt)
 {
 	static int count = 0;
 	static int count2 = 0;
-	//if (count >= 120)
+	if (count >= 120)
 	{
 		drawTileTable();
 		count = 0;
@@ -385,8 +385,9 @@ cocos2d::Vec2 MapManager::toTileRowCol(const cocos2d::Vec2& pos)
 	//int col = pos.x / m_tileSize.width + m_mapSize.height - m_mapSize.width / 2.0 - pos.y / m_tileSize.height - 0.5;
 	float width = m_tileSize.width / 2.0;
 	float height = m_tileSize.height / 2.0;
-	int row = (m_tileMapOriginCoor.y * width - pos.y * width + m_tileMapOriginCoor.x * height - pos.x * height) / (2 * width * height);
-	int col = (m_tileMapOriginCoor.y * width - pos.y * width + pos.x * height - m_tileMapOriginCoor.x * height) / (2 * width * height);
+	int row = (m_tileMapOriginCoor.y * width - pos.y * width + m_tileMapOriginCoor.x * height - pos.x * height) / (2 * width * height) + 0.5;
+	int col = (m_tileMapOriginCoor.y * width - pos.y * width + pos.x * height - m_tileMapOriginCoor.x * height) / (2 * width * height) + 0.5;
+	
 	if (row < 0 || row >= m_mapSize.height)
 	{
 		row = 0;
@@ -395,7 +396,7 @@ cocos2d::Vec2 MapManager::toTileRowCol(const cocos2d::Vec2& pos)
 	{
 		col = 0;
 	}
-
+	
 	return cocos2d::Vec2(row, col);
 }
 

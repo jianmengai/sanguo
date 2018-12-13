@@ -62,7 +62,7 @@ private:
 	TileNode* getLastNode(TileNode* node, int index);
 	void getArroundNode(TileNode* node, int count, std::vector<TileNode*>& arrounds);
 private:
-	int m_techPoint = 1000;
+	int m_techPoint = 3000;
 	SOLDIER_MAP m_soldiers;
 	BUILDING_MAP m_buildings;
 	std::vector<Soldier*> m_selectedSodiers;

@@ -227,23 +227,8 @@ void GameUILayer::onMediumMapTouched(cocos2d::Ref * sender, cocos2d::ui::Widget:
 		color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
 		auto widget = static_cast<cocos2d::ui::Widget*>(sender);
 		auto touchPos = widget->convertToNodeSpace(widget->getTouchEndPosition());
-		
-		if (!m_pathList.empty())
-		{
-			//绘制直线
-			m_mediumMapDrawNode->drawLine(m_pathList.back(), touchPos, color);
-		}
-		//
-		else
-		{
-			/*if (m_pathStartPos == cocos2d::Vec2::ZERO)
-			{
-				return;
-			}*/
-			m_mediumMapDrawNode->drawLine(m_pathStartPos, touchPos, color);
-		}
-		m_mediumMapDrawNode->drawSolidRect(touchPos - cocos2d::Vec2(1, 1), touchPos + cocos2d::Vec2(1, 1), color);
 		m_pathList.push_back(touchPos);
+		drawPath();
 	}
 }
 
@@ -394,12 +379,16 @@ void GameUILayer::onPathSwitch(cocos2d::Ref * sender, cocos2d::ui::Widget::Touch
 				m_teamMemSelectPanel->setVisible(false);
 			}
 			m_pathSettingPanel->setVisible(true);
-			if (m_pathStartPos != cocos2d::Vec2::ZERO)
+			//更新起点坐标
+			updatePathStartPos();
+			//获取剩余路径
+			auto pathList = GameBattle::getInstance()->getPlayerTeamPath(m_currentTeamNo);
+			m_pathList.clear();
+			for (auto pos : pathList)
 			{
-				cocos2d::Color4F color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
-				m_mediumMapDrawNode->drawSolidRect(m_pathStartPos - cocos2d::Vec2(1, 1), m_pathStartPos + cocos2d::Vec2(1, 1), color);
+				m_pathList.push_back(pos * m_scale);
 			}
-			
+			drawPath();
 		}
 		
 	}
@@ -424,6 +413,7 @@ void GameUILayer::onPathOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEven
 		m_pathList.clear();
 		m_mediumMapDrawNode->clear();
 	}
+	m_pathSettingPanel->setVisible(false);
 }
 
 void GameUILayer::onPathCancel(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
@@ -524,25 +514,8 @@ void GameUILayer::onTeamMemOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchE
 
 bool GameUILayer::selectTeam(TeamNo teamNo)
 {
-	m_pathStartPos = cocos2d::Vec2::ZERO;
-	int teamId = GameBattle::getInstance()->getPlayerTeamId(teamNo);
-	if (teamId == -1)
-	{
-		return false;
-	}
-	auto teamMembers = TeamManager::getInstance()->getTeamMembers(teamId);
-	
-	for (auto gameObject : teamMembers)
-	{
-		m_pathStartPos += gameObject->getPosition();
-	}
-
-	m_pathStartPos = m_pathStartPos / teamMembers.size();
-
-	m_pathStartPos = m_pathStartPos * m_scale;
-
 	m_currentTeamNo = teamNo;
-
+	updatePathStartPos();
 	GameBattle::getInstance()->selectPlayerTeam(teamNo);
 
 	return true;
@@ -638,6 +611,43 @@ void GameUILayer::showTeamMemList()
 		checkBox->setVisible(false);
 	
 	}
+}
+
+void GameUILayer::drawPath()
+{
+	m_mediumMapDrawNode->clear();
+	cocos2d::Color4F color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
+	cocos2d::Vec2 lastPos;
+	if (m_pathStartPos == cocos2d::Vec2::ZERO) 
+	{
+		return;
+	}
+	m_mediumMapDrawNode->drawSolidRect(m_pathStartPos - cocos2d::Vec2(5, 5), m_pathStartPos + cocos2d::Vec2(5, 5), color);
+	lastPos = m_pathStartPos;
+	for (auto pos : m_pathList)
+	{
+		m_mediumMapDrawNode->drawLine(lastPos, pos, color);
+		m_mediumMapDrawNode->drawSolidRect(pos - cocos2d::Vec2(1, 1), pos + cocos2d::Vec2(1, 1), color);
+		lastPos = pos;
+	}
+}
+
+void GameUILayer::updatePathStartPos()
+{
+	m_pathStartPos = cocos2d::Vec2::ZERO;
+	int teamId = GameBattle::getInstance()->getPlayerTeamId(m_currentTeamNo);
+	if (teamId == -1)
+	{
+		return;
+	}
+	auto teamMembers = TeamManager::getInstance()->getTeamMembers(teamId);
+	for (auto gameObject : teamMembers)
+	{
+		m_pathStartPos += gameObject->getPosition();
+	}
+
+	m_pathStartPos = m_pathStartPos / teamMembers.size();
+	m_pathStartPos = m_pathStartPos * m_scale;
 }
 
 bool GameUILayer::createBuilding(BuildingType type)

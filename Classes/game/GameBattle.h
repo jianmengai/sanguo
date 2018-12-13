@@ -28,6 +28,8 @@ public:
 	SOLDIER_MAP getPlayerSoldiers();
 
 	void setPlayerTeam(TeamNo teamNo, std::vector<int>& teamMem);
+
+	std::list<cocos2d::Vec2>& getPlayerTeamPath(TeamNo teamNo);
 private:
 	//设置基地位置
 	void initBasePosition();
