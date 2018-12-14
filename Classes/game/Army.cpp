@@ -125,7 +125,7 @@ Soldier* Army::createSoldier(SoldierType type)
 				****
 				****
 			*/
-			for (int row = posToTileNode.x - 6; row <= static_cast<int>(mapSize.height); ++row)
+			for (int row = posToTileNode.x - 3; row <= static_cast<int>(mapSize.height); ++row)
 			{
 				for (int col = posToTileNode.y + 3; col <= posToTileNode.y + 7/*static_cast<int>(mapSize.width)*/; ++col)
 				{
@@ -301,6 +301,11 @@ void Army::selectTeam(TeamNo teamNo)
 	}
 }
 
+void Army::unSelect()
+{
+	m_selectedSodiers.clear();
+}
+
 int Army::getTeamId(TeamNo teamNo)
 {
 	auto it = m_teams.find(teamNo);
@@ -343,17 +348,98 @@ SOLDIER_MAP Army::getAllSoldiers()
 	return m_soldiers;
 }
 
+void Army::removeSoldier(GameObject * gameObject)
+{
+	if (gameObject == nullptr)
+	{
+		return;
+	}
+	Soldier* soldier = dynamic_cast<Soldier*>(gameObject);
+	auto soldierType = soldier->getSoldierType();
+	auto& soldiers = m_soldiers[soldierType];
+	for (auto it = soldiers.begin(); it != soldiers.end();)
+	{
+		if ((*it) == soldier)
+		{
+			it = soldiers.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
+
+void Army::removeBuilding(GameObject * gameObject)
+{
+	if (gameObject == nullptr)
+	{
+		return;
+	}
+	Building* building = dynamic_cast<Building*>(gameObject);
+	auto buildingType = building->getBuildingType();
+	auto& buildings = m_buildings[buildingType];
+	for (auto it = buildings.begin(); it != buildings.end();)
+	{
+		if ((*it) == building)
+		{
+			it = buildings.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
+
 void Army::npcAutoCreating()
 {
 
-	if (m_buildings.count(BuildingType::MainTown) == 0)
+	if (!isBuildingExist(BuildingType::MainTown))
 	{
 		createBuilding(BuildingType::MainTown, m_basePosition.basePosition, true);
 	}
-	if (m_buildings.count(BuildingType::Barrack) == 0)
+	if (!isBuildingExist(BuildingType::Barrack))
 	{
 		createBuilding(BuildingType::Barrack, m_basePosition.barrackPosition, true);
 	}
+	//检查防御塔
+	for (auto pos : m_basePosition.archerTowerPositions)
+	{
+		auto archerTowers = m_buildings[BuildingType::DefenceTower];
+		bool fund = false;
+		for (auto tower : archerTowers)
+		{
+			if (tower == nullptr)
+			{
+				continue;
+			}
+			auto towerPos = tower->getPosition();
+			if (towerPos == pos)
+			{
+				fund = true;
+			}
+		}
+		if (!fund)
+		{
+			createBuilding(BuildingType::DefenceTower, pos, true);
+		}
+	}
+	//这里直接根据一个编队需要的资源来创建，如果资源满足创建一个编队，则直接创建
+	static auto archerConf = GameConfig::getInstance()->getSoldierConf(m_forceType, SoldierType::Archer);
+	static auto cavalryConf = GameConfig::getInstance()->getSoldierConf(m_forceType, SoldierType::Cavalry);
+	static auto infantryConf = GameConfig::getInstance()->getSoldierConf(m_forceType, SoldierType::Infantry);
+	static int totalTechPoint = archerConf->technologyPoint * 2 + cavalryConf->technologyPoint * 2 + infantryConf->technologyPoint * 2;
+	if (totalTechPoint <= m_techPoint)
+	{
+		createSoldier(SoldierType::Archer);
+		createSoldier(SoldierType::Cavalry);
+		createSoldier(SoldierType::Infantry);
+		createSoldier(SoldierType::Archer);
+		createSoldier(SoldierType::Cavalry);
+		createSoldier(SoldierType::Infantry);
+	}
+	/*
 	int teamOneCount = 0;
 	auto it = m_teams.find(TeamNo::One);
 	if ((it != m_teams.end()))
@@ -367,7 +453,7 @@ void Army::npcAutoCreating()
 		{
 			addToTeam(TeamNo::One, archorSoldier);
 		}
-		/*
+		
 		auto cavalrySoldier = createSoldier(SoldierType::Cavalry);
 		if (cavalrySoldier != nullptr)
 		{
@@ -378,8 +464,9 @@ void Army::npcAutoCreating()
 		{
 			addToTeam(TeamNo::One, infantrySoldier);
 		}
-		*/
+		
 	}
+	*/
 }
 
 bool Army::canBuild(BuildingType buildingType)
@@ -442,21 +529,24 @@ bool Army::canBuild(BuildingType buildingType)
 
 void Army::updateTechPoint(float dt)
 {
-	static time_t lastUpdateTime = time(nullptr);
 	time_t now = time(nullptr);
 	//每秒增加一次
-	if ((now - lastUpdateTime) >= 1)
+	if (((now - m_lastUpdateTime) >= 1))
 	{
+		if (!isMainTownWorking())
+		{
+			return;
+		}
 		if (m_forceType == ForceType::AI)
 		{
-			m_techPoint += 200;
+			m_techPoint += 100;
 		}
 		else
 		{
 			m_techPoint += 100;
 		}
 		
-		lastUpdateTime = now;
+		m_lastUpdateTime = now;
 	}
 }
 
@@ -623,6 +713,41 @@ void Army::getArroundNode(TileNode * node, int count, std::vector<TileNode*>& ar
 			}
 		}
 	}
+}
+
+bool Army::isMainTownWorking()
+{
+	auto it = m_buildings.find(BuildingType::MainTown);
+	if (it == m_buildings.end())
+	{
+		return false;
+	}
+	auto buildings = it->second;
+	bool fund = false;
+	for (auto mainTown : buildings)
+	{
+		if (mainTown == nullptr)
+		{
+			continue;
+		}
+		if (mainTown->isWorking())
+		{
+			fund = true;
+			break;
+		}
+	}
+	return fund;
+}
+
+bool Army::isBuildingExist(BuildingType type)
+{
+	auto it = m_buildings.find(type);
+	if (it == m_buildings.end())
+	{
+		return false;
+	}
+	auto buildings = it->second;
+	return buildings.empty() == false;
 }
 
 void Army::resetTeam(TeamNo teamNo)

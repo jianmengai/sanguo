@@ -66,7 +66,7 @@ bool MapManager::init(cocos2d::Layer* parentLayer, const std::string& mapFileNam
 
 	AutoFindPath::initTileNodeTable(m_tileNodeTable);
 	
-	drawTileTable();
+	//drawTileTable();
 
 	m_mapContentSize = m_tiledMap->getContentSize();
 	m_clientWinSize = cocos2d::Director::getInstance()->getWinSize();
@@ -86,7 +86,7 @@ void MapManager::update(float dt)
 	static int count2 = 0;
 	if (count >= 120)
 	{
-		drawTileTable();
+		//drawTileTable();
 		count = 0;
 	}
 	//if (count2 >= 30)
@@ -126,14 +126,14 @@ bool MapManager::initBasePosition()
 	{
 		ss.str("");
 		ss << "npcArchor" << i;
-		std::string archorTowerName = ss.str();
-		auto archorTowerValueMap = resourceLayer->getObject(archorTowerName);
-		if (archorTowerValueMap.empty())
+		std::string archerTowerName = ss.str();
+		auto archerTowerValueMap = resourceLayer->getObject(archerTowerName);
+		if (archerTowerValueMap.empty())
 		{
 			break;
 		}
-		auto archorTowerPostion = getObjectPosition(archorTowerValueMap, archorTowerName);
-		basePosition.archorTowerPositions.push_back(archorTowerPostion);
+		auto archerTowerPostion = getObjectPosition(archerTowerValueMap, archerTowerName);
+		basePosition.archerTowerPositions.push_back(archerTowerPostion);
 	}
 		
 	m_basePositions = basePosition;

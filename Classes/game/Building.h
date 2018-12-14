@@ -20,6 +20,8 @@ public:
 
 	bool isReadyToRemove();
 
+	bool isWorking();
+
 private:
 	bool init(ForceType forceType, const BuildingType type, const cocos2d::Vec2& position);
 	cocos2d::Sprite* createBuildingStatusSprite(const BuildingType type, BuildingStatus buildingStatus, int opacity = 255);

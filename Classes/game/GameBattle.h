@@ -23,6 +23,8 @@ public:
 
 	void selectPlayerTeam(TeamNo teamNo);
 
+	void unSelectPlayer();
+
 	int getPlayerTeamId(TeamNo teamNo);
 
 	SOLDIER_MAP getPlayerSoldiers();
@@ -30,6 +32,10 @@ public:
 	void setPlayerTeam(TeamNo teamNo, std::vector<int>& teamMem);
 
 	std::list<cocos2d::Vec2>& getPlayerTeamPath(TeamNo teamNo);
+
+	void removeGameObject(GameObject* gameObject);
+
+	bool playerHasBuilt();
 private:
 	//设置基地位置
 	void initBasePosition();

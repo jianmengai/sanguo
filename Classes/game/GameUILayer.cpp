@@ -144,22 +144,26 @@ bool GameUILayer::initTeamButton()
 	teamOneButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
 	m_teamCallback[teamOneButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::One);
 	m_teamButtons.push_back(teamOneButton);
+	m_teamButtonSelect[teamOneButton] = false;
 
 	auto teamTwoButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamTwo");
 	teamTwoButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
 	m_teamCallback[teamTwoButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::Two);
 	m_teamButtons.push_back(teamTwoButton);
+	m_teamButtonSelect[teamTwoButton] = false;
 	
 	auto teamThreeButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamThree");
 	teamThreeButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
 	m_teamCallback[teamThreeButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::Three);
 	m_teamButtons.push_back(teamThreeButton);
+	m_teamButtonSelect[teamThreeButton] = false;
 	
 	
 	auto teamFourButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_TeamFour");
 	teamFourButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onTeam, this));
 	m_teamCallback[teamFourButton] = CC_CALLBACK_0(GameUILayer::selectTeam, this, TeamNo::Four);
 	m_teamButtons.push_back(teamFourButton);
+	m_teamButtonSelect[teamFourButton] = false;
 	
 	
 	auto pathSwitchButton = teamPanel->getChildByName<cocos2d::ui::Button*>("Button_PathSwitch");
@@ -275,14 +279,14 @@ void GameUILayer::updateMiniMap()
 		auto gameObjectInTileMapPosition = gameObject->getPosition();
 		auto gameObjectInMinimapPosition = cocos2d::Vec2(gameObjectInTileMapPosition.x * miniMapSize.width / mapSize.width,
 			gameObjectInTileMapPosition.y * miniMapSize.height / mapSize.height);
-		if (gameObject->getGameObjectType() == GameObjectType::Building)
+		if ((gameObject->getGameObjectType() == GameObjectType::Building) && (gameObject->isVisible()))
 		{
 			m_miniMapDrawNode->drawSolidRect(cocos2d::Vec2(gameObjectInMinimapPosition.x - 2.0f, gameObjectInMinimapPosition.y - 2.0f),
 				cocos2d::Vec2(gameObjectInMinimapPosition.x + 2.0f, gameObjectInMinimapPosition.y + 2.0f),
 				color
 			);
 		}
-		else if (gameObject->getGameObjectType() == GameObjectType::Soldier)
+		else if ((gameObject->getGameObjectType() == GameObjectType::Soldier) && (gameObject->isVisible()))
 		{
 			m_miniMapDrawNode->drawDot(gameObjectInMinimapPosition, 1.0f, color);
 		}
@@ -341,20 +345,33 @@ void GameUILayer::onCreateObject(cocos2d::Ref* sender, cocos2d::ui::Widget::Touc
 
 void GameUILayer::onTeam(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
 {
-	for (auto bt : m_teamButtons)
-	{
-		cocos2d::ui::Button* button = dynamic_cast<cocos2d::ui::Button*>(bt);
-		if (bt == sender)
-		{
-			button->setHighlighted(true);
-		}
-		else
-		{
-			button->setHighlighted(false);
-		}
-	}
+	
 	if (touchType == cocos2d::ui::Widget::TouchEventType::ENDED)
 	{
+		for (auto bt : m_teamButtons)
+		{
+			cocos2d::ui::Button* button = dynamic_cast<cocos2d::ui::Button*>(bt);
+			if (bt == sender)
+			{
+				if (m_teamButtonSelect[sender])
+				{
+					m_isSelectOp = false;
+					button->setHighlighted(false);
+					m_teamButtonSelect[sender] = false;
+				}
+				else
+				{
+					m_isSelectOp = true;
+					button->setHighlighted(true);
+					m_teamButtonSelect[sender] = true;
+				}
+
+			}
+			else
+			{
+				button->setHighlighted(false);
+			}
+		}
 		auto it = m_teamCallback.find(sender);
 		if (it != m_teamCallback.end())
 		{
@@ -516,7 +533,14 @@ bool GameUILayer::selectTeam(TeamNo teamNo)
 {
 	m_currentTeamNo = teamNo;
 	updatePathStartPos();
-	GameBattle::getInstance()->selectPlayerTeam(teamNo);
+	if (m_isSelectOp)
+	{
+		GameBattle::getInstance()->selectPlayerTeam(teamNo);
+	}
+	else
+	{
+		GameBattle::getInstance()->unSelectPlayer();
+	}
 
 	return true;
 }

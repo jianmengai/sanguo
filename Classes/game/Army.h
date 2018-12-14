@@ -32,6 +32,8 @@ public:
 
 	void selectTeam(TeamNo teamNo);
 
+	void unSelect();
+
 	int getTeamId(TeamNo teamNo);
 
 	//清空队伍
@@ -46,6 +48,9 @@ public:
 	
 	SOLDIER_MAP getAllSoldiers();
 
+	void removeSoldier(GameObject* gameObject);
+	void removeBuilding(GameObject* gameObject);
+	bool isBuildingExist(BuildingType type);
 protected:
 	//队伍中发现攻击目标，通知给队伍所有成员
 	//void notifyTeamMemberTarget();
@@ -61,6 +66,8 @@ private:
 
 	TileNode* getLastNode(TileNode* node, int index);
 	void getArroundNode(TileNode* node, int count, std::vector<TileNode*>& arrounds);
+	bool isMainTownWorking();
+	
 private:
 	int m_techPoint = 3000;
 	SOLDIER_MAP m_soldiers;
@@ -75,4 +82,6 @@ private:
 
 	std::map<TeamNo, std::list<cocos2d::Vec2> > m_teamPath;
 	std::map<TeamNo, cocos2d::Vec2> m_teamLastPos;
+
+	time_t m_lastUpdateTime = 0;
 };

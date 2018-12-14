@@ -95,6 +95,11 @@ void GameBattle::selectPlayerTeam(TeamNo teamNo)
 	m_player->selectTeam(teamNo);
 }
 
+void GameBattle::unSelectPlayer()
+{
+	m_player->unSelect();
+}
+
 int GameBattle::getPlayerTeamId(TeamNo teamNo)
 {
 	return m_player->getTeamId(teamNo);
@@ -121,6 +126,44 @@ void GameBattle::setPlayerTeam(TeamNo teamNo, std::vector<int>& teamMem)
 std::list<cocos2d::Vec2>& GameBattle::getPlayerTeamPath(TeamNo teamNo)
 {
 	return m_player->getTeamPath(teamNo);
+}
+
+void GameBattle::removeGameObject(GameObject * gameObject)
+{
+	if (gameObject == nullptr)
+	{
+		return;
+	}
+	auto forceType = gameObject->getForceType();
+	auto objectType = gameObject->getGameObjectType();
+	Army* pArmy = nullptr;
+	if (forceType == ForceType::AI)
+	{
+		pArmy = m_npc;
+	}
+	else if (forceType == ForceType::Player)
+	{
+		pArmy = m_player;
+	}
+
+	if (pArmy == nullptr)
+	{
+		return;
+	}
+
+	if (objectType == GameObjectType::Building)
+	{
+		pArmy->removeBuilding(gameObject);
+	}
+	else if (objectType == GameObjectType::Soldier)
+	{
+		pArmy->removeSoldier(gameObject);
+	}
+}
+
+bool GameBattle::playerHasBuilt()
+{
+	return m_player->isBuildingExist(BuildingType::MainTown);
 }
 
 void GameBattle::touchProcess(const cocos2d::Vec2& position)
@@ -168,9 +211,9 @@ void GameBattle::initBasePosition()
 	//BasePosition npcBase;
 	auto& basePosition = MapManager::getInstance()->getBasePosition();
 	auto& playerPos = MapManager::getInstance()->getPlayerInitPosition();
-	
+	auto pos = playerPos - cocos2d::Vec2(650, 960);
 	//地图切到玩家视野
-	MapManager::getInstance()->setPosition(playerPos);
+	MapManager::getInstance()->setPosition(pos);
 	//WarFogLayer::getInstance()->setFogPosition(playerBase.basePosition);
 	//m_player->setBasePosition(playerBase);
 	m_npc->setBasePosition(basePosition);
@@ -233,18 +276,18 @@ GameObject* GameBattle::npcGetAttackTarget()
 
 void GameBattle::updateVisible()
 {
-	/*
 	auto winSize = cocos2d::Director::getInstance()->getWinSize();
 	auto& gameObjests = GameObjectManager::getInstance()->getGameObjectMap();
 	for (auto& objectPair1 : gameObjests)
 	{
 		auto object1 = objectPair1.second;
-		if (object1->getForceType() == ForceType::AI)
+		if ((object1->getForceType() == ForceType::AI))
 		{
+			//object1->setVisible(false);
 			continue;
 		}
 		auto position = object1->getPosition() * MapManager::getInstance()->getMapScale();
-		cocos2d::Rect checkRect(position.x - winSize.width, position.y - winSize.height, winSize.width * 2, winSize.height * 2);
+		cocos2d::Rect checkRect(position.x - winSize.width / 2, position.y - winSize.height / 2, winSize.width, winSize.height);
 		for (auto& objectPair2 : gameObjests)
 		{
 			auto object2 = objectPair2.second;
@@ -263,5 +306,5 @@ void GameBattle::updateVisible()
 			}
 		}
 	}
-	*/
+	
 }

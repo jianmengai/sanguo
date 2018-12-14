@@ -1,5 +1,6 @@
 #include "GameObjectManager.h"
 #include "TeamManager.h"
+#include "GameBattle.h"
 
 GameObjectManager* GameObjectManager::getInstance()
 {
@@ -59,9 +60,11 @@ void GameObjectManager::removeGameObjectById(int gameObjectId)
 	auto gameObjectIter = m_gameObjects.find(gameObjectId);
 	if (gameObjectIter != m_gameObjects.end())
 	{
-		TeamManager::getInstance()->removeFromTeam(gameObjectIter->second);
-		gameObjectIter->second->removeFromParent();
-		gameObjectIter->second = nullptr;
+		auto gameObject = gameObjectIter->second;
+		GameBattle::getInstance()->removeGameObject(gameObject);
+		TeamManager::getInstance()->removeFromTeam(gameObject);
+		gameObject->removeFromParent();
+		gameObject = nullptr;
 		m_gameObjects.erase(gameObjectId);
 	}
 }

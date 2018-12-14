@@ -58,12 +58,11 @@ bool Soldier::init(ForceType forceType, SoldierType type, const cocos2d::Vec2& p
 	scheduleUpdate();
 	
 	//敌方单位默认不显示
-	/*
 	if (m_forceType == ForceType::AI)
 	{
 		setVisible(false);
 	}
-	*/
+	
 	return true;
 }
 

@@ -90,4 +90,6 @@ private:
 	cocos2d::ui::ScrollView* m_scrollView = nullptr;
 	std::vector<CheckBoxValue> m_teamMemCheckBox;
 	std::map<cocos2d::Ref*, int> m_checkBoxIndex;
+	std::map<cocos2d::Ref*, bool> m_teamButtonSelect;
+	bool m_isSelectOp = true;
 };

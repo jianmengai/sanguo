@@ -7,6 +7,7 @@
 #include "Soldier.h"
 
 
+
 Building* Building::create(ForceType forceType, BuildingType type, const cocos2d::Vec2& position)
 {
 	auto building = new Building();
@@ -50,12 +51,11 @@ bool Building::init(ForceType forceType, const BuildingType type, const cocos2d:
 	updateStatus(BuildingStatus::BeingBuilt);
 
 	//敌方单位默认不显示
-	/*
 	if (m_forceType == ForceType::AI)
 	{
 		setVisible(false);
 	}
-	*/
+	
 	return true;
 }
 
@@ -182,6 +182,11 @@ void Building::initData(const BuildingType type)
 bool Building::isReadyToRemove()
 {
 	return m_buildingStatus == BuildingStatus::Destory;
+}
+
+bool Building::isWorking()
+{
+	return m_buildingStatus == BuildingStatus::Working;
 }
 
 void Building::onPrepareToRemove()

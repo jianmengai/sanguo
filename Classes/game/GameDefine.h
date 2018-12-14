@@ -159,7 +159,7 @@ struct BasePosition
 {
 	cocos2d::Vec2 basePosition;
 	cocos2d::Vec2 barrackPosition;
-	std::vector<cocos2d::Vec2> archorTowerPositions;
+	std::vector<cocos2d::Vec2> archerTowerPositions;
 };
 
 namespace std
