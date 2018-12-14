@@ -298,26 +298,26 @@
             <EndColor A="255" R="255" G="255" B="255" />
             <ColorVector ScaleY="1.0000" />
           </AbstractNodeData>
-          <AbstractNodeData Name="Panel_PathSetting" ActionTag="-91871384" CallBackType="Touch" Tag="41" IconVisible="False" LeftMargin="103.5708" RightMargin="224.4292" TopMargin="32.9804" BottomMargin="17.0196" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="762" Scale9Height="518" ctype="PanelObjectData">
+          <AbstractNodeData Name="Panel_PathSetting" ActionTag="-91871384" CallBackType="Touch" Tag="41" IconVisible="False" LeftMargin="103.5708" RightMargin="224.4292" TopMargin="-35.9997" BottomMargin="85.9997" TouchEnable="True" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="762" Scale9Height="518" ctype="PanelObjectData">
             <Size X="632.0000" Y="550.0000" />
             <Children>
-              <AbstractNodeData Name="Image_MediumMap" ActionTag="1357451427" Tag="42" IconVisible="False" LeftMargin="0.3554" RightMargin="-0.3554" TopMargin="3.1342" BottomMargin="66.8658" TouchEnable="True" Scale9Width="632" Scale9Height="480" ctype="ImageViewObjectData">
+              <AbstractNodeData Name="Image_MediumMap" ActionTag="1357451427" Tag="42" IconVisible="False" HorizontalEdge="BothEdge" VerticalEdge="BothEdge" LeftMargin="-1.6489" RightMargin="1.6489" TopMargin="35.0320" BottomMargin="34.9680" TouchEnable="True" Scale9Width="632" Scale9Height="480" ctype="ImageViewObjectData">
                 <Size X="632.0000" Y="480.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="316.3554" Y="306.8658" />
-                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <Position X="314.3511" Y="274.9680" />
+                <Scale ScaleX="1.0000" ScaleY="1.1323" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.5006" Y="0.5579" />
+                <PrePosition X="0.4974" Y="0.4999" />
                 <PreSize X="1.0000" Y="0.8727" />
                 <FileData Type="Normal" Path="res/MediumMap.png" Plist="" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Button_PathOk" ActionTag="-1451205804" Tag="43" IconVisible="False" LeftMargin="171.0318" RightMargin="414.9682" TopMargin="502.4734" BottomMargin="11.5266" TouchEnable="True" FontSize="14" ButtonText="确定" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="Button_PathOk" ActionTag="-1451205804" Tag="43" IconVisible="False" LeftMargin="138.0318" RightMargin="447.9682" TopMargin="412.0000" BottomMargin="52.0000" TouchEnable="True" FontSize="14" ButtonText="确定" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="46.0000" Y="36.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="194.0318" Y="29.5266" />
+                <Position X="161.0318" Y="70.0000" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.3070" Y="0.0537" />
+                <PrePosition X="0.2548" Y="0.1400" />
                 <PreSize X="0.0000" Y="0.0000" />
                 <TextColor A="255" R="65" G="65" B="70" />
                 <DisabledFileData Type="Default" Path="Default/Button_Disable.png" Plist="" />
@@ -326,13 +326,13 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Button_PathCancel" ActionTag="-922238583" Tag="44" IconVisible="False" LeftMargin="387.2079" RightMargin="198.7921" TopMargin="505.6370" BottomMargin="8.3630" TouchEnable="True" FontSize="14" ButtonText="清除" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="Button_PathCancel" ActionTag="-922238583" Tag="44" IconVisible="False" LeftMargin="468.2079" RightMargin="117.7921" TopMargin="412.0000" BottomMargin="52.0000" TouchEnable="True" FontSize="14" ButtonText="清除" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="16" Scale9Height="14" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="46.0000" Y="36.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="410.2079" Y="26.3630" />
+                <Position X="491.2079" Y="70.0000" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.6491" Y="0.0479" />
+                <PrePosition X="0.7772" Y="0.1400" />
                 <PreSize X="0.0000" Y="0.0000" />
                 <TextColor A="255" R="65" G="65" B="70" />
                 <DisabledFileData Type="Default" Path="Default/Button_Disable.png" Plist="" />
@@ -343,10 +343,10 @@
               </AbstractNodeData>
             </Children>
             <AnchorPoint />
-            <Position X="103.5708" Y="17.0196" />
-            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <Position X="103.5708" Y="85.9997" />
+            <Scale ScaleX="1.0000" ScaleY="0.8818" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.1079" Y="0.0284" />
+            <PrePosition X="0.1079" Y="0.1433" />
             <PreSize X="0.6583" Y="0.9167" />
             <SingleColor A="255" R="150" G="200" B="255" />
             <FirstColor A="255" R="150" G="200" B="255" />
