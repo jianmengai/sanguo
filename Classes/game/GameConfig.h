@@ -73,6 +73,8 @@ typedef struct soldierConf_st
 
 	bool isAir = false;
 	bool canAirAttack = false;
+
+	int subCount = 1;   //建造栏一个图像代表士兵的个数
 }SoldierConf;
 
 typedef struct buildingConf_st

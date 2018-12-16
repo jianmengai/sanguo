@@ -251,7 +251,14 @@ void GameUILayer::onMediumMapTouched(cocos2d::Ref * sender, cocos2d::ui::Widget:
 
 void GameUILayer::update(float dt)
 {
-	updateMiniMap();
+	static int count = 0;
+	if (count > 10)
+	{
+		updateMiniMap();
+		count = 0;
+	}
+	++count;
+	//updateMiniMap();
 	updateGameTime();
 	//updateButtonStatus();
 	updateTechPoint();
@@ -259,7 +266,6 @@ void GameUILayer::update(float dt)
 
 void GameUILayer::updateMiniMap()
 {
-	
 	m_miniMapDrawNode->clear();
 	auto mapPosition = MapManager::getInstance()->getPosition();
 	auto mapScale = MapManager::getInstance()->getMapScale();
@@ -281,7 +287,7 @@ void GameUILayer::updateMiniMap()
 			}
 			else
 			{
-				color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
+				color = cocos2d::Color4F(1.0f, 1.0f, 1.0f, 1.0f); //cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
 			}
 		}
 		else
@@ -294,6 +300,7 @@ void GameUILayer::updateMiniMap()
 			gameObjectInTileMapPosition.y * miniMapSize.height / mapSize.height);
 		if ((gameObject->getGameObjectType() == GameObjectType::Building) && (gameObject->isVisible()))
 		{
+			//cocos2d::log("draw rect...");
 			m_miniMapDrawNode->drawSolidRect(cocos2d::Vec2(gameObjectInMinimapPosition.x - 2.0f, gameObjectInMinimapPosition.y - 2.0f),
 				cocos2d::Vec2(gameObjectInMinimapPosition.x + 2.0f, gameObjectInMinimapPosition.y + 2.0f),
 				color
@@ -301,6 +308,7 @@ void GameUILayer::updateMiniMap()
 		}
 		else if ((gameObject->getGameObjectType() == GameObjectType::Soldier) && (gameObject->isVisible()))
 		{
+			//cocos2d::log("draw node...");
 			m_miniMapDrawNode->drawDot(gameObjectInMinimapPosition, 1.0f, color);
 		}
 	}
@@ -543,7 +551,7 @@ void GameUILayer::onTeamMemOk(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchE
 		}
 
 		//ÖØÖÃ
-		checkBoxValue.gameObjectId = 0;
+		//checkBoxValue.gameObjectId = 0;
 	}
 
 	GameBattle::getInstance()->setPlayerTeam(m_currentTeamNo, teamMem);
@@ -646,7 +654,7 @@ void GameUILayer::showTeamMemList()
 		{
 			checkBox->loadTextureBackGround(soldierImg);
 			checkBox->loadTextureFrontCross("CheckBox_Selected.png");
-			m_teamMemCheckBox[index].gameObjectId = soldier->getId();
+			//m_teamMemCheckBox[index].gameObjectId = soldier->getId();
 		}
 		++index;
 		checkBox->setVisible(true);

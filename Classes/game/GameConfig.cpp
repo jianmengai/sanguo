@@ -272,6 +272,7 @@ bool GameConfig::parseSoldierConf(const tinyxml2::XMLElement* node)
 			soldierConf->moveAnimateDelayPerUnit = atof(brotherNode->Attribute("moveAnimatePerUnit"));
 			soldierConf->dieAnimateDelayPerUnit = atof(brotherNode->Attribute("dieAnimatePerUnit"));
 			soldierConf->technologyPoint = atoi(brotherNode->Attribute("technologyPoint"));
+			soldierConf->subCount = atoi(brotherNode->Attribute("subCount"));
 			if (i == 0)
 			{
 				m_playerSoldierConf[soldierType] = soldierConf;

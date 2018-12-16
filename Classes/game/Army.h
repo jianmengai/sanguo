@@ -8,6 +8,14 @@
 typedef std::map<SoldierType, std::vector<Soldier*> > SOLDIER_MAP;
 typedef std::map<BuildingType, std::vector<Building*> > BUILDING_MAP;
 
+typedef struct struct_soldier_pos_st
+{
+	cocos2d::Vec2 pos;
+	int tileRow;
+	int tileCol;
+	FaceDirection direction;
+}SoldierPos;
+
 class Army
 {
 public:
@@ -15,8 +23,8 @@ public:
 	~Army();
 
 	void update(float dt);
-	Soldier* createSoldier(SoldierType type);
-	Building* createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos = false);
+	bool createSoldier(SoldierType type);
+	bool createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos = false);
 	bool soldiersMoveTo(const std::vector<Soldier*>& soldiers, const cocos2d::Vec2& position);
 	bool soldiersMoveTo(const cocos2d::Vec2& position);
 	void addSelected(GameObject* gameObject);
@@ -67,7 +75,7 @@ private:
 	TileNode* getLastNode(TileNode* node, int index);
 	void getArroundNode(TileNode* node, int count, std::vector<TileNode*>& arrounds);
 	bool isMainTownWorking();
-	
+	bool getSoldierPos(cocos2d::Vec2& pos, int count, std::vector<SoldierPos>& soldiersPos);
 private:
 	int m_techPoint = 3000;
 	SOLDIER_MAP m_soldiers;
@@ -84,4 +92,5 @@ private:
 	std::map<TeamNo, cocos2d::Vec2> m_teamLastPos;
 
 	time_t m_lastUpdateTime = 0;
+	time_t m_now = 0;
 };

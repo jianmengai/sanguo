@@ -330,6 +330,7 @@ void GameBattle::updateVisible()
 {
 	auto winSize = cocos2d::Director::getInstance()->getWinSize();
 	auto& gameObjests = GameObjectManager::getInstance()->getGameObjectMap();
+	std::map<GameObject*, bool> hasSet;
 	for (auto& objectPair1 : gameObjests)
 	{
 		auto object1 = objectPair1.second;
@@ -351,9 +352,15 @@ void GameBattle::updateVisible()
 			if (checkRect.containsPoint(enemyPos))
 			{
 				object2->setVisible(true);
+				hasSet[object2] = true;
 			}
 			else
 			{
+				//如果已经visible已经设置为true，则本轮不能设置为false
+				if (hasSet.count(object2) && hasSet[object2])
+				{
+					continue;
+				}
 				object2->setVisible(false);
 			}
 		}

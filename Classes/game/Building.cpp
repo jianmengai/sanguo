@@ -392,6 +392,12 @@ void Building::updateStatus(BuildingStatus buildingStatus)
 			break;
 			case BuildingStatus::Destory:
 			{
+				//建造中就被摧毁了
+				if (m_buildingSoundId != 0)
+				{
+					SoundManager::getInstance()->stop(m_buildingSoundId);
+
+				}
 				SoundManager::getInstance()->playBuildingEffect(BuildingSoundEffectType::Destroyed);
 
 				/*if (_defenceNpc)

@@ -10,7 +10,7 @@
 typedef struct _checkBox_value_st
 {
 	cocos2d::ui::CheckBox* checkBox = nullptr;
-	int gameObjectId = 0;
+	std::vector<int> gameObjectIds;
 }CheckBoxValue;
 
 class GameUILayer : public cocos2d::Node
