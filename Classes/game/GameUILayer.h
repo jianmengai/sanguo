@@ -29,6 +29,9 @@ public:
 	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 
+	static void showWin();
+	static void showFail();
+
 private:
 	bool init() override;
 	bool initMiniMap();
@@ -50,6 +53,7 @@ private:
 	bool createBuilding(BuildingType type);
 	bool createSoldier(SoldierType type);
 	void onCreateObject(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
+	void onExit(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
 
 	void onTeam(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType touchType);
 
@@ -92,4 +96,7 @@ private:
 	std::map<cocos2d::Ref*, int> m_checkBoxIndex;
 	std::map<cocos2d::Ref*, bool> m_teamButtonSelect;
 	bool m_isSelectOp = true;
+
+	static cocos2d::ui::Text* ms_showWinText;
+	static cocos2d::ui::Text* ms_showFailText;
 };

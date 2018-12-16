@@ -219,6 +219,7 @@ void Soldier::onAttackAnimationEnd()
 void Soldier::onDieAnimationEnd()
 {
 	cocos2d::log("will remove id:%d", m_uniqId);
+	stopAllActions();
 	GameObjectManager::getInstance()->addReadyToRemoveGameObject(m_uniqId);
 }
 
@@ -269,6 +270,10 @@ void Soldier::resumeNormalSpeed()
 
 void Soldier::update(float deltaTime)
 {
+	if (isReadyToRemove())
+	{
+		return;
+	}
 	GameObject::update(deltaTime);
 	//GameBattle里面已经控制指定攻击目标，之类只需要定时刷新状态，以及行进过程中的遭遇战
 	//if (m_forceType == ForceType::AI)

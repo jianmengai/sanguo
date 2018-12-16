@@ -28,6 +28,9 @@
           <Image Name="BalloonButtonDown.png" />
           <Image Name="BalloonButtonDisable.png" />
           <Image Name="MediumMap.png" />
+          <TTF Name="lishu.ttf" />
+          <Image Name="CloseDialogNormal.png" />
+          <Image Name="CloseDialogDown.png" />
         </Folder>
       </RootFolder>
     </Group>

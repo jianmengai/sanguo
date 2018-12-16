@@ -72,6 +72,19 @@ void GameScene::update(float deltaTime)
 {
 	MapManager::getInstance()->update(deltaTime);
 	GameBattle::getInstance()->update(deltaTime);
+
+	bool isPlayerWin = false;
+	if (GameBattle::getInstance()->isGameEnd(isPlayerWin))
+	{
+		if (isPlayerWin)
+		{
+			onWin();
+		}
+		else
+		{
+			onLost();
+		}
+	}
 	//updateWarFog();
 }
 
@@ -93,17 +106,19 @@ void GameScene::updateWarFog()
 
 void GameScene::pauseGame()
 {
-
+	cocos2d::Director::getInstance()->pause();
 }
 
 void GameScene::onWin()
 {
-
+	pauseGame();
+	GameUILayer::showWin();
 }
 
 void GameScene::onLost()
 {
-
+	pauseGame();
+	GameUILayer::showFail();
 }
 
 bool GameScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)

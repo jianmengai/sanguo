@@ -39,7 +39,12 @@ bool GameBattle::createBuilding(ForceType forceType, BuildingType buidingType, c
 	//不同建筑数量限制
 	if (ForceType::Player == forceType)
 	{
-		return m_player->createBuilding(buidingType, position);
+		bool buildResult = m_player->createBuilding(buidingType, position);
+		if ((!m_playerStartBuilt) && buildResult)
+		{
+			m_playerStartBuilt = true;
+		}
+		return buildResult;
 	}
 
 	return true;
@@ -49,7 +54,12 @@ bool GameBattle::createSoldier(ForceType forceType, SoldierType soldierType)
 {
 	if (ForceType::Player == forceType)
 	{
-		return m_player->createSoldier(soldierType);
+		bool buildResult = m_player->createSoldier(soldierType);
+		if ((!m_playerStartBuilt) && buildResult)
+		{
+			m_playerStartBuilt = true;
+		}
+		return buildResult;
 	}
 
 	return true;
@@ -57,6 +67,7 @@ bool GameBattle::createSoldier(ForceType forceType, SoldierType soldierType)
 
 void GameBattle::update(float dt)
 {
+	updateVisible();
 	m_player->update(dt);
 	m_npc->update(dt);
 	if (m_npcFindAttackTargetCdTime >= GameConfig::getInstance()->getCooldownConf()->npcFindTargetCdTime)
@@ -72,7 +83,7 @@ void GameBattle::update(float dt)
 
 	TeamManager::getInstance()->update(dt);
 
-	updateVisible();
+	
 }
 
 void GameBattle::playerMoveTo(const cocos2d::Vec2& postiion)
@@ -164,6 +175,47 @@ void GameBattle::removeGameObject(GameObject * gameObject)
 bool GameBattle::playerHasBuilt()
 {
 	return m_player->isBuildingExist(BuildingType::MainTown);
+}
+
+bool GameBattle::isGameEnd(bool isPlayerWin)
+{
+	if (!m_playerStartBuilt)
+	{
+		return false;
+	}
+	bool isGameEnd = false;
+	bool playerAllDie = true;
+	bool npcAllDie = true;
+	auto& allObjects = GameObjectManager::getInstance()->getGameObjectMap();
+	for (auto& objectPair : allObjects)
+	{
+		auto object = objectPair.second;
+		if (object == nullptr)
+		{
+			continue;
+		}
+		if ((object->getForceType() == ForceType::AI) && (!object->isReadyToRemove()))
+		{
+			npcAllDie = false;
+		}
+		else if ((object->getForceType() == ForceType::Player) && (!object->isReadyToRemove()))
+		{
+			playerAllDie = false;
+		}
+	}
+
+	if (playerAllDie)
+	{
+		isPlayerWin = false;
+		isGameEnd = true;
+	}
+	else if (npcAllDie)
+	{
+		isPlayerWin = true;
+		isGameEnd = true;
+	}
+
+	return isGameEnd;
 }
 
 void GameBattle::touchProcess(const cocos2d::Vec2& position)

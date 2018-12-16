@@ -9,6 +9,9 @@
 #include "GameBattle.h"
 #include "TeamManager.h"
 
+cocos2d::ui::Text* GameUILayer::ms_showWinText = nullptr;
+cocos2d::ui::Text* GameUILayer::ms_showFailText = nullptr;
+
 GameUILayer::GameUILayer()
 {
 
@@ -131,6 +134,16 @@ bool GameUILayer::initCreateButton()
 	auto createArcher = createSoldierPanel->getChildByName<cocos2d::ui::Button*>("Button_Archer");
 	createArcher->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onCreateObject, this));
 	m_createCallback[createArcher] = CC_CALLBACK_0(GameUILayer::createSoldier, this, SoldierType::Archer);
+
+	//ÍË³ö
+	auto exitGame = createBuildingPanel->getChildByName<cocos2d::ui::Button*>("Button_Exit");
+	exitGame->addTouchEventListener(CC_CALLBACK_2(GameUILayer::onExit, this));
+
+	ms_showWinText = gameMainPanel->getChildByName<cocos2d::ui::Text*>("Text_Win");
+	ms_showFailText = gameMainPanel->getChildByName<cocos2d::ui::Text*>("Text_Lost");
+
+	ms_showFailText->setVisible(false);
+	ms_showWinText->setVisible(false);
 
 	return true;
 }
@@ -341,6 +354,15 @@ void GameUILayer::onCreateObject(cocos2d::Ref* sender, cocos2d::ui::Widget::Touc
 		}
 		
 	}
+}
+
+void GameUILayer::onExit(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
+{
+	if (touchType == cocos2d::ui::Widget::TouchEventType::ENDED)
+	{
+		cocos2d::Director::getInstance()->end();
+	}
+	
 }
 
 void GameUILayer::onTeam(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType touchType)
@@ -702,6 +724,18 @@ void GameUILayer::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 void GameUILayer::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 {
 
+}
+
+void GameUILayer::showWin()
+{
+	ms_showFailText->setVisible(false);
+	ms_showWinText->setVisible(true);
+}
+
+void GameUILayer::showFail()
+{
+	ms_showFailText->setVisible(true);
+	ms_showWinText->setVisible(false);
 }
 
 

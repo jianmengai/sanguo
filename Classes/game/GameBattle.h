@@ -36,6 +36,9 @@ public:
 	void removeGameObject(GameObject* gameObject);
 
 	bool playerHasBuilt();
+
+	//返回true表示结束
+	bool isGameEnd(bool isPlayerWin);
 private:
 	//设置基地位置
 	void initBasePosition();
@@ -49,4 +52,6 @@ private:
 
 	float m_npcFindAttackTargetCdTime = 60;
 	GameObject* m_npcAttackTarget = nullptr; //npc攻击目标
+
+	bool m_playerStartBuilt = false;
 };
