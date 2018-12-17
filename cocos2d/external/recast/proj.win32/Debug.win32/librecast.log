@@ -1,2 +1,19 @@
-﻿  fastlz.c
-  librecast.vcxproj -> E:\cocos\sanguo\proj.win32\Debug.win32\librecast.lib
+﻿  DebugDraw.cpp
+  DetourDebugDraw.cpp
+  DetourCrowd.cpp
+  DetourLocalBoundary.cpp
+  DetourObstacleAvoidance.cpp
+  DetourPathCorridor.cpp
+  DetourPathQueue.cpp
+  DetourProximityGrid.cpp
+  DetourTileCache.cpp
+d:\codes\sanguo\cocos2d\external\recast\detourcrowd\detourobstacleavoidance.cpp(334): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+  DetourTileCacheBuilder.cpp
+  DetourAlloc.cpp
+  DetourCommon.cpp
+  DetourNavMesh.cpp
+  DetourNavMeshBuilder.cpp
+  DetourNavMeshQuery.cpp
+  DetourNode.cpp
+  fastlz.c
+  librecast.vcxproj -> D:\codes\sanguo\proj.win32\Debug.win32\librecast.lib

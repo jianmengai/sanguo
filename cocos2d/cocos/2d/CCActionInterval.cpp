@@ -374,7 +374,7 @@ void Sequence::update(float t)
         else
             new_t = (t-_split) / (1 - _split );
     }
-	//CCLOG("t:%f, split:%f, found:%d", t, _split, found);
+
     if ( found==1 )
     {
         if( _last == -1 )
@@ -406,18 +406,12 @@ void Sequence::update(float t)
     // Last action found and it is done.
     if( found == _last && _actions[found]->isDone() )
     {
-		CCLOG("found:%d, last:%d", found, _last);
         return;
     }
 
     // Last action found and it is done
     if( found != _last )
     {
-		/*if (found == 1)
-		{
-			CCLOG("exec second action....");
-		}*/
-
         _actions[found]->startWithTarget(_target);
     }
     if (!(sendUpdateEventToScript(new_t, _actions[found])))
