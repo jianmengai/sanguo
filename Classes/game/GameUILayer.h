@@ -7,11 +7,21 @@
 #include "ui/UICheckBox.h"
 #include "GameDefine.h"
 
+
+typedef struct _soldier_node_st
+{
+	bool selected = false;
+	SoldierType type = SoldierType::Invalid;
+	std::vector<int> gameObjectIds;
+}SoldierNode;
+
 typedef struct _checkBox_value_st
 {
 	cocos2d::ui::CheckBox* checkBox = nullptr;
-	std::vector<int> gameObjectIds;
+	SoldierNode soldierNode;
 }CheckBoxValue;
+
+class Soldier;
 
 class GameUILayer : public cocos2d::Node
 {
@@ -69,6 +79,8 @@ private:
 	void showTeamMemList();
 	void drawPath();
 	void updatePathStartPos();
+
+	void getSoldierNode(std::vector<Soldier*>& sortedSoldiers, bool selected, std::vector<SoldierNode>& soldierNodes);
 private:
 	cocos2d::Node* m_gameUI = nullptr;
 	cocos2d::ui::ImageView* m_miniMapImgView = nullptr;

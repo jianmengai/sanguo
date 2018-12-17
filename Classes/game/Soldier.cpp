@@ -55,7 +55,7 @@ bool Soldier::init(ForceType forceType, SoldierType type, const cocos2d::Vec2& p
 
 	toStand();
 	
-	scheduleUpdate();
+	//scheduleUpdate();
 	
 	//敌方单位默认不显示
 	if (m_forceType == ForceType::AI)
@@ -769,39 +769,43 @@ void Soldier::findAndFight(float deltaTime)
 			
 		}
 	}
-	
-	
-	if (m_alertTimeCd >= GameConfig::getInstance()->getCooldownConf()->alertCdTime)
+	//else
 	{
-		GameObject* object = nullptr;
-		if (m_forceType == ForceType::AI)
+		if (m_alertTimeCd >= GameConfig::getInstance()->getCooldownConf()->alertCdTime)
 		{
-			object = searchEnemy();
+			GameObject* object = nullptr;
+			if (m_forceType == ForceType::AI)
+			{
+				object = searchEnemy();
+			}
+			//所有周围alter范围内的目标
+			else
+			{
+				object = searchNearbyEnemy();
+			}
+			if ((object != m_attackTarget) && (object != nullptr))
+			{
+				m_attackTarget = object;
+				setEnemyId(object->getId());
+				m_moveToEnemy = false;
+				m_attacking = false;
+			}
+			m_alertTimeCd = 0;
 		}
-		//所有周围alter范围内的目标
-		else
-		{
-			object = searchNearbyEnemy();
-		}
-		if ((object != m_attackTarget) && (object != nullptr))
-		{
-			m_attackTarget = object;
-			setEnemyId(object->getId());
-			m_moveToEnemy = false;
-			m_attacking = false;
-		}
-		m_alertTimeCd = 0;
 	}
 	
 }
 
 GameObject* Soldier::searchEnemy()
 {
+	clock_t start = clock();
 	GameObject* nearbyObject = nullptr;
 	float distance = 0;
 	auto& gameObjects = GameObjectManager::getInstance()->getGameObjectMap();
-	std::map<float, std::vector<GameObject*> > enemyDistance;
-	//优先查找建筑
+	std::map<float, std::vector<GameObject*> > buildingDistance;
+	std::map<float, std::vector<GameObject*> > soldierDistance;
+	std::vector<GameObject*> alertDistance;
+	GameObject* enemy = nullptr;
 	for (auto& gameObjectIt : gameObjects)
 	{
 		auto gameObject = gameObjectIt.second;
@@ -810,8 +814,43 @@ GameObject* Soldier::searchEnemy()
 			continue;
 		}
 		distance = getEnemyDistance(gameObject);
-		enemyDistance[distance].push_back(gameObject);
+		//在警戒范围内，直接选定该目标攻击
+		if (distance <= m_alertDistance)
+		{
+			alertDistance.push_back(gameObject);
+		}
+		auto type = gameObject->getGameObjectType();
+		if (type == GameObjectType::Building)
+		{
+			buildingDistance[distance].push_back(gameObject);
+		}
+		else if (type == GameObjectType::Soldier)
+		{
+			soldierDistance[distance].push_back(gameObject);
+		}
 	}
+	if (!alertDistance.empty())
+	{
+		auto size = alertDistance.size();
+		auto index = rand() % size;
+		enemy = alertDistance[index];
+	}
+	if (enemy == nullptr)
+	{
+		if (!buildingDistance.empty())
+		{
+			auto it = buildingDistance.begin();
+			auto buildings = it->second;
+			enemy = buildings[0];
+		}
+		else if (!soldierDistance.empty())
+		{
+			auto it = soldierDistance.begin();
+			auto soldiers = it->second;
+			enemy = soldiers[0];
+		}
+	}
+	/*
 	for (auto pairs : enemyDistance)
 	{
 		//在警戒距离内
@@ -864,7 +903,10 @@ GameObject* Soldier::searchEnemy()
 			}
 		}
 	}
-
+	*/
+	nearbyObject = enemy;
+	clock_t end = clock();
+	cocos2d::log("====================npc find target %u", end - start);
 	return nearbyObject;
 }
 

@@ -15,7 +15,9 @@
 	</SoundEffect>
 	<SpecialEffect></SpecialEffect>
 	<CooldownTime>
-		<detail cd="10" />
+		<Detail type="alert" cd="1" />
+		<Detail type="npcFindTarget" cd="1" />
+		<Detail type="updateVisible" cd="0.1" >
 	</CooldownTime>
 	<Npc>
 		<Soldier>

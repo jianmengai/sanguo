@@ -761,6 +761,20 @@ bool Army::getSoldierPos(cocos2d::Vec2& pos, int count, std::vector<SoldierPos>&
 	return false;
 }
 
+void Army::updateSoldier(float dt)
+{
+	for (auto& soldierPair : m_soldiers)
+	{
+		for (auto soldier : soldierPair.second)
+		{
+			if (soldier != nullptr)
+			{
+				soldier->update(dt);
+			}
+		}
+	}
+}
+
 bool Army::isBuildingExist(BuildingType type)
 {
 	auto it = m_buildings.find(type);
@@ -834,6 +848,10 @@ void Army::update(float dt)
 	{
 		m_lastUpdateTime = m_now;
 	}
+	clock_t start = clock();
+	updateSoldier(dt);
+	clock_t end = clock();
+	cocos2d::log("======= update soldier %u", end-start);
 }
 
 void Army::addSelected(GameObject* gameObject)

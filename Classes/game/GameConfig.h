@@ -113,6 +113,7 @@ typedef struct cooldownConf_st
 {
 	float npcFindTargetCdTime = 0;
 	float alertCdTime = 0;
+	float updateVisible = 0;
 }CooldownConf;
 
 typedef struct buildingSoundEffectData_st
@@ -151,6 +152,7 @@ private:
 	bool parseSoldierConf(const tinyxml2::XMLElement* node);
 	bool parseBuildingConf(const tinyxml2::XMLElement* node);
 	bool parseSoundEffectConf(const tinyxml2::XMLElement* node);
+	bool parseCooldownConf(const tinyxml2::XMLElement* node);
 
 	bool loadRes();
 

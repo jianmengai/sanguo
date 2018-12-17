@@ -73,6 +73,12 @@ bool GameConfig::init()
 		doc = nullptr;
 		return false;
 	}
+	if (!parseCooldownConf(root))
+	{
+		delete doc;
+		doc = nullptr;
+		return false;
+	}
 	delete doc;
 	doc = nullptr;
 
@@ -385,6 +391,39 @@ bool GameConfig::parseSoundEffectConf(const tinyxml2::XMLElement * node)
 			soldierEffectData->selectName = GameUtils::escapeString(brotherNode->Attribute("selectFileName"));
 			soldierEffectData->deathName = GameUtils::escapeString(brotherNode->Attribute("dieFileName"));
 			m_soldierSounds[soldierType] = soldierEffectData;
+		}
+		brotherNode = brotherNode->NextSiblingElement();
+	}
+
+	return true;
+}
+
+bool GameConfig::parseCooldownConf(const tinyxml2::XMLElement * node)
+{
+	if (node == nullptr)
+	{
+		return false;
+	}
+	const tinyxml2::XMLElement* bulletNode = node->FirstChildElement("CooldownTime");
+	if (bulletNode == nullptr)
+	{
+		return false;
+	}
+	const tinyxml2::XMLElement* brotherNode = bulletNode->FirstChildElement();
+	while (brotherNode != nullptr)
+	{
+		std::string type = GameUtils::escapeString(brotherNode->Attribute("type"));
+		if (type == "alert")
+		{
+			m_coolDownConf.alertCdTime = atof(brotherNode->Attribute("cd"));
+		}
+		else if (type == "npcFindTarget")
+		{
+			m_coolDownConf.npcFindTargetCdTime = atof(brotherNode->Attribute("cd"));
+		}
+		else if (type == "updateVisible")
+		{
+			m_coolDownConf.npcFindTargetCdTime = atof(brotherNode->Attribute("cd"));
 		}
 		brotherNode = brotherNode->NextSiblingElement();
 	}

@@ -76,6 +76,8 @@ private:
 	void getArroundNode(TileNode* node, int count, std::vector<TileNode*>& arrounds);
 	bool isMainTownWorking();
 	bool getSoldierPos(cocos2d::Vec2& pos, int count, std::vector<SoldierPos>& soldiersPos);
+
+	void updateSoldier(float dt);
 private:
 	int m_techPoint = 3000;
 	SOLDIER_MAP m_soldiers;

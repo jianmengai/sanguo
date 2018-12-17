@@ -67,9 +67,19 @@ bool GameBattle::createSoldier(ForceType forceType, SoldierType soldierType)
 
 void GameBattle::update(float dt)
 {
-	updateVisible();
+	auto time1 = clock();
+	updateVisible(dt);
+	auto time2 = clock();
+	cocos2d::log("========> update visible %u", time2 - time1);
+	time1 = clock();
 	m_player->update(dt);
+	time2 = clock();
+	cocos2d::log("========> update player %u", time2 - time1);
+	time1 = clock();
 	m_npc->update(dt);
+	time2 = clock();
+	cocos2d::log("========> update npc %u", time2 - time1);
+	time1 = clock();
 	if (m_npcFindAttackTargetCdTime >= GameConfig::getInstance()->getCooldownConf()->npcFindTargetCdTime)
 	{
 		npcAttack();
@@ -82,8 +92,8 @@ void GameBattle::update(float dt)
 	GameObjectManager::getInstance()->removeAllReadyToRemoveGameObjects();
 
 	TeamManager::getInstance()->update(dt);
-
-	
+	time2 = clock();
+	cocos2d::log("========> update others %u", time2 - time1);
 }
 
 void GameBattle::playerMoveTo(const cocos2d::Vec2& postiion)
@@ -326,8 +336,14 @@ GameObject* GameBattle::npcGetAttackTarget()
 	return target;
 }
 
-void GameBattle::updateVisible()
+void GameBattle::updateVisible(float dt)
 {
+	m_lastUpdateVisibleCost += dt;
+	if (m_lastUpdateVisibleCost < GameConfig::getInstance()->getCooldownConf()->updateVisible)
+	{
+		return;
+	}
+	m_lastUpdateVisibleCost = 0;
 	auto winSize = cocos2d::Director::getInstance()->getWinSize();
 	auto& gameObjests = GameObjectManager::getInstance()->getGameObjectMap();
 	std::map<GameObject*, bool> hasSet;

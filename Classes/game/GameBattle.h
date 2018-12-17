@@ -45,7 +45,7 @@ private:
 	void npcAttack();
 	GameObject* npcGetAttackTarget();
 
-	void updateVisible();
+	void updateVisible(float dt);
 private:
 	Army* m_player = nullptr;
 	Army* m_npc = nullptr;
@@ -54,4 +54,5 @@ private:
 	GameObject* m_npcAttackTarget = nullptr; //npc¹¥»÷Ä¿±ê
 
 	bool m_playerStartBuilt = false;
+	float m_lastUpdateVisibleCost = 0;
 };
