@@ -38,10 +38,11 @@ public:
 	bool playerHasBuilt();
 
 	//返回true表示结束
-	bool isGameEnd(bool isPlayerWin);
+	bool isGameEnd(bool& isPlayerWin);
 private:
 	//设置基地位置
 	void initBasePosition();
+	bool initPlayerScout();
 	void npcAttack();
 	GameObject* npcGetAttackTarget();
 

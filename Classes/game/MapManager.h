@@ -91,6 +91,8 @@ public:
 	BasePosition& getBasePosition();
 
 	cocos2d::Vec2& getPlayerInitPosition();
+
+	cocos2d::Vec2& getPlayerScoutPosition();
 private:
 	bool initBasePosition();
 
@@ -120,4 +122,5 @@ private:
 
 	BasePosition m_basePositions;
 	cocos2d::Vec2 m_playerInitPosition;
+	cocos2d::Vec2 m_playerScoutPosition;
 };

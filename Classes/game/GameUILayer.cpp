@@ -287,7 +287,7 @@ void GameUILayer::updateMiniMap()
 			}
 			else
 			{
-				color = cocos2d::Color4F(1.0f, 1.0f, 1.0f, 1.0f); //cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
+				color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
 			}
 		}
 		else
@@ -301,15 +301,24 @@ void GameUILayer::updateMiniMap()
 		if ((gameObject->getGameObjectType() == GameObjectType::Building) && (gameObject->isVisible()))
 		{
 			//cocos2d::log("draw rect...");
-			m_miniMapDrawNode->drawSolidRect(cocos2d::Vec2(gameObjectInMinimapPosition.x - 2.0f, gameObjectInMinimapPosition.y - 2.0f),
+			m_miniMapDrawNode->drawRect(cocos2d::Vec2(gameObjectInMinimapPosition.x - 2.0f, gameObjectInMinimapPosition.y - 2.0f),
 				cocos2d::Vec2(gameObjectInMinimapPosition.x + 2.0f, gameObjectInMinimapPosition.y + 2.0f),
+				color
+			);
+
+			m_miniMapDrawNode->drawRect(cocos2d::Vec2(gameObjectInMinimapPosition.x - 1.0f, gameObjectInMinimapPosition.y - 1.0f),
+				cocos2d::Vec2(gameObjectInMinimapPosition.x + 1.0f, gameObjectInMinimapPosition.y + 1.0f),
 				color
 			);
 		}
 		else if ((gameObject->getGameObjectType() == GameObjectType::Soldier) && (gameObject->isVisible()))
 		{
 			//cocos2d::log("draw node...");
-			m_miniMapDrawNode->drawDot(gameObjectInMinimapPosition, 1.0f, color);
+			//m_miniMapDrawNode->drawDot(gameObjectInMinimapPosition, 1.0f, color);
+			m_miniMapDrawNode->drawRect(cocos2d::Vec2(gameObjectInMinimapPosition.x - 1.0f, gameObjectInMinimapPosition.y - 1.0f),
+				cocos2d::Vec2(gameObjectInMinimapPosition.x + 1.0f, gameObjectInMinimapPosition.y + 1.0f),
+				color
+			);
 		}
 	}
 
@@ -400,6 +409,7 @@ void GameUILayer::onTeam(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventT
 			else
 			{
 				button->setHighlighted(false);
+				m_teamButtonSelect[sender] = false;
 			}
 		}
 		auto it = m_teamCallback.find(sender);

@@ -55,7 +55,7 @@ bool Soldier::init(ForceType forceType, SoldierType type, const cocos2d::Vec2& p
 
 	toStand();
 	
-	//scheduleUpdate();
+	scheduleUpdate();
 	
 	//敌方单位默认不显示
 	if (m_forceType == ForceType::AI)
@@ -582,6 +582,7 @@ void Soldier::setTeamNo(TeamNo teamNo)
 	{
 		TeamManager::getInstance()->removeFromTeam(this);
 		m_teamText->setVisible(false);
+		resumeNormalSpeed();
 	}
 	if (m_forceType == ForceType::AI)
 	{
@@ -815,7 +816,7 @@ GameObject* Soldier::searchEnemy()
 		}
 		distance = getEnemyDistance(gameObject);
 		//在警戒范围内，直接选定该目标攻击
-		if (distance <= m_alertDistance)
+		if ((distance <= m_alertDistance) || (distance <= m_attackDistance))
 		{
 			alertDistance.push_back(gameObject);
 		}
@@ -931,7 +932,7 @@ GameObject* Soldier::searchNearbyEnemy()
 		}
 		
 	}
-	if (minDistance <= m_alertDistance)
+	if ((minDistance <= m_alertDistance) || (minDistance <= m_attackDistance))
 	{
 		return nearbyObject;
 	}

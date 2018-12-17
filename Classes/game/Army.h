@@ -24,6 +24,7 @@ public:
 
 	void update(float dt);
 	bool createSoldier(SoldierType type);
+	bool createScout(cocos2d::Vec2& pos);
 	bool createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos = false);
 	bool soldiersMoveTo(const std::vector<Soldier*>& soldiers, const cocos2d::Vec2& position);
 	bool soldiersMoveTo(const cocos2d::Vec2& position);

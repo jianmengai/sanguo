@@ -28,7 +28,7 @@ bool GameBattle::init()
 	m_npc = new (std::nothrow) Army;
 	m_npc->setForceType(ForceType::AI);
 	initBasePosition();
-	return true;
+	return initPlayerScout();
 }
 
 bool GameBattle::createBuilding(ForceType forceType, BuildingType buidingType, cocos2d::Vec2 position)
@@ -187,7 +187,7 @@ bool GameBattle::playerHasBuilt()
 	return m_player->isBuildingExist(BuildingType::MainTown);
 }
 
-bool GameBattle::isGameEnd(bool isPlayerWin)
+bool GameBattle::isGameEnd(bool& isPlayerWin)
 {
 	if (!m_playerStartBuilt)
 	{
@@ -279,6 +279,13 @@ void GameBattle::initBasePosition()
 	//WarFogLayer::getInstance()->setFogPosition(playerBase.basePosition);
 	//m_player->setBasePosition(playerBase);
 	m_npc->setBasePosition(basePosition);
+}
+
+bool GameBattle::initPlayerScout()
+{
+	m_playerStartBuilt = true;
+	auto scoutPos = MapManager::getInstance()->getPlayerScoutPosition();
+	return m_player->createScout(scoutPos);
 }
 
 void GameBattle::npcAttack()

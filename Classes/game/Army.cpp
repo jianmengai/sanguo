@@ -69,6 +69,22 @@ bool Army::createSoldier(SoldierType type)
 	return true;
 }
 
+bool Army::createScout(cocos2d::Vec2& pos)
+{
+	auto type = SoldierType::Archer;
+	Soldier* soldier = Soldier::create(m_forceType, type, pos, FaceDirection::FaceToEast);
+	if (nullptr == soldier)
+	{
+		return false;
+	}
+	auto tileRowCol = MapManager::getInstance()->toTileRowCol(pos);
+	m_soldiers[type].push_back(soldier);
+	MapManager::getInstance()->addChildToGameObjectLayer(soldier);
+	GameObjectManager::getInstance()->addGameObject(soldier);
+	MapManager::getInstance()->setOccupy(tileRowCol.x, tileRowCol.y, OccupyType::Soldier);
+	return true;
+}
+
 bool Army::createBuilding(BuildingType type, const cocos2d::Vec2& position, bool isMapPos)
 {
 	if (!canBuild(type))
@@ -295,12 +311,9 @@ void Army::npcAutoCreating()
 	static auto archerConf = GameConfig::getInstance()->getSoldierConf(m_forceType, SoldierType::Archer);
 	static auto cavalryConf = GameConfig::getInstance()->getSoldierConf(m_forceType, SoldierType::Cavalry);
 	static auto infantryConf = GameConfig::getInstance()->getSoldierConf(m_forceType, SoldierType::Infantry);
-	static int totalTechPoint = archerConf->technologyPoint * 2 + cavalryConf->technologyPoint * 2 + infantryConf->technologyPoint * 2;
+	static int totalTechPoint = archerConf->technologyPoint * archerConf->subCount + cavalryConf->technologyPoint * cavalryConf->subCount + infantryConf->technologyPoint * infantryConf->subCount;
 	if (totalTechPoint <= m_techPoint)
 	{
-		createSoldier(SoldierType::Archer);
-		createSoldier(SoldierType::Cavalry);
-		createSoldier(SoldierType::Infantry);
 		createSoldier(SoldierType::Archer);
 		createSoldier(SoldierType::Cavalry);
 		createSoldier(SoldierType::Infantry);
@@ -376,11 +389,11 @@ void Army::updateTechPoint(float dt)
 		}
 		if (m_forceType == ForceType::AI)
 		{
-			m_techPoint += 100;
+			m_techPoint += 50;
 		}
 		else
 		{
-			m_techPoint += 100;
+			m_techPoint += 50;
 		}
 		
 	}
@@ -848,10 +861,12 @@ void Army::update(float dt)
 	{
 		m_lastUpdateTime = m_now;
 	}
+	/*
 	clock_t start = clock();
 	updateSoldier(dt);
 	clock_t end = clock();
 	cocos2d::log("======= update soldier %u", end-start);
+	*/
 }
 
 void Army::addSelected(GameObject* gameObject)

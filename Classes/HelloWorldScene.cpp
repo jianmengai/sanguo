@@ -134,9 +134,14 @@ bool HelloWorld::init()
 
 	this->addChild(listView);
 
-	
+	m_drawNode = cocos2d::DrawNode::create();
+	this->addChild(m_drawNode);
+	auto color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
+	m_drawNode->drawSolidRect(Vec2(visibleSize.width / 2 + origin.x - 10, visibleSize.height / 2 + origin.y - 10),
+		Vec2(visibleSize.width / 2 + origin.x + 10, visibleSize.height / 2 + origin.y + 10), color);
 
-    return true;
+	scheduleUpdate();
+	return true;
 }
 
 
@@ -175,4 +180,16 @@ void HelloWorld::selectedItemEvent(Ref * sender, ui::ListView::EventType type)
 	default:
 		break;
 	}
+}
+
+void HelloWorld::update(float dt)
+{
+	m_drawNode->clear();
+	cocos2d::log("update");
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto color = cocos2d::Color4F(248.0f / 255.0f, 200.0f / 255.0f, 40.0f / 255.0f, 1.0f);
+	m_drawNode->drawSolidRect(Vec2(visibleSize.width / 2 + origin.x - 2, visibleSize.height / 2 + origin.y - 2),
+		Vec2(visibleSize.width / 2 + origin.x + 2, visibleSize.height / 2 + origin.y + 2), color);
+
 }

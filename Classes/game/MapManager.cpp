@@ -143,6 +143,12 @@ bool MapManager::initBasePosition()
 	std::string playerInitPositionName = ss.str();
 	auto playerInitPosValueMap = resourceLayer->getObject(playerInitPositionName);
 	m_playerInitPosition = getObjectPosition(playerInitPosValueMap, playerInitPositionName);
+
+	ss.str("");
+	ss << "playerScout";
+	std::string playerScoutPositionName = ss.str();
+	auto scoutPosValueMap = resourceLayer->getObject(playerScoutPositionName);
+	m_playerScoutPosition = getObjectPosition(scoutPosValueMap, playerScoutPositionName);
 	
 
 	return true;
@@ -170,6 +176,13 @@ cocos2d::Vec2 & MapManager::getPlayerInitPosition()
 	// TODO: 在此处插入 return 语句
 	return m_playerInitPosition;
 }
+
+cocos2d::Vec2 & MapManager::getPlayerScoutPosition()
+{
+	// TODO: 在此处插入 return 语句
+	return m_playerScoutPosition;
+}
+
 
 void MapManager::initTileNodeTable()
 {

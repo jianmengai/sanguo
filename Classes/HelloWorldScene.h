@@ -46,6 +46,11 @@ public:
     CREATE_FUNC(HelloWorld);
 
 	void selectedItemEvent(cocos2d::Ref* sender, cocos2d::ui::ListView::EventType type);
+
+	void update(float dt);
+
+private:
+	cocos2d::DrawNode* m_drawNode;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

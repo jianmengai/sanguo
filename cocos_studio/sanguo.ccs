@@ -31,6 +31,7 @@
           <TTF Name="lishu.ttf" />
           <Image Name="CloseDialogNormal.png" />
           <Image Name="CloseDialogDown.png" />
+          <Image Name="Block.png" />
         </Folder>
       </RootFolder>
     </Group>
